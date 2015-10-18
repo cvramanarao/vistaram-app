@@ -171,7 +171,7 @@ public class VistaramEmailDataExtractor implements Tasklet {
 				
 				
 				
-				if(message.getFrom()[0].toString().equalsIgnoreCase("MakeMyTrip <noreply@makemytrip.com>")) {
+				if(message.getFrom()[0].toString().equalsIgnoreCase("MakeMyTrip <noreply@makemytrip.com>") && message.getSubject().contains("Hotel Booking on MakeMyTrip.com")) {
 					++vouchers;
 					System.out.println("Text: "
 							+ message.getContent().toString());
