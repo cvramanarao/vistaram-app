@@ -7,7 +7,7 @@
   <packaging>pom</packaging>
   <name>vistaram-parent</name>
   <modules>
-    <module>vistaram-web</module>
     <module>vistaram-batch</module>
+    <module>vistaram-web</module>
   </modules>
 </project>
