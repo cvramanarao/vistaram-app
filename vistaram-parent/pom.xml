@@ -6,7 +6,14 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>vistaram-parent</name>
-  <modules>
+  
+	<parent>
+		<!-- Your own application should inherit from spring-boot-starter-parent -->
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.2.7.RELEASE</version>
+</parent>
+<modules>
     <module>vistaram-batch</module>
     <module>vistaram-web</module>
   </modules>
