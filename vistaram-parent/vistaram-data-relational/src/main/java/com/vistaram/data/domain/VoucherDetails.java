@@ -2,15 +2,93 @@ package com.vistaram.data.domain;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Map;
 
 public class VoucherDetails {
+	
+	
+	/*
+	 * 
+	 * {name of hotel & city=Vistaram Rtc Complex, Visakhapatnam, India, 
+	 * type of room=Royal King A/c, 
+	 * number of rooms=1, 
+	 * number of nights=1, 
+	 * Rate plan name=MAP, 
+	 * booking date=Oct. 10, 2015, 9:40 p.m., 
+	 * guest request=WEB SERVICES BOOKING, 
+	 * room 1=Adult 2 Child 0, 
+	 * Special Request=None, 
+	 * checkout date=Oct. 12, 2015, 
+	 * name of guest=Santosh Pradhan, 
+	 * checkin date=Oct. 11, 2015, 
+	 * inclusions=Accommodation , Breakfast and Dinner(MAP), 
+	 * Booking Type=mobile}
+	 */
 	
 	private String bookingAgent;
 	private String voucherNumber;
 	private String guestName;
+	private String hotelAndCity;
 	private Date bookingDate;
 	private Date checkInDate;
 	private Date checkOutDate;
+	private int noOfRooms;
+	private int noOfNights;
+	private String ratePlan;
+	private String guestRequest;
+	private String inclusions;
+	private String bookingType;
+	
+	public String getHotelAndCity() {
+		return hotelAndCity;
+	}
+	public void setHotelAndCity(String hotelAndCity) {
+		this.hotelAndCity = hotelAndCity;
+	}
+	public int getNoOfRooms() {
+		return noOfRooms;
+	}
+	public void setNoOfRooms(int noOfRooms) {
+		this.noOfRooms = noOfRooms;
+	}
+	public int getNoOfNights() {
+		return noOfNights;
+	}
+	public void setNoOfNights(int noOfNights) {
+		this.noOfNights = noOfNights;
+	}
+	public String getRatePlan() {
+		return ratePlan;
+	}
+	public void setRatePlan(String ratePlan) {
+		this.ratePlan = ratePlan;
+	}
+	public String getGuestRequest() {
+		return guestRequest;
+	}
+	public void setGuestRequest(String guestRequest) {
+		this.guestRequest = guestRequest;
+	}
+	public String getInclusions() {
+		return inclusions;
+	}
+	public void setInclusions(String inclusions) {
+		this.inclusions = inclusions;
+	}
+	public String getBookingType() {
+		return bookingType;
+	}
+	public void setBookingType(String bookingType) {
+		this.bookingType = bookingType;
+	}
+	public Map<String, Map<String, Integer>> getGuestsPerRoom() {
+		return guestsPerRoom;
+	}
+	public void setGuestsPerRoom(Map<String, Map<String, Integer>> guestsPerRoom) {
+		this.guestsPerRoom = guestsPerRoom;
+	}
+
+	private Map<String, Map<String, Integer>> guestsPerRoom;
 	
 	
 	
@@ -53,16 +131,14 @@ public class VoucherDetails {
 	public void setCheckOutDate(Date checkOutDate) {
 		this.checkOutDate = checkOutDate;
 	}
-	
 	@Override
 	public String toString() {
-		return "VoucherDetails [bookingAgent=" + bookingAgent
-				+ ", voucherNumber=" + voucherNumber + ", guestName="
-				+ guestName + ", bookingDate=" + bookingDate + ", checkInDate="
-				+ checkInDate + ", checkOutDate=" + checkOutDate + "]";
+		return "VoucherDetails [bookingAgent=" + bookingAgent + ", voucherNumber=" + voucherNumber + ", guestName="
+				+ guestName + ", hotelAndCity=" + hotelAndCity + ", bookingDate=" + bookingDate + ", checkInDate="
+				+ checkInDate + ", checkOutDate=" + checkOutDate + ", noOfRooms=" + noOfRooms + ", noOfNights="
+				+ noOfNights + ", ratePlan=" + ratePlan + ", guestRequest=" + guestRequest + ", inclusions="
+				+ inclusions + ", bookingType=" + bookingType + ", guestsPerRoom=" + guestsPerRoom + "]";
 	}
 	
 	
-	
-
 }
