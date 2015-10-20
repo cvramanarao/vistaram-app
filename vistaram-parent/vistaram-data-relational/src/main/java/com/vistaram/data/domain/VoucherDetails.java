@@ -2,6 +2,7 @@ package com.vistaram.data.domain;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class VoucherDetails {
@@ -32,12 +33,17 @@ public class VoucherDetails {
 	private Date bookingDate;
 	private Date checkInDate;
 	private Date checkOutDate;
+	private String roomType;
+	
+
 	private int noOfRooms;
 	private int noOfNights;
 	private String ratePlan;
 	private String guestRequest;
 	private String inclusions;
 	private String bookingType;
+	
+	private Map<String, Map<String, Integer>> guestsPerRoom = new HashMap<String, Map<String, Integer>>();
 	
 	public String getHotelAndCity() {
 		return hotelAndCity;
@@ -88,7 +94,7 @@ public class VoucherDetails {
 		this.guestsPerRoom = guestsPerRoom;
 	}
 
-	private Map<String, Map<String, Integer>> guestsPerRoom;
+	
 	
 	
 	
@@ -131,6 +137,14 @@ public class VoucherDetails {
 	public void setCheckOutDate(Date checkOutDate) {
 		this.checkOutDate = checkOutDate;
 	}
+	
+	public String getRoomType() {
+		return roomType;
+	}
+	public void setRoomType(String roomType) {
+		this.roomType = roomType;
+	}
+	
 	@Override
 	public String toString() {
 		return "VoucherDetails [bookingAgent=" + bookingAgent + ", voucherNumber=" + voucherNumber + ", guestName="

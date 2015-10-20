@@ -8,9 +8,11 @@ import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vistaram.data.domain.VoucherDetails;
 import com.vistaram.data.domain.VoucherDetailsBuilder;
+import com.vistaram.data.service.VoucherDetailsService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +27,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.mail.Address;
 import javax.mail.BodyPart;
@@ -40,6 +43,9 @@ import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeMultipart;
 
 public class VistaramEmailDataExtractor implements Tasklet {
+	
+	@Autowired
+	private VoucherDetailsService voucherDetailsService;
 
 	@Override
 	public RepeatStatus execute(StepContribution stepContribution,
@@ -64,7 +70,12 @@ public class VistaramEmailDataExtractor implements Tasklet {
 		 * accordingly
 		 */
 
-		extractVoucherDetails(host, port, mailStoreType, username, password);
+		Map<String, VoucherDetails> voucherDetailsMap = extractVoucherDetails(host, port, mailStoreType, username, password);
+		
+		for(Map.Entry<String, VoucherDetails> entry : voucherDetailsMap.entrySet()) {
+			
+			voucherDetailsService.saveVoucherDetails(entry.getValue());
+		}
 
 		return RepeatStatus.FINISHED;
 	}
@@ -165,7 +176,7 @@ public class VistaramEmailDataExtractor implements Tasklet {
 							.substring(message.getSubject().lastIndexOf(" "))
 							.trim();
 					voucherDetailsMap.put(voucher.trim(),
-					extractGoIbiboVoucherDetailsFromMessage(message));
+							extractGoIbiboVoucherDetailsFromMessage(message));
 
 					System.out.println("---------------------------------");
 					

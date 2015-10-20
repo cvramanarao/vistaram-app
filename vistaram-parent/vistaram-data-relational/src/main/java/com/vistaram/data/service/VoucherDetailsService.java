@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.vistaram.data.domain.VoucherDetails;
 import com.vistaram.data.mapper.DtoToEntityMapper;
-import com.vistaram.relational.domain.BookingDetail;
-import com.vistaram.relational.repositories.BookingDetailRepository;
+import com.vistaram.data.relational.domain.BookingDetail;
+import com.vistaram.data.relational.repositories.BookingDetailRepository;
 
 
 @Service

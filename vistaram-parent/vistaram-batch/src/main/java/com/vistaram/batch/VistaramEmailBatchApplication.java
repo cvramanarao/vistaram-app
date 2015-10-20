@@ -35,8 +35,8 @@ import org.springframework.context.annotation.Configuration;
 import com.vistaram.batch.tasklet.VistaramEmailDataExtractor;
 
 @Configuration
-@EnableAutoConfiguration
-@ComponentScan
+@EnableAutoConfiguration								  
+@ComponentScan(basePackages={"com.vistaram.data.service", "com.vistaram.data.relational.repositories"})
 @EnableBatchProcessing
 public class VistaramEmailBatchApplication {
 
@@ -47,7 +47,7 @@ public class VistaramEmailBatchApplication {
 	private StepBuilderFactory steps;
 
 	@Bean
-	protected Tasklet tasklet() {
+	public Tasklet tasklet() {
 		/*return new Tasklet() {
 			@Override
 			public RepeatStatus execute(StepContribution contribution,

@@ -1,4 +1,4 @@
-package com.vistaram.relational.domain;
+package com.vistaram.data.relational.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;

@@ -3,6 +3,7 @@ package com.vistaram.data.domain;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class VoucherDetailsBuilder {
@@ -58,16 +59,28 @@ public class VoucherDetailsBuilder {
 		
 		
 		
-		detailsMap.get("name of hotel & city");
-		detailsMap.get("type of room");
-		detailsMap.get("number of rooms");
-		detailsMap.get("number of nights");
-		detailsMap.get("Rate plan name");
-		detailsMap.get("guest request");
-		detailsMap.get("room 1");
-		detailsMap.get("Special Request");
-		detailsMap.get("inclusions");
-		detailsMap.get("Booking Type");
+		voucherDetails.setHotelAndCity(detailsMap.get("name of hotel & city"));
+		voucherDetails.setRoomType(detailsMap.get("type of room"));
+		voucherDetails.setNoOfRooms(Integer.valueOf(detailsMap.get("number of rooms")));
+		voucherDetails.setNoOfNights(Integer.valueOf(detailsMap.get("number of nights")));
+		voucherDetails.setRatePlan(detailsMap.get("Rate plan name"));
+		voucherDetails.setGuestRequest(detailsMap.get("guest request"));
+		String room1Occupancy = detailsMap.get("room 1");
+		String tokens[] = room1Occupancy.split(" ");
+		Map<String, Integer> guests = new HashMap<String, Integer>();
+		if(tokens[0].trim().equalsIgnoreCase("Adult")) {
+			Integer noOfAdults = Integer.valueOf(tokens[1].trim());
+			guests.put("Adult", noOfAdults);
+		}
+			
+		if(null != tokens[2] && "Child".equalsIgnoreCase(tokens[2])){
+			Integer noOfChildren = (null == tokens[3] || tokens[3].trim().isEmpty() ) ? 0: Integer.valueOf(tokens[3].trim());
+			guests.put("Child", noOfChildren);
+		}
+		voucherDetails.getGuestsPerRoom().put("Room1", guests);
+		//voucherDetails.detailsMap.get("Special Request");
+		//voucherDetails.setInclusions(inclusions);detailsMap.get("inclusions");
+		voucherDetails.setBookingType(detailsMap.get("Booking Type"));
 		
 		return voucherDetails;
 	}
