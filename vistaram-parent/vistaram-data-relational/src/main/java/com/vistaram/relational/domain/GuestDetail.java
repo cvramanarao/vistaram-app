@@ -23,30 +23,30 @@ public class GuestDetail implements Serializable {
 	@Column(nullable=false, length=250)
 	private String address;
 
-	@Column(nullable=false)
-	private int contact_Num;
+	@Column(name="contact_num", nullable=false)
+	private int contactNum;
 
 	@Temporal(TemporalType.DATE)
 	@Column(nullable=false)
 	private Date dob;
 
-	@Column(nullable=false, length=200)
-	private String email_Id;
+	@Column(name="email_id", nullable=false, length=200)
+	private String emailId;
 
-	@Column(nullable=false, length=30)
-	private String first_Name;
+	@Column(name="first_name", nullable=false, length=30)
+	private String firstName;
 
 	@Column(nullable=false, length=1)
 	private String gender;
 
-	@Column(nullable=false, length=40)
-	private String last_Name;
+	@Column(name="last_name", nullable=false, length=40)
+	private String lastName;
 
 	@Column(nullable=false, length=30)
 	private String occupation;
 
-	@Column(nullable=false)
-	private int zip_Code;
+	@Column(name="zip_code", nullable=false)
+	private int zipCode;
 
 	public GuestDetail() {
 	}
@@ -67,12 +67,12 @@ public class GuestDetail implements Serializable {
 		this.address = address;
 	}
 
-	public int getContact_Num() {
-		return this.contact_Num;
+	public int getContactNum() {
+		return this.contactNum;
 	}
 
-	public void setContact_Num(int contact_Num) {
-		this.contact_Num = contact_Num;
+	public void setContactNum(int contactNum) {
+		this.contactNum = contactNum;
 	}
 
 	public Date getDob() {
@@ -83,20 +83,20 @@ public class GuestDetail implements Serializable {
 		this.dob = dob;
 	}
 
-	public String getEmail_Id() {
-		return this.email_Id;
+	public String getEmailId() {
+		return this.emailId;
 	}
 
-	public void setEmail_Id(String email_Id) {
-		this.email_Id = email_Id;
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
 	}
 
-	public String getFirst_Name() {
-		return this.first_Name;
+	public String getFirstName() {
+		return this.firstName;
 	}
 
-	public void setFirst_Name(String first_Name) {
-		this.first_Name = first_Name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
 	public String getGender() {
@@ -107,12 +107,12 @@ public class GuestDetail implements Serializable {
 		this.gender = gender;
 	}
 
-	public String getLast_Name() {
-		return this.last_Name;
+	public String getLastName() {
+		return this.lastName;
 	}
 
-	public void setLast_Name(String last_Name) {
-		this.last_Name = last_Name;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getOccupation() {
@@ -123,12 +123,12 @@ public class GuestDetail implements Serializable {
 		this.occupation = occupation;
 	}
 
-	public int getZip_Code() {
-		return this.zip_Code;
+	public int getZipCode() {
+		return this.zipCode;
 	}
 
-	public void setZip_Code(int zip_Code) {
-		this.zip_Code = zip_Code;
+	public void setZipCode(int zipCode) {
+		this.zipCode = zipCode;
 	}
 
 }

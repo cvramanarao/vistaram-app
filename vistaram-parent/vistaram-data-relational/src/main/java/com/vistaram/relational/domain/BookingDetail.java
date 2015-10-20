@@ -6,11 +6,12 @@ import java.util.Date;
 
 
 /**
- * The persistent class for the Booking_Details database table.
+ * The persistent class for the booking_details database table.
  * 
  */
 @Entity
-@Table(name="Booking_Details")
+@Table(name="booking_details")
+@NamedQuery(name="BookingDetail.findAll", query="SELECT b FROM BookingDetail b")
 public class BookingDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -19,20 +20,20 @@ public class BookingDetail implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(nullable=false, length=120)
-	private String booking_Agent;
+	@Column(name="booking_agent", nullable=false, length=120)
+	private String bookingAgent;
 
 	@Temporal(TemporalType.DATE)
-	@Column(nullable=false)
-	private Date booking_Date;
+	@Column(name="booking_date", nullable=false)
+	private Date bookingDate;
 
 	@Temporal(TemporalType.DATE)
-	@Column(nullable=false)
-	private Date checking_Date;
+	@Column(name="checking_date", nullable=false)
+	private Date checkingDate;
 
 	@Temporal(TemporalType.DATE)
-	@Column(nullable=false)
-	private Date checkout_Date;
+	@Column(name="checkout_date", nullable=false)
+	private Date checkoutDate;
 
 	@Lob
 	@Column(name="comments_or_requests", nullable=false)
@@ -44,11 +45,11 @@ public class BookingDetail implements Serializable {
 	@Column(name="hotel_details_id", nullable=false)
 	private int hotelDetailsId;
 
-	@Column(nullable=false)
-	private int no_Of_Nights_Stayed;
+	@Column(name="no_of_nights_stayed", nullable=false)
+	private int noOfNightsStayed;
 
-	@Column(nullable=false)
-	private int number_Of_Rooms;
+	@Column(name="number_of_rooms", nullable=false)
+	private int numberOfRooms;
 
 	@Column(name="properties_id", nullable=false)
 	private int propertiesId;
@@ -59,8 +60,8 @@ public class BookingDetail implements Serializable {
 	@Column(name="room_details_id", nullable=false)
 	private int roomDetailsId;
 
-	@Column(nullable=false, length=30)
-	private String voucher_id;
+	@Column(name="voucher_id", nullable=false, length=30)
+	private String voucherId;
 
 	public BookingDetail() {
 	}
@@ -73,36 +74,36 @@ public class BookingDetail implements Serializable {
 		this.id = id;
 	}
 
-	public String getBooking_Agent() {
-		return this.booking_Agent;
+	public String getBookingAgent() {
+		return this.bookingAgent;
 	}
 
-	public void setBooking_Agent(String booking_Agent) {
-		this.booking_Agent = booking_Agent;
+	public void setBookingAgent(String bookingAgent) {
+		this.bookingAgent = bookingAgent;
 	}
 
-	public Date getBooking_Date() {
-		return this.booking_Date;
+	public Date getBookingDate() {
+		return this.bookingDate;
 	}
 
-	public void setBooking_Date(Date booking_Date) {
-		this.booking_Date = booking_Date;
+	public void setBookingDate(Date bookingDate) {
+		this.bookingDate = bookingDate;
 	}
 
-	public Date getChecking_Date() {
-		return this.checking_Date;
+	public Date getCheckingDate() {
+		return this.checkingDate;
 	}
 
-	public void setChecking_Date(Date checking_Date) {
-		this.checking_Date = checking_Date;
+	public void setCheckingDate(Date checkingDate) {
+		this.checkingDate = checkingDate;
 	}
 
-	public Date getCheckout_Date() {
-		return this.checkout_Date;
+	public Date getCheckoutDate() {
+		return this.checkoutDate;
 	}
 
-	public void setCheckout_Date(Date checkout_Date) {
-		this.checkout_Date = checkout_Date;
+	public void setCheckoutDate(Date checkoutDate) {
+		this.checkoutDate = checkoutDate;
 	}
 
 	public byte[] getCommentsOrRequests() {
@@ -129,20 +130,20 @@ public class BookingDetail implements Serializable {
 		this.hotelDetailsId = hotelDetailsId;
 	}
 
-	public int getNo_Of_Nights_Stayed() {
-		return this.no_Of_Nights_Stayed;
+	public int getNoOfNightsStayed() {
+		return this.noOfNightsStayed;
 	}
 
-	public void setNo_Of_Nights_Stayed(int no_Of_Nights_Stayed) {
-		this.no_Of_Nights_Stayed = no_Of_Nights_Stayed;
+	public void setNoOfNightsStayed(int noOfNightsStayed) {
+		this.noOfNightsStayed = noOfNightsStayed;
 	}
 
-	public int getNumber_Of_Rooms() {
-		return this.number_Of_Rooms;
+	public int getNumberOfRooms() {
+		return this.numberOfRooms;
 	}
 
-	public void setNumber_Of_Rooms(int number_Of_Rooms) {
-		this.number_Of_Rooms = number_Of_Rooms;
+	public void setNumberOfRooms(int numberOfRooms) {
+		this.numberOfRooms = numberOfRooms;
 	}
 
 	public int getPropertiesId() {
@@ -169,12 +170,12 @@ public class BookingDetail implements Serializable {
 		this.roomDetailsId = roomDetailsId;
 	}
 
-	public String getVoucher_id() {
-		return this.voucher_id;
+	public String getVoucherId() {
+		return this.voucherId;
 	}
 
-	public void setVoucher_id(String voucher_id) {
-		this.voucher_id = voucher_id;
+	public void setVoucherId(String voucherId) {
+		this.voucherId = voucherId;
 	}
 
 }

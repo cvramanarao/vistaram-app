@@ -5,11 +5,11 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the Room_Details database table.
+ * The persistent class for the room_details database table.
  * 
  */
 @Entity
-@Table(name="Room_Details")
+@Table(name="room_details")
 @NamedQuery(name="RoomDetail.findAll", query="SELECT r FROM RoomDetail r")
 public class RoomDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,11 +19,11 @@ public class RoomDetail implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(nullable=false, length=50)
-	private String room_Name;
+	@Column(name="room_name", nullable=false, length=50)
+	private String roomName;
 
-	@Column(nullable=false, length=20)
-	private String room_Rate;
+	@Column(name="room_rate", nullable=false, length=20)
+	private String roomRate;
 
 	@Column(nullable=false, length=30)
 	private String room_Type;
@@ -39,20 +39,20 @@ public class RoomDetail implements Serializable {
 		this.id = id;
 	}
 
-	public String getRoom_Name() {
-		return this.room_Name;
+	public String getRoomName() {
+		return this.roomName;
 	}
 
-	public void setRoom_Name(String room_Name) {
-		this.room_Name = room_Name;
+	public void setRoomName(String roomName) {
+		this.roomName = roomName;
 	}
 
-	public String getRoom_Rate() {
-		return this.room_Rate;
+	public String getRoomRate() {
+		return this.roomRate;
 	}
 
-	public void setRoom_Rate(String room_Rate) {
-		this.room_Rate = room_Rate;
+	public void setRoomRate(String roomRate) {
+		this.roomRate = roomRate;
 	}
 
 	public String getRoom_Type() {

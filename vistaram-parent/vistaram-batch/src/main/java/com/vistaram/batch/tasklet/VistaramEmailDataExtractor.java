@@ -9,6 +9,9 @@ import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 
+import com.vistaram.data.domain.VoucherDetails;
+import com.vistaram.data.domain.VoucherDetailsBuilder;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -61,14 +64,14 @@ public class VistaramEmailDataExtractor implements Tasklet {
 		 * accordingly
 		 */
 
-		check(host, port, mailStoreType, username, password);
+		extractVoucherDetails(host, port, mailStoreType, username, password);
 
 		return RepeatStatus.FINISHED;
 	}
 
-	public void check(String host, String port, String storeType, String user,
+	public Map<String, VoucherDetails> extractVoucherDetails(String host, String port, String storeType, String user,
 			String password) {
-		Map<String, Map<String, String>> voucherDetails = new HashMap<String, Map<String, String>>();
+		Map<String, VoucherDetails> voucherDetailsMap = new HashMap<String,VoucherDetails>();
 		try {
 
 			// create properties field
@@ -148,7 +151,7 @@ public class VistaramEmailDataExtractor implements Tasklet {
 					}
 				}
 				
-				/*if (message.getFrom()[0].toString().equalsIgnoreCase("hotelpartners@goibibo.com") &&  message.getSubject().contains("Confirm Hotel Booking") ) {
+				if (message.getFrom()[0].toString().equalsIgnoreCase("hotelpartners@goibibo.com") &&  message.getSubject().contains("Confirm Hotel Booking") ) {
 					System.out.println("---------------------------------");
 					++vouchers;
 					System.out.println("Email Number " + (i + 1));
@@ -161,12 +164,12 @@ public class VistaramEmailDataExtractor implements Tasklet {
 					String voucher = message.getSubject()
 							.substring(message.getSubject().lastIndexOf(" "))
 							.trim();
-					voucherDetails.put(voucher.trim(),
+					voucherDetailsMap.put(voucher.trim(),
 					extractGoIbiboVoucherDetailsFromMessage(message));
 
 					System.out.println("---------------------------------");
 					
-				}*/
+				}
 				
 				
 				
@@ -199,11 +202,12 @@ public class VistaramEmailDataExtractor implements Tasklet {
 			e.printStackTrace();
 		}
 
-		System.out.println(voucherDetails);
+		System.out.println(voucherDetailsMap);
+		return voucherDetailsMap;
 	}
 
-	private Map<String, String> extractGoIbiboVoucherDetailsFromMessage(Message message) throws IOException, MessagingException {
-		Map<String, String> voucherDetails = new HashMap<String, String>();
+	private VoucherDetails extractGoIbiboVoucherDetailsFromMessage(Message message) throws IOException, MessagingException {
+		Map<String, String> voucherDetailsMap = new HashMap<String, String>();
 		MimeMultipart mimePart = (MimeMultipart) message
 				.getContent();
 		System.out.println("total parts in this message : "
@@ -232,19 +236,22 @@ public class VistaramEmailDataExtractor implements Tasklet {
 				String voucherString = voucherNumberTable.text();
 				System.out.println("voucherString : "
 						+ voucherString);
-				// voucherDetails.put("voucher", voucherString);
+				voucherDetailsMap.put("voucherNumber", voucherString.substring(voucherString.indexOf(":")));
 				Element reservationDetailsTable = tables.get(2);
 				Elements trs = reservationDetailsTable
 						.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
 				for (Element tr : trs) {
 					String key = tr.child(0).ownText();
 					String value = tr.child(1).ownText();
-					voucherDetails.put(key, value);
+					voucherDetailsMap.put(key, value);
 				}
 				
 			}
 		}
 		
+		System.out.println(voucherDetailsMap);
+		VoucherDetails voucherDetails = VoucherDetailsBuilder.build(voucherDetailsMap);
+		voucherDetails.setBookingAgent("goibibio.com");
 		return voucherDetails;
 	}
 	

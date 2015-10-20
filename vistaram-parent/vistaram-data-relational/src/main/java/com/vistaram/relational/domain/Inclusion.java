@@ -5,11 +5,11 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the Inclusions database table.
+ * The persistent class for the inclusions database table.
  * 
  */
 @Entity
-@Table(name="Inclusions")
+@Table(name="inclusions")
 @NamedQuery(name="Inclusion.findAll", query="SELECT i FROM Inclusion i")
 public class Inclusion implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,8 +19,8 @@ public class Inclusion implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(nullable=false, length=50)
-	private String property_Name;
+	@Column(name="property_name", nullable=false, length=50)
+	private String propertyName;
 
 	public Inclusion() {
 	}
@@ -33,12 +33,12 @@ public class Inclusion implements Serializable {
 		this.id = id;
 	}
 
-	public String getProperty_Name() {
-		return this.property_Name;
+	public String getPropertyName() {
+		return this.propertyName;
 	}
 
-	public void setProperty_Name(String property_Name) {
-		this.property_Name = property_Name;
+	public void setPropertyName(String propertyName) {
+		this.propertyName = propertyName;
 	}
 
 }

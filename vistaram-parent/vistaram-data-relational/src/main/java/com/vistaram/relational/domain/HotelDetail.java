@@ -5,11 +5,11 @@ import javax.persistence.*;
 
 
 /**
- * The persistent class for the Hotel_Details database table.
+ * The persistent class for the hotel_details database table.
  * 
  */
 @Entity
-@Table(name="Hotel_Details")
+@Table(name="hotel_details")
 @NamedQuery(name="HotelDetail.findAll", query="SELECT h FROM HotelDetail h")
 public class HotelDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,8 +19,8 @@ public class HotelDetail implements Serializable {
 	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(nullable=false)
-	private int contact_Info;
+	@Column(name="contact_info", nullable=false)
+	private int contactInfo;
 
 	@Column(nullable=false, length=55)
 	private String country;
@@ -29,7 +29,7 @@ public class HotelDetail implements Serializable {
 	private String hotelName;
 
 	@Column(nullable=false, length=150)
-	private String mail_ID;
+	private String mail_id;
 
 	@Column(nullable=false, length=255)
 	private String map;
@@ -37,8 +37,8 @@ public class HotelDetail implements Serializable {
 	@Column(nullable=false, length=80)
 	private String place;
 
-	@Column(nullable=false)
-	private int zip_Code;
+	@Column(name="zip_code", nullable=false)
+	private int zipCode;
 
 	public HotelDetail() {
 	}
@@ -51,12 +51,12 @@ public class HotelDetail implements Serializable {
 		this.id = id;
 	}
 
-	public int getContact_Info() {
-		return this.contact_Info;
+	public int getContactInfo() {
+		return this.contactInfo;
 	}
 
-	public void setContact_Info(int contact_Info) {
-		this.contact_Info = contact_Info;
+	public void setContactInfo(int contactInfo) {
+		this.contactInfo = contactInfo;
 	}
 
 	public String getCountry() {
@@ -75,12 +75,12 @@ public class HotelDetail implements Serializable {
 		this.hotelName = hotelName;
 	}
 
-	public String getMail_ID() {
-		return this.mail_ID;
+	public String getMail_id() {
+		return this.mail_id;
 	}
 
-	public void setMail_ID(String mail_ID) {
-		this.mail_ID = mail_ID;
+	public void setMail_id(String mail_id) {
+		this.mail_id = mail_id;
 	}
 
 	public String getMap() {
@@ -99,12 +99,12 @@ public class HotelDetail implements Serializable {
 		this.place = place;
 	}
 
-	public int getZip_Code() {
-		return this.zip_Code;
+	public int getZipCode() {
+		return this.zipCode;
 	}
 
-	public void setZip_Code(int zip_Code) {
-		this.zip_Code = zip_Code;
+	public void setZipCode(int zipCode) {
+		this.zipCode = zipCode;
 	}
 
 }
