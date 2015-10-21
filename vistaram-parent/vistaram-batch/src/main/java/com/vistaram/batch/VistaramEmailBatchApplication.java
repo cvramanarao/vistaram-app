@@ -28,16 +28,23 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 
 import com.vistaram.batch.tasklet.VistaramEmailDataExtractor;
+import com.vistaram.data.config.DataSourceConfiguration;
 
-@Configuration
-@EnableAutoConfiguration								  
-@ComponentScan(basePackages={"com.vistaram.data.service", "com.vistaram.data.relational.repositories"})
+
+@SpringBootApplication
+@EnableAutoConfiguration(exclude = { DataSourceAutoConfiguration.class })
+@Import(DataSourceConfiguration.class)
 @EnableBatchProcessing
+@PropertySource("classpath:application.properties")
 public class VistaramEmailBatchApplication {
 
 	@Autowired

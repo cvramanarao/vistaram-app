@@ -14,6 +14,18 @@
 		<version>1.2.7.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 </parent>
+<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<!-- Import dependency management from Spring Boot -->
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>1.2.7.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 <modules>
     <module>vistaram-data-relational</module>
     <module>vistaram-batch</module>

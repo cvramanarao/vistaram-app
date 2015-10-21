@@ -8,9 +8,9 @@ import javax.persistence.*;
  * The persistent class for the guest_booking_properties database table.
  * 
  */
-@Entity
-@Table(name="guest_booking_properties")
-@NamedQuery(name="GuestBookingProperty.findAll", query="SELECT g FROM GuestBookingProperty g")
+//@Entity
+//@Table(name="guest_booking_properties")
+//@NamedQuery(name="GuestBookingProperty.findAll", query="SELECT g FROM GuestBookingProperty g")
 public class GuestBookingProperty implements Serializable {
 	private static final long serialVersionUID = 1L;
 
