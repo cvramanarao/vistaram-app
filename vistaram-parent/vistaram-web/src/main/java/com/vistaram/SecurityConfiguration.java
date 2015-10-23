@@ -30,6 +30,11 @@ import com.vistaram.data.config.DataSourceConfiguration;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Import(DataSourceConfiguration.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
+	
+	
+	public SecurityConfiguration() {
+		System.out.println("SecurityConfiguration : ");
+	}
 
 	
 	@Autowired
@@ -44,6 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .defaultSuccessUrl("/")
                 .loginPage("/login")
                 .permitAll()
+                .and().exceptionHandling().accessDeniedPage("/error")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/login")
                 .permitAll();
@@ -57,7 +63,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
  
         auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
         auth.jdbcAuthentication().dataSource(dataSource);
- 
+        
+        System.out.println("userDetailsService.userExists(admin) : "+userDetailsService.userExists("admin"));
         if(!userDetailsService.userExists("admin")) {
             List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
             authorities.add(new SimpleGrantedAuthority("ADMIN"));

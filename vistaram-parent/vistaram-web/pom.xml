@@ -6,7 +6,7 @@
 	<groupId>com.vistaram</groupId>
 	<artifactId>vistaram-web</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>vistaram-web</name>
 	<description>vistaram-web</description>
@@ -32,6 +32,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.vistaram</groupId>
 			<artifactId>vistaram-data-relational</artifactId>
@@ -40,8 +46,10 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
+			
 		</dependency>
+		
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
