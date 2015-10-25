@@ -16,6 +16,8 @@ public class BookingDetailDao {
 	private BookingDetailRepository bookingDetailRepo;
 	
 	public void save(BookingDetail detail){
+		System.out.println("BookingDetailDao || save()-->");
 		bookingDetailRepo.save(detail);
+		System.out.println("<-- BookingDetailDao || save()");
 	}
 }

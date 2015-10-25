@@ -61,7 +61,7 @@ CREATE Table booking_details (
   checkout_date date noT nUll,
   no_of_nights_stayed int(4),
   number_of_rooms int(4) noT nUll defaUlT '1',
-  guest_id int(10),
+  guest_id int(10) not null,
   hotel_details_id int(11),
   properties_id int(11),
   rate_plan_id int(11),

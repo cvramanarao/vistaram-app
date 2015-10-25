@@ -19,23 +19,39 @@ public class VoucherDetailsBuilder {
 		voucherDetails.setVoucherNumber(detailsMap.get("voucherNumber"));
 		voucherDetails.setGuestName(detailsMap.get("name of guest"));
 		String bookingDateStr = detailsMap.get("booking date");
-		bookingDateStr = bookingDateStr.replace(".", "");
+		bookingDateStr = correctDateString(bookingDateStr);
+		System.out.println("bookingDateStr: "+bookingDateStr);
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		Date bookingDate = null;
 		try {
-			sdf.applyLocalizedPattern("MMM dd, yyyy, h:mm a");
+			sdf.applyLocalizedPattern("MMM dd, yyyy, hh:mm a");
 			bookingDate = sdf.parse(bookingDateStr); 
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.err.println("Error parsing booking date");
+		}
+		
+		if(null == bookingDate) {
+			
+			try {
+				sdf.applyLocalizedPattern("MMM dd, yyyy, hh a");
+				bookingDate = sdf.parse(bookingDateStr);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				System.err.println("Error parsing booking date");
+			}
 		}
 		
 		voucherDetails.setBookingDate(bookingDate);
 		
 		String checkInDateStr = detailsMap.get("checkin date");
+		checkInDateStr = correctDateString(checkInDateStr);
+		System.out.println("checkInDateStr: "+checkInDateStr);
 		Date checkInDate = null;
 		try {
-		    sdf.applyLocalizedPattern("MMM. dd, yyyy");
+		    sdf.applyLocalizedPattern("MMM dd, yyyy");
 		    checkInDate = sdf.parse(checkInDateStr);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
@@ -46,7 +62,8 @@ public class VoucherDetailsBuilder {
 		
 		
 		String checkOutDateStr = detailsMap.get("checkout date");
-
+		checkOutDateStr = correctDateString(checkOutDateStr);
+		System.out.println("checkOutDateStr: "+checkOutDateStr);
 		Date checkOutDate = null;
 		try {
 			checkOutDate = sdf.parse(checkOutDateStr);
@@ -83,6 +100,18 @@ public class VoucherDetailsBuilder {
 		voucherDetails.setBookingType(detailsMap.get("Booking Type"));
 		
 		return voucherDetails;
+	}
+
+	private static String correctDateString(String dateStr) {
+		dateStr = dateStr.replace(".", "");
+		if(dateStr.startsWith("Sept")) {
+			dateStr = dateStr.replace("Sept", "Sep");
+		} else if(dateStr.startsWith("June")) {
+			dateStr = dateStr.replace("June", "Jun");
+		} else if(dateStr.startsWith("July")) {
+			dateStr = dateStr.replace("July", "Jul");
+		}
+		return dateStr;
 	}
 
 }

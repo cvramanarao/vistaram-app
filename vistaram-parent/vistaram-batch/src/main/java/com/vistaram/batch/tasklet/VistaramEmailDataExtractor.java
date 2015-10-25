@@ -51,18 +51,20 @@ public class VistaramEmailDataExtractor implements Tasklet {
 	public RepeatStatus execute(StepContribution stepContribution,
 			ChunkContext chunkContext) throws Exception {
 
-		/*
-		 * String host = "imap.gmail.com";// change accordingly String port =
-		 * "993"; String mailStoreType = "imaps"; String username =
-		 * "vistaramrooms@gmail.com";// change accordingly String password =
-		 * "vistaram@66669";// change accordingly
-		 */
+		String host = "imap.gmail.com";// change accordingly 
+		String port ="993"; 
+		String mailStoreType = "imaps"; 
+		String username =
+		 "vistaramrooms@gmail.com";// change accordingly 
+		String password =
+		 "vistaram@66669";// change accordingly
+		
 
-		String host = "pop.gmail.com";// change accordingly
+		/*String host = "pop.gmail.com";// change accordingly
 		String mailStoreType = "pop3s";
 		String username = "vistaramrooms@gmail.com";// change accordingly
-		String password = "vistaram@66669";// change accordingly */
-		String port = "995";
+		String password = "vistaram@66669";// change accordingly 
+		String port = "995";*/
 		/*
 		 * String host = "vistaram.com";// change accordingly String
 		 * mailStoreType = "pop3"; String username = "info@vistaram.com";//
@@ -88,16 +90,15 @@ public class VistaramEmailDataExtractor implements Tasklet {
 			// create properties field
 			Properties properties = new Properties();
 			// pop3 settings
-			properties.put("mail.pop3.host", host);
-			properties.put("mail.pop3.port", port);
-			properties.put("mail.pop3.starttls.enable", "true");
+//			properties.put("mail.pop3.host", host);
+//			properties.put("mail.pop3.port", port);
+//			properties.put("mail.pop3.starttls.enable", "true");
 
 			// imap settings
-			/*
-			 * properties.put("mail.imaps.host", host);
-			 * properties.put("mail.imaps.port", port);
-			 * properties.put("mail.imaps.starttls.enable", "true");
-			 */
+			
+			properties.put("mail.imaps.host", host);
+			properties.put("mail.imaps.port", port);
+			properties.put("mail.imaps.starttls.enable", "true");
 			Session emailSession = Session.getDefaultInstance(properties);
 
 			/*
@@ -115,7 +116,7 @@ public class VistaramEmailDataExtractor implements Tasklet {
 
 			// create the folder object and open it
 			Folder emailFolder = store.getFolder("INBOX");
-			emailFolder.open(Folder.READ_ONLY);
+			emailFolder.open(Folder.HOLDS_MESSAGES);
 
 			// retrieve the messages from the folder in an array and print it
 			Message[] messages = emailFolder.getMessages();
@@ -181,20 +182,14 @@ public class VistaramEmailDataExtractor implements Tasklet {
 					System.out.println("---------------------------------");
 					
 				}
-				
-				
-				
-				
-				if(message.getFrom()[0].toString().equalsIgnoreCase("MakeMyTrip <noreply@makemytrip.com>") && message.getSubject().contains("Hotel Booking on MakeMyTrip.com")) {
+		
+				/*if(message.getFrom()[0].toString().equalsIgnoreCase("MakeMyTrip <noreply@makemytrip.com>") && message.getSubject().contains("Hotel Booking on MakeMyTrip.com")) {
 					++vouchers;
 					System.out.println("Text: "
 							+ message.getContent().toString());
 					
 					extractMakeMyTripVoucherDetails(message);
-				}
-				
-				if (vouchers >= 3)
-					break;
+				}*/
 				
 				System.out.println("---------------------------------");
 
