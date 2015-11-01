@@ -2,6 +2,7 @@ package com.vistaram.data.relational.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -16,47 +17,57 @@ public class HotelDetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
-	private int id;
+	@Column(name="hotel_id")
+	private int hotelId;
 
-	@Column(name="contact_info", nullable=false)
-	private int contactInfo;
+	private String address;
 
-	@Column(nullable=false, length=55)
+	private String city;
+
 	private String country;
 
-	@Column(name="hotel_name", nullable=false, length=120)
+	@Column(name="hotel_identifier_name")
+	private String hotelIdentifierName;
+
+	@Column(name="hotel_name")
 	private String hotelName;
 
-	@Column(nullable=false, length=150)
-	private String mail_id;
+	private String pincode;
 
-	@Column(nullable=false, length=255)
-	private String map;
+	//bi-directional many-to-one association to BookingDetail
+	@OneToMany(mappedBy="hotelDetail")
+	private List<BookingDetail> bookingDetails;
 
-	@Column(nullable=false, length=80)
-	private String place;
-
-	@Column(name="zip_code", nullable=false)
-	private int zipCode;
+	//bi-directional one-to-one association to User
+	@OneToOne
+	@JoinColumn(name="users_username")
+	private User user;
 
 	public HotelDetail() {
 	}
 
-	public int getId() {
-		return this.id;
+	public int getHotelId() {
+		return this.hotelId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setHotelId(int hotelId) {
+		this.hotelId = hotelId;
 	}
 
-	public int getContactInfo() {
-		return this.contactInfo;
+	public String getAddress() {
+		return this.address;
 	}
 
-	public void setContactInfo(int contactInfo) {
-		this.contactInfo = contactInfo;
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getCity() {
+		return this.city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getCountry() {
@@ -67,6 +78,14 @@ public class HotelDetail implements Serializable {
 		this.country = country;
 	}
 
+	public String getHotelIdentifierName() {
+		return this.hotelIdentifierName;
+	}
+
+	public void setHotelIdentifierName(String hotelIdentifierName) {
+		this.hotelIdentifierName = hotelIdentifierName;
+	}
+
 	public String getHotelName() {
 		return this.hotelName;
 	}
@@ -75,36 +94,42 @@ public class HotelDetail implements Serializable {
 		this.hotelName = hotelName;
 	}
 
-	public String getMail_id() {
-		return this.mail_id;
+	public String getPincode() {
+		return this.pincode;
 	}
 
-	public void setMail_id(String mail_id) {
-		this.mail_id = mail_id;
+	public void setPincode(String pincode) {
+		this.pincode = pincode;
 	}
 
-	public String getMap() {
-		return this.map;
+	public List<BookingDetail> getBookingDetails() {
+		return this.bookingDetails;
 	}
 
-	public void setMap(String map) {
-		this.map = map;
+	public void setBookingDetails(List<BookingDetail> bookingDetails) {
+		this.bookingDetails = bookingDetails;
 	}
 
-	public String getPlace() {
-		return this.place;
+	public BookingDetail addBookingDetail(BookingDetail bookingDetail) {
+		getBookingDetails().add(bookingDetail);
+		bookingDetail.setHotelDetail(this);
+
+		return bookingDetail;
 	}
 
-	public void setPlace(String place) {
-		this.place = place;
+	public BookingDetail removeBookingDetail(BookingDetail bookingDetail) {
+		getBookingDetails().remove(bookingDetail);
+		bookingDetail.setHotelDetail(null);
+
+		return bookingDetail;
 	}
 
-	public int getZipCode() {
-		return this.zipCode;
+	public User getUser() {
+		return this.user;
 	}
 
-	public void setZipCode(int zipCode) {
-		this.zipCode = zipCode;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

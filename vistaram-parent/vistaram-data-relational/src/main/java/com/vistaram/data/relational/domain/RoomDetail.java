@@ -2,6 +2,7 @@ package com.vistaram.data.relational.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import java.util.List;
 
 
 /**
@@ -16,17 +17,35 @@ public class RoomDetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
 	private int id;
 
-	@Column(name="room_name", nullable=false, length=50)
+	@Column(name="no_of_adults")
+	private int noOfAdults;
+
+	@Column(name="no_of_children")
+	private int noOfChildren;
+
+	@Column(name="room_name")
 	private String roomName;
 
-	@Column(name="room_rate", nullable=false, length=20)
-	private String roomRate;
+	@Column(name="room_rate")
+	private double roomRate;
 
-	@Column(nullable=false, length=30)
-	private String room_Type;
+	@Column(name="room_type")
+	private String roomType;
+
+	//bi-directional many-to-many association to BookingDetail
+	@ManyToMany
+	@JoinTable(
+		name="room_details_has_booking_details"
+		, joinColumns={
+			@JoinColumn(name="room_details_id")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="booking_details_booking_id")
+			}
+		)
+	private List<BookingDetail> bookingDetails;
 
 	public RoomDetail() {
 	}
@@ -39,6 +58,22 @@ public class RoomDetail implements Serializable {
 		this.id = id;
 	}
 
+	public int getNoOfAdults() {
+		return this.noOfAdults;
+	}
+
+	public void setNoOfAdults(int noOfAdults) {
+		this.noOfAdults = noOfAdults;
+	}
+
+	public int getNoOfChildren() {
+		return this.noOfChildren;
+	}
+
+	public void setNoOfChildren(int noOfChildren) {
+		this.noOfChildren = noOfChildren;
+	}
+
 	public String getRoomName() {
 		return this.roomName;
 	}
@@ -47,20 +82,28 @@ public class RoomDetail implements Serializable {
 		this.roomName = roomName;
 	}
 
-	public String getRoomRate() {
+	public double getRoomRate() {
 		return this.roomRate;
 	}
 
-	public void setRoomRate(String roomRate) {
+	public void setRoomRate(double roomRate) {
 		this.roomRate = roomRate;
 	}
 
-	public String getRoom_Type() {
-		return this.room_Type;
+	public String getRoomType() {
+		return this.roomType;
 	}
 
-	public void setRoom_Type(String room_Type) {
-		this.room_Type = room_Type;
+	public void setRoomType(String roomType) {
+		this.roomType = roomType;
+	}
+
+	public List<BookingDetail> getBookingDetails() {
+		return this.bookingDetails;
+	}
+
+	public void setBookingDetails(List<BookingDetail> bookingDetails) {
+		this.bookingDetails = bookingDetails;
 	}
 
 }

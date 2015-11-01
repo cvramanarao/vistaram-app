@@ -3,6 +3,7 @@ package com.vistaram.data.relational.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -17,62 +18,45 @@ public class GuestDetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
-	private int id;
+	@Column(name="guest_id")
+	private int guestId;
 
-	@Column(nullable=false, length=250)
-	private String address;
-
-	@Column(name="contact_num", nullable=false)
-	private int contactNum;
+	@Column(name="contact_number")
+	private String contactNumber;
 
 	@Temporal(TemporalType.DATE)
-	@Column(nullable=false)
 	private Date dob;
 
-	@Column(name="email_id", nullable=false, length=200)
+	@Column(name="email_id")
 	private String emailId;
 
-	@Column(name="first_name", nullable=false, length=30)
+	@Column(name="first_name")
 	private String firstName;
 
-	@Column(nullable=false, length=1)
-	private String gender;
-
-	@Column(name="last_name", nullable=false, length=40)
+	@Column(name="last_name")
 	private String lastName;
 
-	@Column(nullable=false, length=30)
-	private String occupation;
-
-	@Column(name="zip_code", nullable=false)
-	private int zipCode;
+	//bi-directional many-to-one association to BookingDetail
+	@OneToMany(mappedBy="guestDetail")
+	private List<BookingDetail> bookingDetails;
 
 	public GuestDetail() {
 	}
 
-	public int getId() {
-		return this.id;
+	public int getGuestId() {
+		return this.guestId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setGuestId(int guestId) {
+		this.guestId = guestId;
 	}
 
-	public String getAddress() {
-		return this.address;
+	public String getContactNumber() {
+		return this.contactNumber;
 	}
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public int getContactNum() {
-		return this.contactNum;
-	}
-
-	public void setContactNum(int contactNum) {
-		this.contactNum = contactNum;
+	public void setContactNumber(String contactNumber) {
+		this.contactNumber = contactNumber;
 	}
 
 	public Date getDob() {
@@ -99,14 +83,6 @@ public class GuestDetail implements Serializable {
 		this.firstName = firstName;
 	}
 
-	public String getGender() {
-		return this.gender;
-	}
-
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-
 	public String getLastName() {
 		return this.lastName;
 	}
@@ -115,20 +91,26 @@ public class GuestDetail implements Serializable {
 		this.lastName = lastName;
 	}
 
-	public String getOccupation() {
-		return this.occupation;
+	public List<BookingDetail> getBookingDetails() {
+		return this.bookingDetails;
 	}
 
-	public void setOccupation(String occupation) {
-		this.occupation = occupation;
+	public void setBookingDetails(List<BookingDetail> bookingDetails) {
+		this.bookingDetails = bookingDetails;
 	}
 
-	public int getZipCode() {
-		return this.zipCode;
+	public BookingDetail addBookingDetail(BookingDetail bookingDetail) {
+		getBookingDetails().add(bookingDetail);
+		bookingDetail.setGuestDetail(this);
+
+		return bookingDetail;
 	}
 
-	public void setZipCode(int zipCode) {
-		this.zipCode = zipCode;
+	public BookingDetail removeBookingDetail(BookingDetail bookingDetail) {
+		getBookingDetails().remove(bookingDetail);
+		bookingDetail.setGuestDetail(null);
+
+		return bookingDetail;
 	}
 
 }

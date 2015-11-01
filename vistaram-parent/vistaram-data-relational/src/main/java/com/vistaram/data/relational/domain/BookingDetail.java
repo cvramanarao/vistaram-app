@@ -3,6 +3,7 @@ package com.vistaram.data.relational.domain;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -17,61 +18,69 @@ public class BookingDetail implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(unique=true, nullable=false)
-	private int id;
+	@Column(name="booking_id")
+	private int bookingId;
 
-	@Column(name="booking_agent", nullable=false, length=120)
+	@Column(name="booking_agent")
 	private String bookingAgent;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name="booking_date", nullable=false)
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name="booking_date")
 	private Date bookingDate;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="checking_date", nullable=false)
-	private Date checkingDate;
+	@Column(name="checkin_date")
+	private Date checkinDate;
 
 	@Temporal(TemporalType.DATE)
-	@Column(name="checkout_date", nullable=false)
+	@Column(name="checkout_date")
 	private Date checkoutDate;
 
-	@Lob
-	@Column(name="comments_or_requests", nullable=false)
-	private byte[] commentsOrRequests;
+	@Column(name="no_of_nights")
+	private int noOfNights;
 
-	@Column(name="guest_id", nullable=false)
-	private int guestId;
+	@Column(name="no_of_rooms")
+	private int noOfRooms;
 
-	@Column(name="hotel_details_id", nullable=false)
-	private int hotelDetailsId;
+	@Column(name="payment_type")
+	private String paymentType;
 
-	@Column(name="no_of_nights_stayed", nullable=false)
-	private int noOfNightsStayed;
+	@Column(name="total_amout")
+	private double totalAmout;
 
-	@Column(name="number_of_rooms", nullable=false)
-	private int numberOfRooms;
+	@Column(name="total_tax")
+	private double totalTax;
 
-	@Column(name="properties_id", nullable=false)
-	private int propertiesId;
-
-	@Column(name="rate_plan_id", nullable=false)
-	private int ratePlanId;
-
-	@Column(name="room_details_id", nullable=false)
-	private int roomDetailsId;
-
-	@Column(name="voucher_id", nullable=false, length=30)
+	@Column(name="voucher_id")
 	private String voucherId;
+
+	//bi-directional many-to-one association to GuestDetail
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="guest_details_guest_id")
+	private GuestDetail guestDetail;
+
+	//bi-directional many-to-one association to HotelDetail
+	@ManyToOne
+	@JoinColumn(name="hotel_details_hotel_id")
+	private HotelDetail hotelDetail;
+
+	//bi-directional many-to-many association to RoomDetail
+	@ManyToMany(mappedBy="bookingDetails")
+	private List<RoomDetail> roomDetails;
+
+	//bi-directional many-to-one association to TariffDetail
+	@OneToMany(mappedBy="bookingDetail")
+	private List<TariffDetail> tariffDetails;
 
 	public BookingDetail() {
 	}
 
-	public int getId() {
-		return this.id;
+	public int getBookingId() {
+		return this.bookingId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setBookingId(int bookingId) {
+		this.bookingId = bookingId;
 	}
 
 	public String getBookingAgent() {
@@ -90,12 +99,12 @@ public class BookingDetail implements Serializable {
 		this.bookingDate = bookingDate;
 	}
 
-	public Date getCheckingDate() {
-		return this.checkingDate;
+	public Date getCheckinDate() {
+		return this.checkinDate;
 	}
 
-	public void setCheckingDate(Date checkingDate) {
-		this.checkingDate = checkingDate;
+	public void setCheckinDate(Date checkinDate) {
+		this.checkinDate = checkinDate;
 	}
 
 	public Date getCheckoutDate() {
@@ -106,68 +115,44 @@ public class BookingDetail implements Serializable {
 		this.checkoutDate = checkoutDate;
 	}
 
-	public byte[] getCommentsOrRequests() {
-		return this.commentsOrRequests;
+	public int getNoOfNights() {
+		return this.noOfNights;
 	}
 
-	public void setCommentsOrRequests(byte[] commentsOrRequests) {
-		this.commentsOrRequests = commentsOrRequests;
+	public void setNoOfNights(int noOfNights) {
+		this.noOfNights = noOfNights;
 	}
 
-	public int getGuestId() {
-		return this.guestId;
+	public int getNoOfRooms() {
+		return this.noOfRooms;
 	}
 
-	public void setGuestId(int guestId) {
-		this.guestId = guestId;
+	public void setNoOfRooms(int noOfRooms) {
+		this.noOfRooms = noOfRooms;
 	}
 
-	public int getHotelDetailsId() {
-		return this.hotelDetailsId;
+	public String getPaymentType() {
+		return this.paymentType;
 	}
 
-	public void setHotelDetailsId(int hotelDetailsId) {
-		this.hotelDetailsId = hotelDetailsId;
+	public void setPaymentType(String paymentType) {
+		this.paymentType = paymentType;
 	}
 
-	public int getNoOfNightsStayed() {
-		return this.noOfNightsStayed;
+	public double getTotalAmout() {
+		return this.totalAmout;
 	}
 
-	public void setNoOfNightsStayed(int noOfNightsStayed) {
-		this.noOfNightsStayed = noOfNightsStayed;
+	public void setTotalAmout(double totalAmout) {
+		this.totalAmout = totalAmout;
 	}
 
-	public int getNumberOfRooms() {
-		return this.numberOfRooms;
+	public double getTotalTax() {
+		return this.totalTax;
 	}
 
-	public void setNumberOfRooms(int numberOfRooms) {
-		this.numberOfRooms = numberOfRooms;
-	}
-
-	public int getPropertiesId() {
-		return this.propertiesId;
-	}
-
-	public void setPropertiesId(int propertiesId) {
-		this.propertiesId = propertiesId;
-	}
-
-	public int getRatePlanId() {
-		return this.ratePlanId;
-	}
-
-	public void setRatePlanId(int ratePlanId) {
-		this.ratePlanId = ratePlanId;
-	}
-
-	public int getRoomDetailsId() {
-		return this.roomDetailsId;
-	}
-
-	public void setRoomDetailsId(int roomDetailsId) {
-		this.roomDetailsId = roomDetailsId;
+	public void setTotalTax(double totalTax) {
+		this.totalTax = totalTax;
 	}
 
 	public String getVoucherId() {
@@ -176,6 +161,52 @@ public class BookingDetail implements Serializable {
 
 	public void setVoucherId(String voucherId) {
 		this.voucherId = voucherId;
+	}
+
+	public GuestDetail getGuestDetail() {
+		return this.guestDetail;
+	}
+
+	public void setGuestDetail(GuestDetail guestDetail) {
+		this.guestDetail = guestDetail;
+	}
+
+	public HotelDetail getHotelDetail() {
+		return this.hotelDetail;
+	}
+
+	public void setHotelDetail(HotelDetail hotelDetail) {
+		this.hotelDetail = hotelDetail;
+	}
+
+	public List<RoomDetail> getRoomDetails() {
+		return this.roomDetails;
+	}
+
+	public void setRoomDetails(List<RoomDetail> roomDetails) {
+		this.roomDetails = roomDetails;
+	}
+
+	public List<TariffDetail> getTariffDetails() {
+		return this.tariffDetails;
+	}
+
+	public void setTariffDetails(List<TariffDetail> tariffDetails) {
+		this.tariffDetails = tariffDetails;
+	}
+
+	public TariffDetail addTariffDetail(TariffDetail tariffDetail) {
+		getTariffDetails().add(tariffDetail);
+		tariffDetail.setBookingDetail(this);
+
+		return tariffDetail;
+	}
+
+	public TariffDetail removeTariffDetail(TariffDetail tariffDetail) {
+		getTariffDetails().remove(tariffDetail);
+		tariffDetail.setBookingDetail(null);
+
+		return tariffDetail;
 	}
 
 }

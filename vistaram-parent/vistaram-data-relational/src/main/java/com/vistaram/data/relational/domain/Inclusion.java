@@ -8,9 +8,9 @@ import javax.persistence.*;
  * The persistent class for the inclusions database table.
  * 
  */
-@Entity
-@Table(name="inclusions")
-@NamedQuery(name="Inclusion.findAll", query="SELECT i FROM Inclusion i")
+//@Entity
+//@Table(name="inclusions")
+//@NamedQuery(name="Inclusion.findAll", query="SELECT i FROM Inclusion i")
 public class Inclusion implements Serializable {
 	private static final long serialVersionUID = 1L;
 

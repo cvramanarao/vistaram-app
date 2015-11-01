@@ -2,13 +2,15 @@ package com.vistaram.data.domain;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class VoucherDetailsBuilder {
 	
-	public static VoucherDetails build(Map<String, String> detailsMap){
+	public static VoucherDetails buildVoucherDetails(Map<String, String> detailsMap){
 		VoucherDetails voucherDetails = new VoucherDetails();
 		/*
 		 * 
@@ -73,28 +75,36 @@ public class VoucherDetailsBuilder {
 		}
 		
 		voucherDetails.setCheckOutDate(checkOutDate);
+		String hotelAndCity = detailsMap.get("name of hotel & city");
+		String[] args = hotelAndCity .split(",");
+		if(args.length> 2) {
+			hotelAndCity = args[0]+" ,"+args[1];
+		}
 		
-		
-		
-		voucherDetails.setHotelAndCity(detailsMap.get("name of hotel & city"));
+		voucherDetails.setHotelAndCity(hotelAndCity);
 		voucherDetails.setRoomType(detailsMap.get("type of room"));
 		voucherDetails.setNoOfRooms(Integer.valueOf(detailsMap.get("number of rooms")));
 		voucherDetails.setNoOfNights(Integer.valueOf(detailsMap.get("number of nights")));
 		voucherDetails.setRatePlan(detailsMap.get("Rate plan name"));
 		voucherDetails.setGuestRequest(detailsMap.get("guest request"));
-		String room1Occupancy = detailsMap.get("room 1");
-		String tokens[] = room1Occupancy.split(" ");
-		Map<String, Integer> guests = new HashMap<String, Integer>();
-		if(tokens[0].trim().equalsIgnoreCase("Adult")) {
-			Integer noOfAdults = Integer.valueOf(tokens[1].trim());
-			guests.put("Adult", noOfAdults);
-		}
-			
-		if(null != tokens[2] && "Child".equalsIgnoreCase(tokens[2])){
-			Integer noOfChildren = (null == tokens[3] || tokens[3].trim().isEmpty() ) ? 0: Integer.valueOf(tokens[3].trim());
-			guests.put("Child", noOfChildren);
-		}
-		voucherDetails.getGuestsPerRoom().put("Room1", guests);
+		
+	    for(int i=1;i<=voucherDetails.getNoOfRooms();i++) {
+			String room1Occupancy = detailsMap.get("room "+i);
+			String tokens[] = room1Occupancy.split(" ");
+			Map<String, Integer> guests = new HashMap<String, Integer>();
+			if(tokens[0].trim().equalsIgnoreCase("Adult")) {
+				Integer noOfAdults = Integer.valueOf(tokens[1].trim());
+				guests.put("Adult", noOfAdults);
+			}
+				
+			if(null != tokens[2] && "Child".equalsIgnoreCase(tokens[2])){
+				Integer noOfChildren = (null == tokens[3] || tokens[3].trim().isEmpty() ) ? 0: Integer.valueOf(tokens[3].trim());
+				guests.put("Child", noOfChildren);
+			}
+			voucherDetails.getGuestsPerRoom().put("Room"+i, guests);
+		
+	    }
+		
 		//voucherDetails.detailsMap.get("Special Request");
 		//voucherDetails.setInclusions(inclusions);detailsMap.get("inclusions");
 		voucherDetails.setBookingType(detailsMap.get("Booking Type"));
@@ -112,6 +122,61 @@ public class VoucherDetailsBuilder {
 			dateStr = dateStr.replace("July", "Jul");
 		}
 		return dateStr;
+	}
+
+	
+	public static TariffDetails buildTariffDetails(Map<String, String> tariffDetailsMap) {
+		TariffDetails tariffDetails = new TariffDetails();
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		
+		String checkInDateStr = tariffDetailsMap.get("check in date");
+		checkInDateStr = correctDateString(checkInDateStr);
+		System.out.println("checkInDateStr: "+checkInDateStr);
+		Date checkInDate = null;
+		try {
+		    sdf.applyLocalizedPattern("MMM dd, yyyy");
+		    checkInDate = sdf.parse(checkInDateStr);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		tariffDetails.setCheckInDate(checkInDate);
+		
+		
+		String checkOutDateStr = tariffDetailsMap.get("check out date");
+		checkOutDateStr = correctDateString(checkOutDateStr);
+		System.out.println("checkOutDateStr: "+checkOutDateStr);
+		Date checkOutDate = null;
+		try {
+			checkOutDate = sdf.parse(checkOutDateStr);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		tariffDetails.setCheckOutDate(checkOutDate);
+		String currency = tariffDetailsMap.get("currency");
+		tariffDetails.setCurrency(currency);
+		int noOfNights = Integer.valueOf(tariffDetailsMap.get("#nights"));
+		tariffDetails.setNoOfNights(noOfNights);
+		double ratePerRoom = Double.valueOf(tariffDetailsMap.get("rate per room"));
+		tariffDetails.setRatePerRoom(ratePerRoom);
+		double roomRate = Double.valueOf(tariffDetailsMap.get("room rate"));
+		tariffDetails.setRoomRate(roomRate);
+		return tariffDetails;
+	}
+	
+	public static VoucherDetails build(Map<String, String> voucherDetailsMap,
+			List<Map<String, String>> tariffDetailsList) {
+		VoucherDetails voucherDetails = buildVoucherDetails(voucherDetailsMap);
+		
+		List<TariffDetails> tariffDetailObjectsList = new ArrayList<TariffDetails>();
+		for(Map<String, String> tariffDetailsMap : tariffDetailsList) {
+			tariffDetailObjectsList.add(buildTariffDetails(tariffDetailsMap));
+		}
+		
+		voucherDetails.setTariffDetails(tariffDetailObjectsList);
+		return voucherDetails;
 	}
 
 }

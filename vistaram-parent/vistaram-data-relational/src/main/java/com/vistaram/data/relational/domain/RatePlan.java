@@ -8,9 +8,9 @@ import javax.persistence.*;
  * The persistent class for the rate_plan database table.
  * 
  */
-@Entity
-@Table(name="rate_plan")
-@NamedQuery(name="RatePlan.findAll", query="SELECT r FROM RatePlan r")
+//@Entity
+//@Table(name="rate_plan")
+//@NamedQuery(name="RatePlan.findAll", query="SELECT r FROM RatePlan r")
 public class RatePlan implements Serializable {
 	private static final long serialVersionUID = 1L;
 

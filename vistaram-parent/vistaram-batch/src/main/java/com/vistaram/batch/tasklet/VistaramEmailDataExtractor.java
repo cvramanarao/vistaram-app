@@ -10,6 +10,8 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vistaram.data.domain.PaymentType;
+import com.vistaram.data.domain.TariffDetails;
 import com.vistaram.data.domain.VoucherDetails;
 import com.vistaram.data.domain.VoucherDetailsBuilder;
 import com.vistaram.data.service.VoucherDetailsService;
@@ -21,10 +23,13 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -118,7 +123,9 @@ public class VistaramEmailDataExtractor implements Tasklet {
 			Folder emailFolder = store.getFolder("INBOX");
 			emailFolder.open(Folder.HOLDS_MESSAGES);
 
+			
 			// retrieve the messages from the folder in an array and print it
+			
 			Message[] messages = emailFolder.getMessages();
 			System.out.println("messages.length---" + messages.length);
 
@@ -176,9 +183,12 @@ public class VistaramEmailDataExtractor implements Tasklet {
 					String voucher = message.getSubject()
 							.substring(message.getSubject().lastIndexOf(" "))
 							.trim();
+					
+					
 					voucherDetailsMap.put(voucher.trim(),
 							extractGoIbiboVoucherDetailsFromMessage(message));
-
+					
+					
 					System.out.println("---------------------------------");
 					
 				}
@@ -190,6 +200,12 @@ public class VistaramEmailDataExtractor implements Tasklet {
 					
 					extractMakeMyTripVoucherDetails(message);
 				}*/
+				
+				if(vouchers > 3) {
+					break;
+				}
+				
+				
 				
 				System.out.println("---------------------------------");
 
@@ -214,6 +230,7 @@ public class VistaramEmailDataExtractor implements Tasklet {
 
 	private VoucherDetails extractGoIbiboVoucherDetailsFromMessage(Message message) throws IOException, MessagingException {
 		Map<String, String> voucherDetailsMap = new HashMap<String, String>();
+		List<Map<String, String>> tariffDetailsList = new ArrayList<Map<String,String>>();
 		MimeMultipart mimePart = (MimeMultipart) message
 				.getContent();
 		System.out.println("total parts in this message : "
@@ -242,7 +259,7 @@ public class VistaramEmailDataExtractor implements Tasklet {
 				String voucherString = voucherNumberTable.text();
 				System.out.println("voucherString : "
 						+ voucherString);
-				voucherDetailsMap.put("voucherNumber", voucherString.substring(voucherString.indexOf(":")));
+				voucherDetailsMap.put("voucherNumber", voucherString.substring(voucherString.indexOf(":")+1));
 				Element reservationDetailsTable = tables.get(2);
 				Elements trs = reservationDetailsTable
 						.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
@@ -252,12 +269,44 @@ public class VistaramEmailDataExtractor implements Tasklet {
 					voucherDetailsMap.put(key, value);
 				}
 				
+				Element tariffDetailsTable = tables.get(6);
+				Elements headTds = tariffDetailsTable.select("table>tbody>tr>td>table>tbody>tr>td>table>thead>tr>td");
+				List<String> keys = new ArrayList<String>();
+				for(Element td: headTds) {
+					keys.add(td.ownText());
+				}
+				
+				System.out.println("keys : "+keys);
+				Elements bodyTrs = tariffDetailsTable.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
+				
+				
+				
+				for(Element tr: bodyTrs) {
+					Map<String, String> tariffDetailRecord = new HashMap<String, String>();
+					Elements tds = tr.children();
+					int i=0;
+					for(Element td : tds){
+						tariffDetailRecord.put(keys.get(i++), td.ownText());
+					}
+					tariffDetailsList.add(tariffDetailRecord);
+				}
+				
+				
+				Element summaryTable = tables.get(7);
+				Elements summaryRows = summaryTable.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
+				for(Element tr : summaryRows) {
+					String key = tr.child(0).ownText();
+					String value = tr.child(1).ownText();
+					voucherDetailsMap.put(key, value);
+				}
 			}
 		}
 		
 		System.out.println(voucherDetailsMap);
-		VoucherDetails voucherDetails = VoucherDetailsBuilder.build(voucherDetailsMap);
+		VoucherDetails voucherDetails = VoucherDetailsBuilder.build(voucherDetailsMap, tariffDetailsList);
+
 		voucherDetails.setBookingAgent("goibibio.com");
+		voucherDetails.setPaymentType(PaymentType.ONLINE);
 		return voucherDetails;
 	}
 	

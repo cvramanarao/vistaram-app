@@ -3,6 +3,7 @@ package com.vistaram.data.domain;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class VoucherDetails {
@@ -42,6 +43,11 @@ public class VoucherDetails {
 	private String guestRequest;
 	private String inclusions;
 	private String bookingType;
+	
+	private PaymentType paymentType;
+	
+	private List<TariffDetails> tariffDetails;
+	
 	
 	private Map<String, Map<String, Integer>> guestsPerRoom = new HashMap<String, Map<String, Integer>>();
 	
@@ -93,13 +99,6 @@ public class VoucherDetails {
 	public void setGuestsPerRoom(Map<String, Map<String, Integer>> guestsPerRoom) {
 		this.guestsPerRoom = guestsPerRoom;
 	}
-
-	
-	
-	
-	
-	
-	
 	
 	public String getBookingAgent() {
 		return bookingAgent;
@@ -145,14 +144,34 @@ public class VoucherDetails {
 		this.roomType = roomType;
 	}
 	
-	@Override
-	public String toString() {
-		return "VoucherDetails [bookingAgent=" + bookingAgent + ", voucherNumber=" + voucherNumber + ", guestName="
-				+ guestName + ", hotelAndCity=" + hotelAndCity + ", bookingDate=" + bookingDate + ", checkInDate="
-				+ checkInDate + ", checkOutDate=" + checkOutDate + ", noOfRooms=" + noOfRooms + ", noOfNights="
-				+ noOfNights + ", ratePlan=" + ratePlan + ", guestRequest=" + guestRequest + ", inclusions="
-				+ inclusions + ", bookingType=" + bookingType + ", guestsPerRoom=" + guestsPerRoom + "]";
+	public PaymentType getPaymentType() {
+		return paymentType;
+	}
+	public void setPaymentType(PaymentType paymentType) {
+		this.paymentType = paymentType;
 	}
 	
+	public List<TariffDetails> getTariffDetails() {
+		return tariffDetails;
+	}
+	public void setTariffDetails(List<TariffDetails> tariffDetails) {
+		this.tariffDetails = tariffDetails;
+	}
+	@Override
+	public String toString() {
+		return "VoucherDetails [bookingAgent=" + bookingAgent
+				+ ", voucherNumber=" + voucherNumber + ", guestName="
+				+ guestName + ", hotelAndCity=" + hotelAndCity
+				+ ", bookingDate=" + bookingDate + ", checkInDate="
+				+ checkInDate + ", checkOutDate=" + checkOutDate
+				+ ", roomType=" + roomType + ", noOfRooms=" + noOfRooms
+				+ ", noOfNights=" + noOfNights + ", ratePlan=" + ratePlan
+				+ ", guestRequest=" + guestRequest + ", inclusions="
+				+ inclusions + ", bookingType=" + bookingType
+				+ ", paymentType=" + paymentType + ", tariffDetails="
+				+ tariffDetails + ", guestsPerRoom=" + guestsPerRoom + "]";
+	}
+	
+
 	
 }
