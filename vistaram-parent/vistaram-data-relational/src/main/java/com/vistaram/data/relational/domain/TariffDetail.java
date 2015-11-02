@@ -35,7 +35,7 @@ public class TariffDetail implements Serializable {
 	private double ratePerRoom;
 
 	@Column(name="total_rate")
-	private String totalRate;
+	private double totalRate;
 
 	//bi-directional many-to-one association to BookingDetail
 	@ManyToOne
@@ -85,11 +85,11 @@ public class TariffDetail implements Serializable {
 		this.ratePerRoom = ratePerRoom;
 	}
 
-	public String getTotalRate() {
+	public double getTotalRate() {
 		return this.totalRate;
 	}
 
-	public void setTotalRate(String totalRate) {
+	public void setTotalRate(double totalRate) {
 		this.totalRate = totalRate;
 	}
 

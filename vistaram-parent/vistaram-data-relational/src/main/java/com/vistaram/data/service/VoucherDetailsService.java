@@ -27,7 +27,9 @@ public class VoucherDetailsService {
 	@Transactional
 	public void saveVoucherDetails(VoucherDetails voucherDetails){
 		BookingDetail bookingDetail = DtoToEntityMapper.mapVoucherDetailsToBookingDetails(voucherDetails);
-		bookingDetail.setHotelDetail(hotelDetailDao.getHotelDetailByIdentificationName(voucherDetails.getHotelAndCity()));
+		HotelDetail hotelDetail = hotelDetailDao.getHotelDetailByIdentificationName(voucherDetails.getHotelAndCity());
+		System.out.println("Hotel : "+hotelDetail);
+		bookingDetail.setHotelDetail(hotelDetail);
 		bookingDetailDao.save(bookingDetail);
 	}
 

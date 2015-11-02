@@ -132,4 +132,15 @@ public class HotelDetail implements Serializable {
 		this.user = user;
 	}
 
+	@Override
+	public String toString() {
+		return "HotelDetail [hotelId=" + hotelId + ", address=" + address
+				+ ", city=" + city + ", country=" + country
+				+ ", hotelIdentifierName=" + hotelIdentifierName
+				+ ", hotelName=" + hotelName + ", pincode=" + pincode
+				+ ", bookingDetails=" + bookingDetails + ", user=" + user + "]";
+	}
+	
+	
+
 }

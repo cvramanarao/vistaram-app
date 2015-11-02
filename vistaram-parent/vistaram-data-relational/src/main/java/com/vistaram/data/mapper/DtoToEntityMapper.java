@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.vistaram.data.domain.PaymentType;
 import com.vistaram.data.domain.VoucherDetails;
 import com.vistaram.data.relational.domain.BookingDetail;
 import com.vistaram.data.relational.domain.GuestDetail;
@@ -35,7 +36,7 @@ public class DtoToEntityMapper {
 //			
 //		}
 		
-		//bookingDetail.setPaymentType(paymentType);
+		bookingDetail.setPaymentType(PaymentType.ONLINE.toString());
 		System.out.println("<-- mapVoucherDetailsToBookingDetails()");
 		return bookingDetail;
 		

@@ -46,6 +46,9 @@ public class VoucherDetails {
 	
 	private PaymentType paymentType;
 	
+	private double totalTax;
+	private double totalAmountPayable;
+	
 	private List<TariffDetails> tariffDetails;
 	
 	
@@ -157,6 +160,19 @@ public class VoucherDetails {
 	public void setTariffDetails(List<TariffDetails> tariffDetails) {
 		this.tariffDetails = tariffDetails;
 	}
+
+	public double getTotalTax() {
+		return totalTax;
+	}
+	public void setTotalTax(double totalTax) {
+		this.totalTax = totalTax;
+	}
+	public double getTotalAmountPayable() {
+		return totalAmountPayable;
+	}
+	public void setTotalAmountPayable(double totalAmountPayable) {
+		this.totalAmountPayable = totalAmountPayable;
+	}
 	@Override
 	public String toString() {
 		return "VoucherDetails [bookingAgent=" + bookingAgent
@@ -168,8 +184,10 @@ public class VoucherDetails {
 				+ ", noOfNights=" + noOfNights + ", ratePlan=" + ratePlan
 				+ ", guestRequest=" + guestRequest + ", inclusions="
 				+ inclusions + ", bookingType=" + bookingType
-				+ ", paymentType=" + paymentType + ", tariffDetails="
-				+ tariffDetails + ", guestsPerRoom=" + guestsPerRoom + "]";
+				+ ", paymentType=" + paymentType + ", totalTax=" + totalTax
+				+ ", totalAmountPayable=" + totalAmountPayable
+				+ ", tariffDetails=" + tariffDetails + ", guestsPerRoom="
+				+ guestsPerRoom + "]";
 	}
 	
 

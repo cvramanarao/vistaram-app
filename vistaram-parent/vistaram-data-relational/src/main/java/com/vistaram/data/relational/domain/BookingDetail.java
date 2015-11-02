@@ -65,11 +65,11 @@ public class BookingDetail implements Serializable {
 	private HotelDetail hotelDetail;
 
 	//bi-directional many-to-many association to RoomDetail
-	@ManyToMany(mappedBy="bookingDetails")
+	@ManyToMany(mappedBy="bookingDetails", cascade=CascadeType.ALL)
 	private List<RoomDetail> roomDetails;
 
 	//bi-directional many-to-one association to TariffDetail
-	@OneToMany(mappedBy="bookingDetail")
+	@OneToMany(mappedBy="bookingDetail", cascade=CascadeType.ALL)
 	private List<TariffDetail> tariffDetails;
 
 	public BookingDetail() {

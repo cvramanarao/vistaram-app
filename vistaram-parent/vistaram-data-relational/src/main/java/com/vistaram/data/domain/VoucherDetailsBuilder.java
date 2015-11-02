@@ -78,7 +78,7 @@ public class VoucherDetailsBuilder {
 		String hotelAndCity = detailsMap.get("name of hotel & city");
 		String[] args = hotelAndCity .split(",");
 		if(args.length> 2) {
-			hotelAndCity = args[0]+" ,"+args[1];
+			hotelAndCity = args[0].trim()+", "+args[1].trim();
 		}
 		
 		voucherDetails.setHotelAndCity(hotelAndCity);
