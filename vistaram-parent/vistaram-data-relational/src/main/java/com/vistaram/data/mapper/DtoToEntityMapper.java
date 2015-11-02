@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.vistaram.data.domain.PaymentType;
+import com.vistaram.data.domain.TariffDetails;
 import com.vistaram.data.domain.VoucherDetails;
 import com.vistaram.data.relational.domain.BookingDetail;
 import com.vistaram.data.relational.domain.GuestDetail;
 import com.vistaram.data.relational.domain.HotelDetail;
 import com.vistaram.data.relational.domain.RoomDetail;
+import com.vistaram.data.relational.domain.TariffDetail;
 
 public class DtoToEntityMapper {
 	
@@ -30,12 +32,24 @@ public class DtoToEntityMapper {
 		
 		bookingDetail.setNoOfNights(voucherDetails.getNoOfNights());
 		//bookingDetail.setRatePlanId(voucherDetails.getRatePlan());
-		bookingDetail.setRoomDetails(mapVoucherDetailsToRoomDetails(voucherDetails));
-		bookingDetail.setGuestDetail(mapVoucherDetailsToGuestDetails(voucherDetails));
-//		if(voucherDetails.getBookingType().contains("online")){
-//			
-//		}
 		
+		List<RoomDetail> roomDetails = mapVoucherDetailsToRoomDetails(voucherDetails);
+		for(RoomDetail roomDetail : roomDetails) {
+			roomDetail.setBookingDetail(bookingDetail);
+		}
+		bookingDetail.setRoomDetails(roomDetails);
+		GuestDetail guestDetail = mapVoucherDetailsToGuestDetails(voucherDetails);
+		List<BookingDetail> bookingDetailsList = new ArrayList<BookingDetail>();
+		bookingDetailsList.add(bookingDetail);
+		guestDetail.setBookingDetails(bookingDetailsList);
+		bookingDetail.setGuestDetail(guestDetail);
+		List<TariffDetail> tariffDetails = mapVoucherDetailsToTariffDetails(voucherDetails);
+		for(TariffDetail tariffDetail : tariffDetails){
+			tariffDetail.setBookingDetail(bookingDetail);
+		}
+		bookingDetail.setTariffDetails(tariffDetails);
+		bookingDetail.setTotalTax(voucherDetails.getTotalTax());
+		bookingDetail.setTotalAmout(voucherDetails.getTotalAmountPayable());
 		bookingDetail.setPaymentType(PaymentType.ONLINE.toString());
 		System.out.println("<-- mapVoucherDetailsToBookingDetails()");
 		return bookingDetail;
@@ -43,7 +57,23 @@ public class DtoToEntityMapper {
 	}
 	
 	
-	
+	public static List<TariffDetail> mapVoucherDetailsToTariffDetails(VoucherDetails voucherDetails){
+		List<TariffDetail> tariffDetails = new ArrayList<TariffDetail>();
+		List<TariffDetails> tariffDetailsList = voucherDetails.getTariffDetails();
+		for(TariffDetails details : tariffDetailsList) {
+		
+			TariffDetail tariffDetail = new TariffDetail();
+			tariffDetail.setCheckinDate(details.getCheckInDate());
+			tariffDetail.setCheckoutDate(details.getCheckOutDate());
+			tariffDetail.setNoOfNights(details.getNoOfNights());
+			tariffDetail.setRatePerRoom(details.getRatePerRoom());
+			tariffDetail.setTotalRate(details.getRoomRate());
+			tariffDetails.add(tariffDetail);
+		}
+		
+		
+		return tariffDetails;
+	}
 	public static GuestDetail mapVoucherDetailsToGuestDetails(VoucherDetails voucherDetails){
 		GuestDetail guestDetail = new GuestDetail();
 		String guestName = voucherDetails.getGuestName();

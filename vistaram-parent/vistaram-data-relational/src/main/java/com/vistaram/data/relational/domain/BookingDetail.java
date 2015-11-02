@@ -64,8 +64,8 @@ public class BookingDetail implements Serializable {
 	@JoinColumn(name="hotel_details_hotel_id")
 	private HotelDetail hotelDetail;
 
-	//bi-directional many-to-many association to RoomDetail
-	@ManyToMany(mappedBy="bookingDetails", cascade=CascadeType.ALL)
+	//bi-directional many-to-one association to RoomDetail
+	@OneToMany(mappedBy="bookingDetail", cascade=CascadeType.ALL)
 	private List<RoomDetail> roomDetails;
 
 	//bi-directional many-to-one association to TariffDetail
@@ -185,6 +185,20 @@ public class BookingDetail implements Serializable {
 
 	public void setRoomDetails(List<RoomDetail> roomDetails) {
 		this.roomDetails = roomDetails;
+	}
+
+	public RoomDetail addRoomDetail(RoomDetail roomDetail) {
+		getRoomDetails().add(roomDetail);
+		roomDetail.setBookingDetail(this);
+
+		return roomDetail;
+	}
+
+	public RoomDetail removeRoomDetail(RoomDetail roomDetail) {
+		getRoomDetails().remove(roomDetail);
+		roomDetail.setBookingDetail(null);
+
+		return roomDetail;
 	}
 
 	public List<TariffDetail> getTariffDetails() {

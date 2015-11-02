@@ -19,7 +19,7 @@ public class User implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private String username;
 
-	private byte enabled;
+	private Boolean enabled;
 
 	private String password;
 
@@ -42,11 +42,11 @@ public class User implements Serializable {
 		this.username = username;
 	}
 
-	public byte getEnabled() {
+	public Boolean getEnabled() {
 		return this.enabled;
 	}
 
-	public void setEnabled(byte enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 

@@ -19,7 +19,7 @@ public class Authority implements Serializable {
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
-	@JoinColumn(name="username", insertable =false, updatable=false)
+	@JoinColumn(name="username", insertable=false, updatable=false)
 	private User user;
 
 	public Authority() {

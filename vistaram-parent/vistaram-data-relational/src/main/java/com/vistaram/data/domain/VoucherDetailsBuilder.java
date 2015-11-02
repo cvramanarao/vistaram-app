@@ -107,6 +107,9 @@ public class VoucherDetailsBuilder {
 		
 		//voucherDetails.detailsMap.get("Special Request");
 		//voucherDetails.setInclusions(inclusions);detailsMap.get("inclusions");
+	    detailsMap.get("total tax");
+	    detailsMap.get("total amount payable");
+	    
 		voucherDetails.setBookingType(detailsMap.get("Booking Type"));
 		
 		return voucherDetails;

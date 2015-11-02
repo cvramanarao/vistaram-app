@@ -2,7 +2,6 @@ package com.vistaram.data.relational.domain;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import java.util.List;
 
 
 /**
@@ -34,18 +33,10 @@ public class RoomDetail implements Serializable {
 	@Column(name="room_type")
 	private String roomType;
 
-	//bi-directional many-to-many association to BookingDetail
-	@ManyToMany
-	@JoinTable(
-		name="room_details_has_booking_details"
-		, joinColumns={
-			@JoinColumn(name="room_details_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="booking_details_booking_id")
-			}
-		)
-	private List<BookingDetail> bookingDetails;
+	//bi-directional many-to-one association to BookingDetail
+	@ManyToOne
+	@JoinColumn(name="booking_details_booking_id")
+	private BookingDetail bookingDetail;
 
 	public RoomDetail() {
 	}
@@ -98,12 +89,12 @@ public class RoomDetail implements Serializable {
 		this.roomType = roomType;
 	}
 
-	public List<BookingDetail> getBookingDetails() {
-		return this.bookingDetails;
+	public BookingDetail getBookingDetail() {
+		return this.bookingDetail;
 	}
 
-	public void setBookingDetails(List<BookingDetail> bookingDetails) {
-		this.bookingDetails = bookingDetails;
+	public void setBookingDetail(BookingDetail bookingDetail) {
+		this.bookingDetail = bookingDetail;
 	}
 
 }
