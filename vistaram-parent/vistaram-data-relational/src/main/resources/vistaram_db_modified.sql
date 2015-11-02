@@ -198,16 +198,30 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 use vistaram_db;
-insert into users values ('user1', 'user1', 1);
-insert into authorities values('user','user1');
-insert into hotel_details (hotel_name, city, hotel_identifier_name, users_username) values('Vistaram Near Rtc Complex','Visakhapatnam','Vistaram Near Rtc Complex, Visakhapatnam', 'user1');
-insert into users values ('user2', 'user2', 1);
-insert into authorities values('user','user2');
-insert into hotel_details (hotel_name, city, hotel_identifier_name, users_username) values('Vistaram Rtc Complex','Visakhapatnam','Vistaram Rtc Complex, Visakhapatnam', 'user2');
-insert into users values ('user3', 'user3', 1);
-insert into authorities values('user','user3');
-insert into hotel_details (hotel_name, city, hotel_identifier_name, users_username) values('Vistaram Near Railway Station','Visakhapatnam','Vistaram Near Railway Station, Visakhapatnam', 'user3');
-insert into users values ('user4', 'user4', 1);
-insert into authorities values('user','user4');
-insert into hotel_details (hotel_name, city, hotel_identifier_name, users_username) values('Vistaram Ac Rooms Railway Station','Visakhapatnam','Vistaram Ac Rooms Railway Station, Visakhapatnam', 'user4');
-commit;
+
+insert into users values ('hotelmadhurainn@gmail.com', 'Welcome1', 1);
+insert into authorities values('user','hotelmadhurainn@gmail.com');
+insert into users values ('info.vskp@microcontinental.in', 'Welcome1', 1);
+insert into authorities values('user','info.vskp@microcontinental.in');
+insert into users values ('applethehotel@gmail.com', 'Welcome1', 1);
+insert into authorities values('user','applethehotel@gmail.com');
+insert into users values ('om.rt@viharhospitality.com', 'Welcome1', 1);
+insert into authorities values('user','om.rt@viharhospitality.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Madhura INN', '49-24-50/1, Sankaramatam Main Road, back side nistla nivas', 'Visakhapatnam', 'India', 'Vistaram Near Railway Station','hotelmadhurainn@gmail.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Micro Continental', 'Station Road', 'Visakhapatnam', 'India', 'Vistaram Ac Rooms Railway Station', 'info.vskp@microcontinental.in');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Apple Hotel', 'opp Rtc complex,near kfc, dwaraka nagar', 'Visakhapatnam', 'India', 'Vistaram Rtc Complex', 'applethehotel@gmail.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Vihar Boutique Hotel', 'Vinayagar Plaza, Airtel Building Sampath Vinayaka Temple Road', 'Visakhapatnam', 'India', 'Vistaram Near Rtc Complex', 'om.rt@viharhospitality.com');
+
+commit;	
