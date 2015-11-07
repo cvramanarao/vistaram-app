@@ -20,6 +20,11 @@ public class VistaramEmailBatchJobScheduler {
 	@Autowired
 	private Job vistaramDataExtractorJob;
 	
+	
+	public void runSomeJob(){
+		
+	}
+	
 	@Scheduled(cron = "0 0 5 * * *")
 	public void runJob() {
 		System.out.println("run job()-->");
