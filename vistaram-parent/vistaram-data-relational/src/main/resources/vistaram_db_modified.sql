@@ -207,6 +207,16 @@ insert into users values ('applethehotel@gmail.com', 'Welcome1', 1);
 insert into authorities values('user','applethehotel@gmail.com');
 insert into users values ('om.rt@viharhospitality.com', 'Welcome1', 1);
 insert into authorities values('user','om.rt@viharhospitality.com');
+insert into users values ('arukuacrooms', 'Welcome1', 1);
+insert into authorities values('user','arukuacrooms');
+insert into users values ('vistaramairspacelucc', 'Welcome1', 1);
+insert into authorities values('user','vistaramairspacelucc');
+insert into users values ('vistaramairspacelohais', 'Welcome1', 1);
+insert into authorities values('user','vistaramairspacelohais');
+insert into users values ('vistaramairspacewaves', 'Welcome1', 1);
+insert into authorities values('user','vistaramairspacewaves');
+insert into users values ('vistaramazadsquare', 'Welcome1', 1);
+insert into authorities values('user','vistaramazadsquare');
 
 insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
@@ -223,5 +233,25 @@ values('Apple Hotel', 'opp Rtc complex,near kfc, dwaraka nagar', 'Visakhapatnam'
 insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
 values('Vihar Boutique Hotel', 'Vinayagar Plaza, Airtel Building Sampath Vinayaka Temple Road', 'Visakhapatnam', 'India', 'Vistaram Near Rtc Complex', 'om.rt@viharhospitality.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Krishna Tara Comforts','Visakha-Araku Main Road','Araku Valley','India','Vistaram A/C Rooms','arukuacrooms');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Luck Residency','A-392/1,Road No.1,Near IGI Airport,NH-8 Highway,Mahipalpur Extn','Delhi','India','Vistaram Airspace Residency lucc','vistaramairspacelucc');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Hotel Lohias','A-53, Mahipalpur Extn. , National Highway -8 (Near AIRPORT)','Delhi','India','Vistaram Airspace Lohais','vistaramairspacelohais');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Waves Hotel','A-272, Mahipalpur Extn A- Block, NH-8, Near IGI Airport','Delhi','India','Vistaram Airspace Waves','vistaramairspacewaves');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Prime Plaza','Plot No. 7-9,Jharsa, Near Medanta Hospital,Sec. 3','Gurgoan','India','Vistaram Azad Square','vistaramazadsquare');
 
 commit;	

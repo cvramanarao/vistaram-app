@@ -107,11 +107,16 @@ public class VoucherDetailsBuilder {
 		
 		//voucherDetails.detailsMap.get("Special Request");
 		//voucherDetails.setInclusions(inclusions);detailsMap.get("inclusions");
-	    detailsMap.get("total tax");
-	    detailsMap.get("total amount payable");
+	    String totalTaxStr = detailsMap.get("total tax");
+	    voucherDetails.setTotalTax(null==totalTaxStr || totalTaxStr.isEmpty()?0:Double.valueOf(totalTaxStr));
+	    String totalDiscountStr = detailsMap.get("total discount");
+	    voucherDetails.setTotalDiscount(null==totalDiscountStr || totalDiscountStr.isEmpty()?0:Double.valueOf(totalDiscountStr));
+	    String totalAmountPayableStr = detailsMap.get("total amount payable");
+	    voucherDetails.setTotalAmountPayable(null==totalAmountPayableStr || totalAmountPayableStr.isEmpty()?0:Double.valueOf(totalAmountPayableStr));
+	    //String extraGuest = detailsMap.get("extra guest");
+	    //voucherDetails.setExtraGuest(Integer.valueOf(extraGuest));
 	    
-		voucherDetails.setBookingType(detailsMap.get("Booking Type"));
-		
+		voucherDetails.setBookingType(detailsMap.get("Booking Type"));	
 		return voucherDetails;
 	}
 

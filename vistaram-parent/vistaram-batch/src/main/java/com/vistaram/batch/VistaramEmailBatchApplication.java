@@ -16,18 +16,15 @@
 
 package com.vistaram.batch;
 
-import java.util.Date;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -37,13 +34,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.integration.channel.DirectChannel;
+import org.springframework.messaging.MessageHandler;
+
+import com.vistaram.batch.listener.VistaramEmailMessageHandler;
+import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
 import com.vistaram.batch.tasklet.VistaramEmailDataExtractor;
+import com.vistaram.batch.writer.VistaramDetailsWriter;
 import com.vistaram.data.config.DataSourceConfiguration;
 
 
@@ -52,6 +54,7 @@ import com.vistaram.data.config.DataSourceConfiguration;
 @Import(DataSourceConfiguration.class)
 @EnableBatchProcessing
 @PropertySource("classpath:application.properties")
+@ImportResource("classpath:vistaram-email-integration.xml")
 public class VistaramEmailBatchApplication {
 
 	@Autowired
@@ -61,9 +64,22 @@ public class VistaramEmailBatchApplication {
 	private StepBuilderFactory steps;
 	
 
+	@Autowired
+	private DirectChannel directChannel;
+	
+	
+	@PostConstruct
+	public void init(){
+		System.out.println("VistaramEmailBatchApplication || init()-->");
+		directChannel.subscribe(messageHandler());
+		
+		System.out.println("<-- VistaramEmailBatchApplication || init()");
+	}
+	
+
 	@Bean
 	public Tasklet vistaramEmailDataExtractorTask() {
-		/*return new Tasklet() {
+		/*return new Tasklet () {
 			@Override
 			public RepeatStatus execute(StepContribution contribution,
 					ChunkContext context) {
@@ -83,14 +99,28 @@ public class VistaramEmailBatchApplication {
 	public Job vistaramDataExtractorJob(Step vistaramDataExtractorStep) throws Exception {
 		return this.jobs.get("vistaramDataExtractorJob").incrementer(new RunIdIncrementer()).start(vistaramDataExtractorStep).build();
 	}
-
+	
+	@Bean
+	public VistaramEmailMessageHandler messageHandler(){
+		return new VistaramEmailMessageHandler();
+	}
+	
+	@Bean
+	public VistaramEmailMessageProcessor vistaramEmailMessageProcessor(){
+		return new VistaramEmailMessageProcessor();
+	}
+	
+	@Bean
+	public VistaramDetailsWriter vistaramDetailsWriter(){
+		return new VistaramDetailsWriter();
+	}
 	
 	public static void main(String[] args) throws Exception {
 		// System.exit is common for Batch applications since the exit code can be used to
 		// drive a workflow
 //		System.exit(SpringApplication.exit(SpringApplication.run(
 //				VistaramEmailBatchApplication.class, args)));
-		SpringApplication.run(VistaramEmailBatchApplication.class, args);
 		
+		SpringApplication.run(VistaramEmailBatchApplication.class, args);
 	}
 }

@@ -26,11 +26,15 @@ public class VoucherDetailsService {
 	
 	@Transactional
 	public void saveVoucherDetails(VoucherDetails voucherDetails){
+		System.out.println("saveVoucherDetails()-->");
 		BookingDetail bookingDetail = DtoToEntityMapper.mapVoucherDetailsToBookingDetails(voucherDetails);
-		HotelDetail hotelDetail = hotelDetailDao.getHotelDetailByIdentificationName(voucherDetails.getHotelAndCity());
+		String hotelAndCity = voucherDetails.getHotelAndCity();
+		System.out.println("hotelAndCity : "+hotelAndCity.substring(0, hotelAndCity.indexOf(",")));
+		HotelDetail hotelDetail = hotelDetailDao.getHotelDetailByIdentificationName(hotelAndCity.substring(0, hotelAndCity.indexOf(",")));
 		System.out.println("Hotel : "+hotelDetail);
 		bookingDetail.setHotelDetail(hotelDetail);
 		bookingDetailDao.save(bookingDetail);
+		System.out.println("<-- saveVoucherDetails()");
 	}
 
 }
