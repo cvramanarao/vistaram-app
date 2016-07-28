@@ -18,6 +18,7 @@ package com.vistaram.batch;
 
 
 import javax.annotation.PostConstruct;
+import javax.mail.Message;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -28,6 +29,9 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.batch.item.ItemProcessor;
+import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -47,6 +51,7 @@ import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
 import com.vistaram.batch.tasklet.VistaramEmailDataExtractor;
 import com.vistaram.batch.writer.VistaramDetailsWriter;
 import com.vistaram.data.config.DataSourceConfiguration;
+import com.vistaram.data.domain.VoucherDetails;
 
 
 @SpringBootApplication

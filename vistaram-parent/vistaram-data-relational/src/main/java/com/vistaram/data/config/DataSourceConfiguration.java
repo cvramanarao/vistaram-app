@@ -81,7 +81,7 @@ public class DataSourceConfiguration {
         entityManagerFactoryBean.setPersistenceProviderClass(HibernatePersistenceProvider.class);
 
         Properties jpaProperties = new Properties();
-        //jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         jpaProperties.put("spring.jpa.database-platform", "org.hibernate.dialect.MySQLDialect");
        
         //jpaProperties.put("spring.jpa.generate-dd","true");

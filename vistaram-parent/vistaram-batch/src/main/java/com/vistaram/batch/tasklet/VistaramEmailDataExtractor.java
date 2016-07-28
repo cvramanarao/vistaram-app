@@ -27,6 +27,7 @@ import java.io.Reader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -50,7 +51,7 @@ import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeMultipart;
 
 public class VistaramEmailDataExtractor implements Tasklet {
-	
+
 	@Autowired
 	private VistaramDetailsWriter writer;
 
@@ -58,15 +59,14 @@ public class VistaramEmailDataExtractor implements Tasklet {
 	public RepeatStatus execute(StepContribution stepContribution,
 			ChunkContext chunkContext) throws Exception {
 
-		String host = "imap.gmail.com";// change accordingly 
-		String port ="993"; 
-		String mailStoreType = "imaps"; 
-		String username =
-		 "vistaramrooms@gmail.com";// change accordingly 
-		String password =
-		 "vistaram@66669";// change accordingly
+		String host = "imap.gmail.com";// change accordingly
+		String port = "993";
+		String mailStoreType = "imaps";
+		String username = "vistaramrooms@gmail.com";// change accordingly
+		String password = "vistaram66669";// change accordingly
 
-		Map<String, VoucherDetails> voucherDetailsMap = extractVoucherDetails(host, port, mailStoreType, username, password);
+		Map<String, VoucherDetails> voucherDetailsMap = extractVoucherDetails(
+				host, port, mailStoreType, username, password);
 		List<VoucherDetails> voucherDetailsList = new ArrayList<VoucherDetails>();
 		voucherDetailsList.addAll(voucherDetailsMap.values());
 		writer.write(voucherDetailsList);
@@ -74,20 +74,20 @@ public class VistaramEmailDataExtractor implements Tasklet {
 		return RepeatStatus.FINISHED;
 	}
 
-	public Map<String, VoucherDetails> extractVoucherDetails(String host, String port, String storeType, String user,
-			String password) {
-		Map<String, VoucherDetails> voucherDetailsMap = new HashMap<String,VoucherDetails>();
+	public Map<String, VoucherDetails> extractVoucherDetails(String host,
+			String port, String storeType, String user, String password) {
+		Map<String, VoucherDetails> voucherDetailsMap = new HashMap<String, VoucherDetails>();
 		try {
 
 			// create properties field
 			Properties properties = new Properties();
 			// pop3 settings
-//			properties.put("mail.pop3.host", host);
-//			properties.put("mail.pop3.port", port);
-//			properties.put("mail.pop3.starttls.enable", "true");
+			// properties.put("mail.pop3.host", host);
+			// properties.put("mail.pop3.port", port);
+			// properties.put("mail.pop3.starttls.enable", "true");
 
 			// imap settings
-			
+
 			properties.put("mail.imaps.host", host);
 			properties.put("mail.imaps.port", port);
 			properties.put("mail.imaps.starttls.enable", "true");
@@ -107,62 +107,79 @@ public class VistaramEmailDataExtractor implements Tasklet {
 			store.connect(host, user, password);
 
 			// create the folder object and open it
-			Folder emailFolder = store.getFolder("INBOX");
-			emailFolder.open(Folder.HOLDS_MESSAGES);
+			Folder emailFolder = store.getFolder("INBOX/GOIBIBO");
+			emailFolder.open(Folder.READ_ONLY);
 
-			
+			int totalMessageCount = emailFolder.getMessageCount();
+			System.out.println("Total messages = " + totalMessageCount);
+			System.out.println("New messages = "
+					+ emailFolder.getNewMessageCount());
+			System.out.println("unread messages = "
+					+ emailFolder.getUnreadMessageCount());
+			System.out.println("deleted messages = "
+					+ emailFolder.getDeletedMessageCount());
+
+			/*int end = emailFolder.getMessageCount();
+			int start = end - 100 + 1;
+			Message messages[] = emailFolder.getMessages(start, end);*/
+
 			// retrieve the messages from the folder in an array and print it
-			
+
 			Message[] messages = emailFolder.getMessages();
 			System.out.println("messages.length---" + messages.length);
 
 			int vouchers = 0;
 			for (int i = 0, n = messages.length; i < n; i++) {
 				Message message = messages[i];
-			
-				System.out.println("parsing email "+i);
+
+				System.out.println("parsing email " + i);
 				System.out.println("---------------------------------");
 				System.out.println("Email Number " + (i + 1));
 				System.out.println("Subject: " + message.getSubject());
-				
-				System.out.println("From: " + Arrays.toString(message.getFrom()));
-	
-				System.out.println("Date : "+message.getReceivedDate());
-				
-				
+
+				System.out.println("From: "
+						+ Arrays.toString(message.getFrom()));
+
+				Date receivedDate = message.getReceivedDate();
+				System.out.println("Date : " + receivedDate);
+
 				Enumeration<Header> headers = message.getAllHeaders();
-				while(headers.hasMoreElements()){
+				while (headers.hasMoreElements()) {
 					Header header = headers.nextElement();
-					if(header.getName().equalsIgnoreCase("Date")){
+					if (header.getName().equalsIgnoreCase("Date")) {
 						String dateStr = header.getValue();
-						System.out.println("Date Str : "+dateStr);
+						System.out.println("Date Str : " + dateStr);
 						SimpleDateFormat dateFormat = new SimpleDateFormat();
 						Date date = null;
 						try {
 							dateFormat.applyPattern("d MMM yyyy HH:mm:ss Z");
 							date = dateFormat.parse(dateStr);
 						} catch (Exception e) {
-							
+
 						}
-						
-						if(null == date){
+
+						if (null == date) {
 							try {
-								dateFormat.applyPattern("E, d MMM yyyy HH:mm:ss Z");
+								dateFormat
+										.applyPattern("E, d MMM yyyy HH:mm:ss Z");
 								date = dateFormat.parse(dateStr);
 							} catch (Exception e) {
-								
+
 							}
 						}
-						System.out.println("Header Date : "+date);
+						System.out.println("Header Date : " + date);
 					}
 				}
-				
-				if (message.getFrom()[0].toString().equalsIgnoreCase("hotelpartners@goibibo.com") &&  message.getSubject().contains("Confirm Hotel Booking") ) {
+
+				if (message.getFrom()[0].toString().equalsIgnoreCase(
+						"hotelpartners@goibibo.com")
+						&& message.getSubject().contains(
+								"Confirm Hotel Booking")) {
 					System.out.println("---------------------------------");
 					++vouchers;
 					System.out.println("Email Number " + (i + 1));
 					System.out.println("Subject: " + message.getSubject());
-					
+
 					System.out.println("From: " + message.getFrom()[0]);
 					System.out.println("Text: "
 							+ message.getContent().toString());
@@ -170,29 +187,28 @@ public class VistaramEmailDataExtractor implements Tasklet {
 					String voucher = message.getSubject()
 							.substring(message.getSubject().lastIndexOf(" "))
 							.trim();
-					
-					
-					voucherDetailsMap.put(voucher.trim(),
-							VistaramMessageUtils.extractGoIbiboVoucherDetailsFromMessage(message));
-					
-					
+
+					voucherDetailsMap.put(voucher.trim(), VistaramMessageUtils
+							.extractGoIbiboVoucherDetailsFromMessage(message));
+
 					System.out.println("---------------------------------");
-					
+
 				}
-		
-				/*if(message.getFrom()[0].toString().equalsIgnoreCase("MakeMyTrip <noreply@makemytrip.com>") && message.getSubject().contains("Hotel Booking on MakeMyTrip.com")) {
-					++vouchers;
-					System.out.println("Text: "
-							+ message.getContent().toString());
-					
-					extractMakeMyTripVoucherDetails(message);
-				}*/
+
+				/*
+				 * if(message.getFrom()[0].toString().equalsIgnoreCase(
+				 * "MakeMyTrip <noreply@makemytrip.com>") && message.getSubject
+				 * ().contains("Hotel Booking on MakeMyTrip.com")) { ++vouchers;
+				 * System.out.println("Text: " +
+				 * message.getContent().toString());
+				 * 
+				 * extractMakeMyTripVoucherDetails(message); }
+				 */
 				
-				
-				System.out.println("---------------------------------");
-				
-				if(vouchers > 3)
+				if(vouchers > 10)
 					break;
+
+				System.out.println("---------------------------------");
 
 			}
 

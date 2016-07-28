@@ -11,6 +11,7 @@ public class VistaramEmailMessageProcessor implements ItemProcessor<Message, Vou
 
 	@Override
 	public VoucherDetails process(Message message) throws Exception {
+		System.out.println("VistaramEmailMessageProcessor || process()-->");
 		VoucherDetails voucherDetails = null;
 		
 		System.out.println("Subject: " + message.getSubject());
@@ -26,7 +27,7 @@ public class VistaramEmailMessageProcessor implements ItemProcessor<Message, Vou
 		if (message.getFrom()[0].toString().equalsIgnoreCase("hotelpartners@goibibo.com") &&  message.getSubject().contains("Confirm Hotel Booking") ) {
 			voucherDetails = VistaramMessageUtils.extractGoIbiboVoucherDetailsFromMessage(message);
 		}
-				
+		System.out.println("<-- VistaramEmailMessageProcessor || process()");		
 		return voucherDetails;
 	}
 

@@ -38,69 +38,8 @@ public class VistaramMessageUtils {
 			BodyPart bodyPart = mimePart.getBodyPart(j);
 			System.out.println(bodyPart);
 			InputStream in = bodyPart.getInputStream();
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(in));
-			StringBuffer sb = new StringBuffer();
-			String line = null;
-			while (null != (line = br.readLine())) {
-				sb.append(line);
-			}
-
-			Document document = Jsoup.parse(sb.toString());
-			Elements tables = document.select("body > table");
-			System.out.println("tables size : " + tables.size());
-			
-			if (tables.size() > 1) {
-				Element voucherNumberTable = tables.get(0);
-
-				String voucherString = voucherNumberTable.text();
-				System.out.println("voucherString : "
-						+ voucherString);
-				voucherDetailsMap.put("voucherNumber", voucherString.substring(voucherString.indexOf(":")+1));
-				Element reservationDetailsTable = tables.get(2);
-				Elements trs = reservationDetailsTable
-						.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
-				for (Element tr : trs) {
-					String key = tr.child(0).ownText();
-					String value = tr.child(1).ownText();
-					voucherDetailsMap.put(key, value);
-				}
-				
-				Element tariffDetailsTable = tables.get(6);
-				Elements headTds = tariffDetailsTable.select("table>tbody>tr>td>table>tbody>tr>td>table>thead>tr>td");
-				List<String> keys = new ArrayList<String>();
-				for(Element td: headTds) {
-					keys.add(td.ownText());
-				}
-				
-				System.out.println("keys : "+keys);
-				Elements bodyTrs = tariffDetailsTable.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
-				
-				
-				
-				for(Element tr: bodyTrs) {
-					Map<String, String> tariffDetailRecord = new HashMap<String, String>();
-					Elements tds = tr.children();
-					int i=0;
-					for(Element td : tds){
-						tariffDetailRecord.put(keys.get(i++), td.ownText());
-					}
-					tariffDetailsList.add(tariffDetailRecord);
-				}
-				
-				
-				Element summaryTable = tables.get(7);
-				Elements summaryRows = summaryTable.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
-				for(Element tr : summaryRows) {
-					
-					
-					
-					String key = tr.child(0).text();
-					String value = tr.child(1).ownText();
-					System.out.println(key+" -- "+value);
-					voucherDetailsMap.put(key, value);
-				}
-			}
+			extractDetailsFromInputStream(voucherDetailsMap, tariffDetailsList,
+					in);
 		}
 		
 		System.out.println(voucherDetailsMap);
@@ -108,6 +47,89 @@ public class VistaramMessageUtils {
 		voucherDetails.setBookingAgent("goibibio.com");
 		voucherDetails.setPaymentType(PaymentType.ONLINE);
 		return voucherDetails;
+	}
+
+	private static void extractDetailsFromInputStream(
+			Map<String, String> voucherDetailsMap,
+			List<Map<String, String>> tariffDetailsList, InputStream in)
+			throws IOException {
+		BufferedReader br = new BufferedReader(
+				new InputStreamReader(in));
+		StringBuffer sb = new StringBuffer();
+		String line = null;
+		while (null != (line = br.readLine())) {
+			sb.append(line);
+		}
+
+		Document document = Jsoup.parse(sb.toString());
+		
+		Elements tariffTables = document.select("table:contains(tariff applicable:) + table");
+		System.out.println("tariffTables: "+tariffTables.html());
+		
+		
+		
+		Elements tables = document.select("body > table");
+		System.out.println("tables size : " + tables.size());
+		
+		for(Element table : tables){
+			System.out.println("table----------------------------------------->");
+			System.out.println(table.html());
+			System.out.println("<-----------------------------------------table");
+		}
+		
+		
+		if (tables.size() > 1) {
+			Element voucherNumberTable = tables.get(0);
+
+			String voucherString = voucherNumberTable.text();
+			System.out.println("voucherString : "
+					+ voucherString);
+			voucherDetailsMap.put("voucherNumber", voucherString.substring(voucherString.indexOf(":")+1));
+			Element reservationDetailsTable = tables.get(2);
+			Elements trs = reservationDetailsTable
+					.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
+			for (Element tr : trs) {
+				String key = tr.child(0).ownText();
+				String value = tr.child(1).ownText();
+				voucherDetailsMap.put(key, value);
+			}
+			
+			
+			Element tariffDetailsTable = tables.get(6);
+			Elements headTds = tariffDetailsTable.select("table>tbody>tr>td>table>tbody>tr>td>table>thead>tr>td");
+			List<String> keys = new ArrayList<String>();
+			for(Element td: headTds) {
+				keys.add(td.ownText());
+			}
+			
+			System.out.println("keys : "+keys);
+			Elements bodyTrs = tariffDetailsTable.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
+			
+			
+			
+			for(Element tr: bodyTrs) {
+				Map<String, String> tariffDetailRecord = new HashMap<String, String>();
+				Elements tds = tr.children();
+				int i=0;
+				for(Element td : tds){
+					tariffDetailRecord.put(keys.get(i++), td.ownText());
+				}
+				tariffDetailsList.add(tariffDetailRecord);
+			}
+			
+			
+			Element summaryTable = tables.get(7);
+			Elements summaryRows = summaryTable.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
+			for(Element tr : summaryRows) {
+				
+				
+				
+				String key = tr.child(0).text();
+				String value = tr.child(1).ownText();
+				System.out.println(key+" -- "+value);
+				voucherDetailsMap.put(key, value);
+			}
+		}
 	}
 	
 	public static Map<String, String> extractMakeMyTripVoucherDetails(Message message) throws IOException, MessagingException {
