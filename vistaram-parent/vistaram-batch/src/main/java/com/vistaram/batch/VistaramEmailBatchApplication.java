@@ -18,6 +18,7 @@ package com.vistaram.batch;
 
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.mail.Message;
 
 import org.springframework.batch.core.Job;
@@ -38,6 +39,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.bind.PropertySourceUtils;
+import org.springframework.boot.env.PropertySourcesLoader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -45,6 +48,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -120,5 +126,17 @@ public class VistaramEmailBatchApplication{
 	@Bean
 	public VistaramDetailsWriter vistaramDetailsWriter(){
 		return new VistaramDetailsWriter();
+	}
+	
+	
+	@Bean
+	public static PropertySourcesPlaceholderConfigurer placeHolderConfigurer() {
+		PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer 
+				= new PropertySourcesPlaceholderConfigurer();
+		
+		propertySourcesPlaceholderConfigurer.setLocations(new ClassPathResource("application.properties"), new FileSystemResource(System.getProperty("user.home")+"/configuration/application.properties"));
+		propertySourcesPlaceholderConfigurer.setIgnoreUnresolvablePlaceholders(true);
+		propertySourcesPlaceholderConfigurer.setIgnoreResourceNotFound(true);
+		return propertySourcesPlaceholderConfigurer;
 	}
 }

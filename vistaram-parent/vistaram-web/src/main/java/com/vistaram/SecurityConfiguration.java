@@ -6,8 +6,12 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,7 +30,6 @@ import com.vistaram.data.config.DataSourceConfiguration;
 
 
 @Configuration
-@EnableWebMvcSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Import(DataSourceConfiguration.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
@@ -74,6 +77,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         }
     }
     
+    @Bean
+	public static PropertySourcesPlaceholderConfigurer placeHolderConfigurer() {
+		PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer 
+				= new PropertySourcesPlaceholderConfigurer();
+		System.out.println("user.home = "+System.getProperty("user.home"));
+		propertySourcesPlaceholderConfigurer.setLocations(new ClassPathResource("application.properties"), new FileSystemResource(System.getProperty("user.home")+"/configuration/application.properties"));
+		propertySourcesPlaceholderConfigurer.setIgnoreUnresolvablePlaceholders(true);
+		propertySourcesPlaceholderConfigurer.setIgnoreResourceNotFound(true);
+		return propertySourcesPlaceholderConfigurer;
+	}
+
     
     
 }
