@@ -28,6 +28,7 @@
 	</dependencyManagement>
 <modules>
     <module>vistaram-data-relational</module>
+    <module>vistaram-batch-common</module>
     <module>vistaram-batch</module>
     <module>vistaram-web</module>
   </modules>
