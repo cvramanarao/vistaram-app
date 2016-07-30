@@ -1,5 +1,7 @@
 package com.vistaram.data.relational.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,7 +24,12 @@ public class BookingDetailDao {
 	@Transactional(propagation=Propagation.REQUIRED)
 	public void save(BookingDetail detail){
 		System.out.println("BookingDetailDao || save()-->");
+		
 		bookingDetailRepo.save(detail);
 		System.out.println("<-- BookingDetailDao || save()");
+	}
+	
+	public List<BookingDetail> getBookingDetails(){
+		return bookingDetailRepo.findAll();
 	}
 }

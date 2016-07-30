@@ -120,7 +120,7 @@ public class VistaramEmailDataExtractor implements Tasklet {
 					+ emailFolder.getDeletedMessageCount());
 
 			/*int end = emailFolder.getMessageCount();
-			int start = end - 100 + 1;
+			int start = end - 200 + 1;
 			Message messages[] = emailFolder.getMessages(start, end);*/
 
 			// retrieve the messages from the folder in an array and print it
@@ -205,8 +205,8 @@ public class VistaramEmailDataExtractor implements Tasklet {
 				 * extractMakeMyTripVoucherDetails(message); }
 				 */
 				
-				if(vouchers > 10)
-					break;
+//				if(vouchers > 10)
+//					break;
 
 				System.out.println("---------------------------------");
 

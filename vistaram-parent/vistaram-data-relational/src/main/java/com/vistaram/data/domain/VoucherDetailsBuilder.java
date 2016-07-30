@@ -14,11 +14,13 @@ public class VoucherDetailsBuilder {
 		VoucherDetails voucherDetails = new VoucherDetails();
 		/*
 		 * 
-		 * {name of hotel & city=Vistaram Rtc Complex, Visakhapatnam, India, type of room=Royal King A/c, number of rooms=1, number of nights=1, Rate plan name=MAP, booking date=Oct. 10, 2015, 9:40 p.m., guest request=WEB SERVICES BOOKING, room 1=Adult 2 Child 0, Special Request=None, checkout date=Oct. 12, 2015, 
+		 * {name of hotel & city=Vistaram Rtc Complex, Visakhapatnam, India, type of room=Royal King A/c, number of rooms=1, 
+		 * number of nights=1, Rate plan name=MAP, booking date=Oct. 10, 2015, 9:40 p.m., guest request=WEB SERVICES BOOKING, 
+		 * room 1=Adult 2 Child 0, Special Request=None, checkout date=Oct. 12, 2015, 
 		 * name of guest=Santosh Pradhan, checkin date=Oct. 11, 2015, inclusions=Accommodation , Breakfast and Dinner(MAP), Booking Type=mobile}
 		 */
 		
-		voucherDetails.setVoucherNumber(detailsMap.get("voucherNumber"));
+		voucherDetails.setVoucherNumber(detailsMap.get("voucher number"));
 		voucherDetails.setGuestName(detailsMap.get("name of guest"));
 		String bookingDateStr = detailsMap.get("booking date");
 		bookingDateStr = correctDateString(bookingDateStr);
@@ -85,7 +87,7 @@ public class VoucherDetailsBuilder {
 		voucherDetails.setRoomType(detailsMap.get("type of room"));
 		voucherDetails.setNoOfRooms(Integer.valueOf(detailsMap.get("number of rooms")));
 		voucherDetails.setNoOfNights(Integer.valueOf(detailsMap.get("number of nights")));
-		voucherDetails.setRatePlan(detailsMap.get("Rate plan name"));
+		voucherDetails.setRatePlan(detailsMap.get("rate plan name"));
 		voucherDetails.setGuestRequest(detailsMap.get("guest request"));
 		
 	    for(int i=1;i<=voucherDetails.getNoOfRooms();i++) {

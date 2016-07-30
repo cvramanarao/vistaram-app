@@ -6,7 +6,7 @@
 	<groupId>com.vistaram</groupId>
 	<artifactId>vistaram-web</artifactId>
 	<version>1.0-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>vistaram-web</name>
 	<description>vistaram-web</description>
@@ -20,7 +20,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.7</java.version>
+		<java.version>1.8</java.version>
 	</properties>
 
 	<dependencies>
@@ -44,9 +44,14 @@
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
+			<groupId>com.vistaram</groupId>
+			<artifactId>vistaram-batch</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-			
+			<scope>provided</scope>
 		</dependency>
 		
 		
@@ -65,6 +70,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-
 </project>

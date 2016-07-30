@@ -4,6 +4,9 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
+drop database vistaram_db;
+create database vistaram_db;
+use vistaram_db;
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
@@ -197,7 +200,7 @@ SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
-use vistaram_db;
+-- use vistaram_db;
 
 insert into users values ('hotelmadhurainn@gmail.com', 'Welcome1', 1);
 insert into authorities values('user','hotelmadhurainn@gmail.com');
@@ -217,6 +220,8 @@ insert into users values ('vistaramairspacewaves', 'Welcome1', 1);
 insert into authorities values('user','vistaramairspacewaves');
 insert into users values ('vistaramazadsquare', 'Welcome1', 1);
 insert into authorities values('user','vistaramazadsquare');
+insert into users values ('vistaramarakuvalleyhotel', 'Welcome1', 1);
+insert into authorities values('user','vistaramarakuvalleyhotel');
 
 insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
@@ -253,5 +258,9 @@ values('Waves Hotel','A-272, Mahipalpur Extn A- Block, NH-8, Near IGI Airport','
 insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
 values('Prime Plaza','Plot No. 7-9,Jharsa, Near Medanta Hospital,Sec. 3','Gurgoan','India','Vistaram Azad Square','vistaramazadsquare');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values(' Vistaram Araku Valley Hotel','Plot No. 7-9,Jharsa, Near Medanta Hospital,Sec. 3','Araku Valley','India','Vistaram Araku Valley Hotel','vistaramarakuvalleyhotel');
 
 commit;	
