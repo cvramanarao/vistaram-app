@@ -8,16 +8,15 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>vistaram-batch</artifactId>
-	<groupId>com.vistaram</groupId>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<name>vistaram-batch</name>
 	<description>Vistaram Email Batch</description>
-	<version>1.0-SNAPSHOT</version>
-	<url>http://projects.spring.io/spring-boot/</url>
-	<organization>
-		<name>Pivotal Software, Inc.</name>
-		<url>http://www.spring.io</url>
-	</organization>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -42,23 +41,50 @@
 		<dependency>
 			<groupId>org.springframework.integration</groupId>
 			<artifactId>spring-integration-mail</artifactId>
-			<version>4.2.1.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vistaram</groupId>
+			<artifactId>vistaram-batch-common</artifactId>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.vistaram</groupId>
 			<artifactId>vistaram-data-relational</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
+		<!-- jsoup HTML parser library @ http://jsoup.org/ -->
 		<dependency>
-			<!-- jsoup HTML parser library @ http://jsoup.org/ -->
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
 			<version>1.9.2</version>
 		</dependency>
+		
+		<!-- Gmail client
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.oauth-client</groupId>
+			<artifactId>google-oauth-client-jetty</artifactId>
+			<version>1.22.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-gmail</artifactId>
+			<version>v1-rev47-1.22.0</version>
+		</dependency>
+		-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>
@@ -67,39 +93,6 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.2</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-							<createDependencyReducedPom>false</createDependencyReducedPom>
-							<!-- transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<manifestEntries>
-										<Main-Class>com.vistaram.batch.VistaramEmailBatchApplication</Main-Class>
-									</manifestEntries>
-								</transformer>
-							</transformers-->
-							<outputFile>
-								${project.build.directory}/${artifactId}-${version}-standalone.jar
-							</outputFile>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<start-class>com.vistaram.batch.VistaramEmailBatchApplication</start-class>
-		<java.version>1.6</java.version>
-		<main.basedir>${basedir}/../..</main.basedir>
-	</properties>
 </project>

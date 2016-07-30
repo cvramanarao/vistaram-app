@@ -1,4 +1,4 @@
-package com.vistaram.batch;
+package com.vistaram.batch.launcher;
 
 import java.util.Date;
 

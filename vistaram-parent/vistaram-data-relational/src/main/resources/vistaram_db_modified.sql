@@ -72,7 +72,7 @@ SHOW WARNINGS;
 CREATE UNIQUE INDEX `hotel_identifier_name_UNIQUE` ON `hotel_details` (`hotel_identifier_name` ASC);
 
 SHOW WARNINGS;
-CREATE UNIQUE INDEX `users_username_UNIQUE` ON `hotel_details` (`users_username` ASC);
+CREATE  INDEX `users_username_UNIQUE` ON `hotel_details` (`users_username` ASC);
 
 SHOW WARNINGS;
 
@@ -201,7 +201,8 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- use vistaram_db;
-
+insert into users values ('vistaramrooms@gmail.com', 'Welcome1', 1);
+insert into authorities values('admin','vistaramrooms@gmail.com');
 insert into users values ('hotelmadhurainn@gmail.com', 'Welcome1', 1);
 insert into authorities values('user','hotelmadhurainn@gmail.com');
 insert into users values ('info.vskp@microcontinental.in', 'Welcome1', 1);
@@ -261,6 +262,10 @@ values('Prime Plaza','Plot No. 7-9,Jharsa, Near Medanta Hospital,Sec. 3','Gurgoa
 
 insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
-values(' Vistaram Araku Valley Hotel','Plot No. 7-9,Jharsa, Near Medanta Hospital,Sec. 3','Araku Valley','India','Vistaram Araku Valley Hotel','vistaramarakuvalleyhotel');
+values('Vistaram Araku Valley Hotel','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram Araku Valley Hotel','vistaramarakuvalleyhotel');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Vistaram Araku Valley','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram Araku Valley','vistaramarakuvalleyhotel');
 
 commit;	
