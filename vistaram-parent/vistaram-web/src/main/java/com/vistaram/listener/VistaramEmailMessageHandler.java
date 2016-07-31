@@ -1,4 +1,4 @@
-package com.vistaram.batch.listener;
+package com.vistaram.listener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +15,6 @@ import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.MessagingException;
 
 import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
-import com.vistaram.batch.tasklet.VistaramEmailDataExtractor;
 import com.vistaram.batch.writer.VistaramDetailsWriter;
 import com.vistaram.data.domain.VoucherDetails;
 public class VistaramEmailMessageHandler implements MessageHandler {

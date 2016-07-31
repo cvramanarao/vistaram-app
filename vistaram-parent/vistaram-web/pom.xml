@@ -43,11 +43,11 @@
 			<artifactId>vistaram-data-relational</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
-		<!--dependency>
+		<dependency>
 			<groupId>com.vistaram</groupId>
-			<artifactId>vistaram-batch</artifactId>
+			<artifactId>vistaram-batch-common</artifactId>
 			<version>1.0-SNAPSHOT</version>
-		</dependency-->
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>

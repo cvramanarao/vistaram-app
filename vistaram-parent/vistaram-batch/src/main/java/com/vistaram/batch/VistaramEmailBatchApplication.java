@@ -76,7 +76,6 @@ import com.vistaram.data.domain.VoucherDetails;
 @Import(DataSourceConfiguration.class)
 @EnableTransactionManagement(proxyTargetClass=true)
 @EnableAspectJAutoProxy(proxyTargetClass=true)
-@ImportResource("classpath:vistaram-email-integration.xml")
 public class VistaramEmailBatchApplication{
 
 	@Autowired
@@ -116,18 +115,7 @@ public class VistaramEmailBatchApplication{
 	}*/
 
 
-	@Autowired
-	@Qualifier("receiveChannel")
-	private DirectChannel directChannel;
 	
-	
-	@PostConstruct
-	public void init(){
-		System.out.println("VistaramEmailBatchApplication || init()-->");
-		directChannel.subscribe(messageHandler());
-		
-		System.out.println("<-- VistaramEmailBatchApplication || init()");
-	}
 	
 
 	@Bean
@@ -155,10 +143,7 @@ public class VistaramEmailBatchApplication{
 		return jobBuilderFactory.get("vistaramDataExtractorJob").incrementer(new RunIdIncrementer()).start(vistaramDataExtractorStep).build();
 	}
 	
-	@Bean
-	public VistaramEmailMessageHandler messageHandler(){
-		return new VistaramEmailMessageHandler();
-	}
+	
 	
 	@Bean
 	public VistaramEmailMessageProcessor vistaramEmailMessageProcessor(){

@@ -3,10 +3,12 @@ package com.vistaram.batch.processor;
 import javax.mail.Message;
 
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.stereotype.Component;
 
 import com.vistaram.batch.utils.VistaramMessageUtils;
 import com.vistaram.data.domain.VoucherDetails;
 
+@Component
 public class VistaramEmailMessageProcessor implements ItemProcessor<Message, VoucherDetails> {
 
 	@Override

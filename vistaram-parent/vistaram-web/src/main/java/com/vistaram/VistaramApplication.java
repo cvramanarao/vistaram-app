@@ -1,15 +1,19 @@
 package com.vistaram;
 
-import org.springframework.boot.SpringApplication;
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.integration.channel.DirectChannel;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -17,12 +21,15 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.vistaram.listener.VistaramEmailMessageHandler;
+
+
 @Configuration
-@ComponentScan
 @EnableAutoConfiguration
 @EnableTransactionManagement
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableAspectJAutoProxy
+@ImportResource("classpath:vistaram-email-integration.xml")
 @EnableAsync
 public class VistaramApplication  extends WebMvcConfigurerAdapter {
 	
@@ -45,6 +52,24 @@ public class VistaramApplication  extends WebMvcConfigurerAdapter {
 		propertySourcesPlaceholderConfigurer.setIgnoreUnresolvablePlaceholders(true);
 		propertySourcesPlaceholderConfigurer.setIgnoreResourceNotFound(true);
 		return propertySourcesPlaceholderConfigurer;
+	}
+	
+	@Autowired
+	@Qualifier("receiveChannel")
+	private DirectChannel directChannel;
+	
+	
+	@PostConstruct
+	public void init(){
+		System.out.println("VistaramEmailBatchApplication || init()-->");
+		directChannel.subscribe(messageHandler());
+		
+		System.out.println("<-- VistaramEmailBatchApplication || init()");
+	}
+	
+	@Bean
+	public VistaramEmailMessageHandler messageHandler(){
+		return new VistaramEmailMessageHandler();
 	}
 
 }
