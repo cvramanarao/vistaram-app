@@ -47,7 +47,7 @@ public class DataSourceConfiguration {
 
     @Bean
     @Primary
-    public DataSource dataSource()  {
+    public DataSource tomcatDataSource()  {
     	
         org.apache.tomcat.jdbc.pool.DataSource ds = new org.apache.tomcat.jdbc.pool.DataSource();
         System.out.println("databaseDriverClassName: "+databaseDriverClassName);
@@ -73,7 +73,7 @@ public class DataSourceConfiguration {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
    
-			entityManagerFactoryBean.setDataSource(dataSource());
+			entityManagerFactoryBean.setDataSource(tomcatDataSource());
 		
         //entityManagerFactoryBean.setPackagesToScan("com.vistaram.data.relational.domain");
         //HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();

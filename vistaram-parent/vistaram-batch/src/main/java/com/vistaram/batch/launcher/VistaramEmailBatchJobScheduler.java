@@ -25,7 +25,7 @@ public class VistaramEmailBatchJobScheduler {
 		
 	}
 	
-	//@Scheduled(cron = "0 0 5 * * *")
+	@Scheduled(cron = "0 0 5 * * *")
 	public void runJob() {
 		System.out.println("run job()-->");
 		try {
