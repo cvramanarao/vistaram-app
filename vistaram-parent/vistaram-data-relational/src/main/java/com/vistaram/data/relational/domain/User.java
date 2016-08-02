@@ -1,7 +1,9 @@
 package com.vistaram.data.relational.domain;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -16,10 +18,9 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	private String username;
 
-	private Boolean enabled;
+	private byte enabled;
 
 	private String password;
 
@@ -27,9 +28,9 @@ public class User implements Serializable {
 	@OneToMany(mappedBy="user")
 	private List<Authority> authorities;
 
-	//bi-directional one-to-one association to HotelDetail
-	@OneToOne(mappedBy="user")
-	private HotelDetail hotelDetail;
+	//bi-directional many-to-one association to HotelDetail
+	@OneToMany(mappedBy="user")
+	private List<HotelDetail> hotelDetails;
 
 	public User() {
 	}
@@ -42,11 +43,11 @@ public class User implements Serializable {
 		this.username = username;
 	}
 
-	public Boolean getEnabled() {
+	public byte getEnabled() {
 		return this.enabled;
 	}
 
-	public void setEnabled(Boolean enabled) {
+	public void setEnabled(byte enabled) {
 		this.enabled = enabled;
 	}
 
@@ -80,12 +81,26 @@ public class User implements Serializable {
 		return authority;
 	}
 
-	public HotelDetail getHotelDetail() {
-		return this.hotelDetail;
+	public List<HotelDetail> getHotelDetails() {
+		return this.hotelDetails;
 	}
 
-	public void setHotelDetail(HotelDetail hotelDetail) {
-		this.hotelDetail = hotelDetail;
+	public void setHotelDetails(List<HotelDetail> hotelDetails) {
+		this.hotelDetails = hotelDetails;
+	}
+
+	public HotelDetail addHotelDetail(HotelDetail hotelDetail) {
+		getHotelDetails().add(hotelDetail);
+		hotelDetail.setUser(this);
+
+		return hotelDetail;
+	}
+
+	public HotelDetail removeHotelDetail(HotelDetail hotelDetail) {
+		getHotelDetails().remove(hotelDetail);
+		hotelDetail.setUser(null);
+
+		return hotelDetail;
 	}
 
 }

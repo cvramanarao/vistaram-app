@@ -8,13 +8,15 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-    <!-- Original jobRepository missing read ${batch.isolationlevel} -->
+    <!-- Original jobRepository missing read ${batch.isolationlevel}    -->
     <bean id="jobRepository"
         class="org.springframework.batch.core.repository.support.JobRepositoryFactoryBean"
         p:dataSource-ref="dataSource" p:transactionManager-ref="transactionManager" p:isolationLevelForCreate = "ISOLATION_REPEATABLE_READ"/>
+        
+     
 
 
-    <!-- Original jobService conflicted with @EnableScheduling -->
+    <!-- Original jobService conflicted with @EnableScheduling  -->
     <bean id="jobService"
         class="org.springframework.batch.admin.service.SimpleJobServiceFactoryBean">
         <aop:scoped-proxy proxy-target-class="true" />
@@ -25,5 +27,7 @@
         <property name="jobExplorer" ref="jobExplorer" />
         <property name="transactionManager" ref="transactionManager" />
     </bean>
+    
+   
 
 </beans>

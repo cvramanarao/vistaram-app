@@ -4,9 +4,9 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-drop database vistaram_db;
-create database vistaram_db;
-use vistaram_db;
+-- drop database vistaram_db;
+-- create database vistaram_db;
+-- use vistaram_db;
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
@@ -96,6 +96,7 @@ CREATE TABLE IF NOT EXISTS `booking_details` (
   `hotel_details_hotel_id` INT NOT NULL,
   `total_tax` DOUBLE NOT NULL,
   `total_amout` DOUBLE NOT NULL,
+  `STATUS` ENUM('CONFIRMED', 'CANCELLED', 'YET_TO_CONFIRM') NOT NULL,
   PRIMARY KEY (`booking_id`),
   CONSTRAINT `fk_booking_details_guest_details`
     FOREIGN KEY (`guest_details_guest_id`)
@@ -221,8 +222,24 @@ insert into users values ('vistaramairspacewaves', 'Welcome1', 1);
 insert into authorities values('user','vistaramairspacewaves');
 insert into users values ('vistaramazadsquare', 'Welcome1', 1);
 insert into authorities values('user','vistaramazadsquare');
-insert into users values ('vistaramarakuvalleyhotel', 'Welcome1', 1);
-insert into authorities values('user','vistaramarakuvalleyhotel');
+insert into users values ('viharholidayinn', 'Welcome1', 1);
+insert into authorities values('user','viharholidayinn');
+insert into users values ('sirivarshini', 'Welcome1', 1);
+insert into authorities values('user','sirivarshini');
+insert into users values ('leelagrandinn', 'Welcome1', 1);
+insert into authorities values('user','leelagrandinn');
+insert into users values ('welfaremarina', 'Welcome1', 1);
+insert into authorities values('user','welfaremarina');
+insert into users values ('hitechgrand', 'Welcome1', 1);
+insert into authorities values('user','hitechgrand');
+insert into users values ('meenaparadise', 'Welcome1', 1);
+insert into authorities values('user','meenaparadise');
+insert into users values ('adityainn', 'Welcome1', 1);
+insert into authorities values('user','adityainn');
+insert into users values ('saishubam', 'Welcome1', 1);
+insert into authorities values('user','saishubam');
+insert into users values ('msricity', 'Welcome1', 1);
+insert into authorities values('user','msricity');
 
 insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
@@ -240,9 +257,9 @@ insert into hotel_details(hotel_name, address, city, country, hotel_identifier_n
 
 values('Vihar Boutique Hotel', 'Vinayagar Plaza, Airtel Building Sampath Vinayaka Temple Road', 'Visakhapatnam', 'India', 'Vistaram Near Rtc Complex', 'om.rt@viharhospitality.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+-- insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
-values('Krishna Tara Comforts','Visakha-Araku Main Road','Araku Valley','India','Vistaram A/C Rooms','arukuacrooms');
+-- values('Krishna Tara Comforts','Visakha-Araku Main Road','Araku Valley','India','Vistaram A/C Rooms','arukuacrooms');
 
 insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
@@ -262,10 +279,46 @@ values('Prime Plaza','Plot No. 7-9,Jharsa, Near Medanta Hospital,Sec. 3','Gurgoa
 
 insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
-values('Vistaram Araku Valley Hotel','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram Araku Valley Hotel','vistaramarakuvalleyhotel');
+values('Vihar Holiday Inn','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram Araku Valley Hotel','viharholidayinn');
 
 insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
-values('Vistaram Araku Valley','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram Araku Valley','vistaramarakuvalleyhotel');
+values('Vihar Holiday Inn','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram Araku Valley','viharholidayinn');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Vihar Holiday Inn','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram A/C Rooms','viharholidayinn');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('SiriVarshini','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','Siri Varshini Inn','sirivarshini');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Leelagrand Inn','XXXXXXXXXXXXXXXXXXXX','Vijayawada','India','Hotel Leela Grand Inn','leelagrandinn');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Welfare Marina','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','HOTEL WELFARE MARINA','welfaremarina');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Hitech Grand','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','Hi-Tech grand Hotel','hitechgrand');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Meena Paradise','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','HOTEL MEENA PARADISE','meenaparadise');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Aditya Inn','XXXXXXXXXXXXXXXXXXXX','Rajahmundry','India','SRI ADITYA INN','adityainn');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('SaiSubham','XXXXXXXXXXXXXXXXXXXX','Shirdi','India','Hotel Sai Shubham','saishubam');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('MSriCity','XXXXXXXXXXXXXXXXXXXX','Vijayawada','India','M SRICITY A/C','msricity');
 
 commit;	

@@ -24,6 +24,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
 import com.vistaram.batch.utils.VistaramMessageUtils;
 import com.vistaram.batch.writer.VistaramDetailsWriter;
 import com.vistaram.data.domain.VoucherDetails;
@@ -32,6 +33,9 @@ public class VistaramEmailDataExtractor implements Tasklet {
 
 	@Autowired
 	private VistaramDetailsWriter writer;
+	
+	@Autowired
+	private VistaramEmailMessageProcessor processor;
 
 	@Override
 	public RepeatStatus execute(StepContribution stepContribution,
@@ -155,19 +159,27 @@ public class VistaramEmailDataExtractor implements Tasklet {
 								"Confirm Hotel Booking")) {
 					System.out.println("---------------------------------");
 					++vouchers;
+					String voucher = message.getSubject()
+							.substring(message.getSubject().lastIndexOf(" "))
+							.trim();
+					
 					System.out.println("Email Number " + (i + 1));
 					System.out.println("Subject: " + message.getSubject());
 
 					System.out.println("From: " + message.getFrom()[0]);
 					System.out.println("Text: "
 							+ message.getContent().toString());
-
-					String voucher = message.getSubject()
-							.substring(message.getSubject().lastIndexOf(" "))
-							.trim();
-
-					voucherDetailsMap.put(voucher.trim(), VistaramMessageUtils
-							.extractGoIbiboVoucherDetailsFromMessage(message));
+					try {
+						
+						VoucherDetails voucherDetails = VistaramMessageUtils
+								.extractGoIbiboVoucherDetailsFromMessage(message);
+						voucherDetailsMap.put(voucher.trim(), voucherDetails);
+						writer.write(voucherDetails);
+					} catch (Exception e) {
+						
+						System.out.println("Failed to process voucher : "+voucher);
+						e.printStackTrace();
+					}
 
 					System.out.println("---------------------------------");
 

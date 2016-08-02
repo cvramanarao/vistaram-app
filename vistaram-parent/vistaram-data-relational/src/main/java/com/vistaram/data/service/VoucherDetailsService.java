@@ -2,6 +2,7 @@ package com.vistaram.data.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.vistaram.data.domain.VoucherDetails;
@@ -27,13 +28,22 @@ public class VoucherDetailsService {
 	@Transactional
 	public void saveVoucherDetails(VoucherDetails voucherDetails){
 		System.out.println("saveVoucherDetails()-->");
-		BookingDetail bookingDetail = DtoToEntityMapper.mapVoucherDetailsToBookingDetails(voucherDetails);
-		String hotelAndCity = voucherDetails.getHotelAndCity();
-		System.out.println("hotelAndCity : "+hotelAndCity.substring(0, hotelAndCity.indexOf(",")));
-		HotelDetail hotelDetail = hotelDetailDao.getHotelDetailByIdentificationName(hotelAndCity.substring(0, hotelAndCity.indexOf(",")));
-		System.out.println("Hotel : "+hotelDetail);
-		bookingDetail.setHotelDetail(hotelDetail);
-		bookingDetailDao.save(bookingDetail);
+		
+		BookingDetail bookingDetail = bookingDetailDao.getBookingDetailByVoucherId(voucherDetails.getVoucherNumber());
+		
+		if(null == bookingDetail) {
+		
+			bookingDetail = DtoToEntityMapper.mapVoucherDetailsToBookingDetails(voucherDetails);
+			String hotelAndCity = voucherDetails.getHotelAndCity();
+			System.out.println("hotelAndCity : "+hotelAndCity.substring(0, hotelAndCity.indexOf(",")));
+			HotelDetail hotelDetail = hotelDetailDao.getHotelDetailByIdentificationName(hotelAndCity.substring(0, hotelAndCity.indexOf(",")));
+			System.out.println("Hotel : "+hotelDetail);
+			bookingDetail.setHotelDetail(hotelDetail);
+			bookingDetailDao.save(bookingDetail);
+		} else {
+			
+		}
+		
 		System.out.println("<-- saveVoucherDetails()");
 	}
 

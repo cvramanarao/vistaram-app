@@ -1,145 +1,56 @@
 package com.vistaram.batch.reader;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Folder;
-import javax.mail.Header;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
 
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.StepExecution;
+import org.springframework.batch.core.annotation.AfterStep;
+import org.springframework.batch.core.annotation.BeforeStep;
 import org.springframework.batch.item.data.AbstractPaginatedDataItemReader;
+import org.springframework.beans.factory.InitializingBean;
 
-import com.vistaram.batch.utils.VistaramMessageUtils;
+public class VistaramEmailMessageReader extends
+		AbstractPaginatedDataItemReader<Message> implements InitializingBean {
 
-public class VistaramEmailMessageReader extends AbstractPaginatedDataItemReader<Message>{
-	
-	String host = "imap.gmail.com";// change accordingly 
-	String port ="993"; 
-	String mailStoreType = "imaps"; 
-	String username =
-	 "vistaramrooms@gmail.com";// change accordingly 
-	String password =
-	 "vistaram66669";// change accordingly
-	
 
-	@Override
-	protected Iterator<Message> doPageRead() {
-		System.out.println("VistaramEmailMessageReader || doPageRead()-->");
-		List<Message> messagesList = new ArrayList<Message>();
-		Store store = null;
-		Folder emailFolder = null;
-		try {
+	public VistaramEmailMessageReader() {
+		setExecutionContextName("VistaramEmailDataContext");
+		setPageSize(100);
+	}
 
-			// create properties field
-			Properties properties = new Properties();
-			// pop3 settings
-//			properties.put("mail.pop3.host", host);
-//			properties.put("mail.pop3.port", port);
-//			properties.put("mail.pop3.starttls.enable", "true");
+	private Folder emailFolder = null;
 
-			// imap settings
-			
-			properties.put("mail.imaps.host", host);
-			properties.put("mail.imaps.port", port);
-			properties.put("mail.imaps.starttls.enable", "true");
-			Session emailSession = Session.getDefaultInstance(properties);
+	private Store store = null;
 
-			/*
-			 * Session emailSession = Session.getInstance(properties, new
-			 * javax.mail.Authenticator() { protected PasswordAuthentication
-			 * getPasswordAuthentication() { return new
-			 * PasswordAuthentication(user, password); } });
-			 */
+	private JobExecution jobExecution;
 
-			// create the POP3 store object and connect with the pop server
+	@BeforeStep
+	public void beforeStep(StepExecution stepExecution) {
+		jobExecution = stepExecution.getJobExecution();
+	}
 
-			store = emailSession.getStore(mailStoreType);
-
-			store.connect(host, username, password);
-
-			// create the folder object and open it
-			emailFolder = store.getFolder("INBOX");
-			emailFolder.open(Folder.HOLDS_MESSAGES);
-
-			
-			// retrieve the messages from the folder in an array and print it
-			
-			Message[] messages = emailFolder.getMessages();
-			System.out.println("messages.length---" + messages.length);
-			
-			for (int i = 0, n = messages.length; i < n; i++) {
-				Message message = messages[i];
-			
-				System.out.println("parsing email "+i);
-				System.out.println("---------------------------------");
-				System.out.println("Email Number " + (i + 1));
-				System.out.println("Subject: " + message.getSubject());
-				
-				System.out.println("From: " + Arrays.toString(message.getFrom()));
-	
-				System.out.println("Date : "+message.getReceivedDate());
-				
-				
-				Enumeration<Header> headers = message.getAllHeaders();
-				while(headers.hasMoreElements()){
-					Header header = headers.nextElement();
-					if(header.getName().equalsIgnoreCase("Date")){
-						String dateStr = header.getValue();
-						System.out.println("Date Str : "+dateStr);
-						SimpleDateFormat dateFormat = new SimpleDateFormat();
-						Date date = null;
-						try {
-							dateFormat.applyPattern("d MMM yyyy HH:mm:ss Z");
-							date = dateFormat.parse(dateStr);
-						} catch (Exception e) {
-							
-						}
-						
-						if(null == date){
-							try {
-								dateFormat.applyPattern("E, d MMM yyyy HH:mm:ss Z");
-								date = dateFormat.parse(dateStr);
-							} catch (Exception e) {
-								
-							}
-						}
-						System.out.println("Header Date : "+date);
-					}
-				}
-			}
-
-			return Arrays.asList(messages).iterator();
-			
-		} catch (NoSuchProviderException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			// close the store and folder objects
-			if(null != emailFolder)
+	@AfterStep
+	public void afterStep(StepExecution stepExecution) {
+		// close the store and folder objects
+		if (null != emailFolder)
 			try {
 				emailFolder.close(false);
 			} catch (MessagingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(null != store)
+		if (null != store)
 			try {
 				store.close();
 			} catch (MessagingException e) {
@@ -147,12 +58,88 @@ public class VistaramEmailMessageReader extends AbstractPaginatedDataItemReader<
 				e.printStackTrace();
 			}
 
+		System.out.println("<-- afterStep");
+	}
+
+	@Override
+	protected Iterator<Message> doPageRead() {
+		System.out.println("VistaramEmailMessageReader || doPageRead()-->");
+		System.out.println("Reading page : "+page);
+		
+		
+		List<Message> messagesList = new ArrayList<Message>();
+		
+		String folder = String.valueOf(jobExecution.getJobParameters().getString("folder"));
+		String host = "imap.gmail.com";// change accordingly
+		String port = "993";
+		String mailStoreType = "imaps";
+		String username =String.valueOf(jobExecution.getJobParameters().getString("email")); // change accordingly
+		String password = String.valueOf(jobExecution.getJobParameters().getString("password"));// change accordingly
+		
+		System.out.println("Folder : "+folder);
+		System.out.println("email : "+username);
+		System.out.println("key : "+password);
+		try {
+
+			// create properties field
+			Properties properties = new Properties();
+
+			// imap settings
+
+			properties.put("mail.imaps.host", host);
+			properties.put("mail.imaps.port", port);
+			properties.put("mail.imaps.starttls.enable", "true");
+			Session emailSession = Session.getDefaultInstance(properties);
+
+			// create the POP3 store object and connect with the pop server
+
+			store = emailSession.getStore(mailStoreType);
+
+			store.connect(host, username, password);
+
+			
+			
+			// create the folder object and open it
+			// create the folder object and open it
+			emailFolder = store.getFolder(folder);
+			emailFolder.open(Folder.READ_ONLY);
+			if(page == 0){
+				setMaxItemCount(emailFolder.getMessageCount());
+			}
+			// retrieve the messages from the folder in an array and print it
+
+			//Message[] messages = emailFolder.getMessages();
+			int start = pageSize * page+1;
+			int end = pageSize * page + pageSize;
+			
+			Message[] messages = emailFolder.getMessages(start, end);
+			
+			System.out.println("messages.length---" + messages.length);
+
+			return Arrays.asList(messages).iterator();
+
+		} catch (NoSuchProviderException e) {
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			System.out
+					.println("<-- VistaramEmailMessageReader || doPageRead()");
+
 		}
-		
-		
+
 		System.out.println("VistaramEmailMessageReader || doPageRead()-->");
 		return null;
 	}
 
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		
+		
+	
+	}
 
 }

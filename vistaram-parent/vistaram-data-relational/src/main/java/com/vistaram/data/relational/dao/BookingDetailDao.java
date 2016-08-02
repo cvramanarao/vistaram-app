@@ -29,7 +29,13 @@ public class BookingDetailDao {
 		System.out.println("<-- BookingDetailDao || save()");
 	}
 	
+	@Transactional(propagation=Propagation.REQUIRED)
 	public List<BookingDetail> getBookingDetails(){
 		return bookingDetailRepo.findAll();
+	}
+	
+	@Transactional(propagation=Propagation.REQUIRED)
+	public BookingDetail getBookingDetailByVoucherId(String voucherId){
+		return bookingDetailRepo.findByVoucherId(voucherId);
 	}
 }

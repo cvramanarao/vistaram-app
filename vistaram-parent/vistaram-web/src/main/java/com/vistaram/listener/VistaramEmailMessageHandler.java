@@ -38,7 +38,7 @@ public class VistaramEmailMessageHandler implements MessageHandler {
 		Object payload = message.getPayload();
 		//AbstractMailReceiver
 		MimeMessage mimeMessage = (MimeMessage)payload;
-		try {
+		/*try {
 			Enumeration allHeaders = mimeMessage.getAllHeaders();
 			while(allHeaders.hasMoreElements()){
 				System.out.println(allHeaders.nextElement());
@@ -46,7 +46,7 @@ public class VistaramEmailMessageHandler implements MessageHandler {
 		} catch (javax.mail.MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 		String subject;
 		try {

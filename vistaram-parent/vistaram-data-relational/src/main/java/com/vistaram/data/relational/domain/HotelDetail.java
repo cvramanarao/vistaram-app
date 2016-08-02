@@ -1,10 +1,16 @@
 package com.vistaram.data.relational.domain;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
+/**
+ * The persistent class for the hotel_details database table.
+ * 
+ */
 /**
  * The persistent class for the hotel_details database table.
  * 
@@ -16,7 +22,6 @@ public class HotelDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="hotel_id")
 	private int hotelId;
 
@@ -38,8 +43,8 @@ public class HotelDetail implements Serializable {
 	@OneToMany(mappedBy="hotelDetail")
 	private List<BookingDetail> bookingDetails;
 
-	//bi-directional one-to-one association to User
-	@OneToOne
+	//bi-directional many-to-one association to User
+	@ManyToOne
 	@JoinColumn(name="users_username")
 	private User user;
 

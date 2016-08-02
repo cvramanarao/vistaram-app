@@ -29,7 +29,7 @@ import com.vistaram.listener.VistaramEmailMessageHandler;
 @EnableTransactionManagement
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableAspectJAutoProxy
-@ImportResource("classpath:vistaram-email-integration.xml")
+@ImportResource("file:///${user.home}/configuration/vistaram-email-integration.xml")
 @EnableAsync
 public class VistaramApplication  extends WebMvcConfigurerAdapter {
 	
@@ -61,10 +61,10 @@ public class VistaramApplication  extends WebMvcConfigurerAdapter {
 	
 	@PostConstruct
 	public void init(){
-		System.out.println("VistaramEmailBatchApplication || init()-->");
+		System.out.println("VistaramApplication || init()-->");
 		directChannel.subscribe(messageHandler());
 		
-		System.out.println("<-- VistaramEmailBatchApplication || init()");
+		System.out.println("<-- VistaramApplication || init()");
 	}
 	
 	@Bean

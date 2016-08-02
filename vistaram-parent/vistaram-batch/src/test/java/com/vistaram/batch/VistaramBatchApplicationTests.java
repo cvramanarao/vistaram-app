@@ -21,6 +21,8 @@ import org.junit.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.OutputCapture;
 
+import com.vistaram.batch.config.VistaramEmailBatchApplication;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

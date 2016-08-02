@@ -34,16 +34,16 @@ public class VistaramMessageUtils {
 				+ mimePart.getCount());
 		for (int j = 0; j < mimePart.getCount(); j++) {
 
-			System.out.println("body part for : " + j);
+			//System.out.println("body part for : " + j);
 			BodyPart bodyPart = mimePart.getBodyPart(j);
-			System.out.println(bodyPart);
+			//System.out.println(bodyPart);
 			InputStream in = bodyPart.getInputStream();
 			extractDetailsFromInputStream(voucherDetailsMap, tariffDetailsList,
 					in);
 			in.close();
 		}
 		
-		System.out.println(voucherDetailsMap);
+		//System.out.println(voucherDetailsMap);
 		VoucherDetails voucherDetails = VoucherDetailsBuilder.build(voucherDetailsMap, tariffDetailsList);
 		voucherDetails.setBookingAgent("goibibio.com");
 		voucherDetails.setPaymentType(PaymentType.ONLINE);
@@ -72,7 +72,7 @@ public class VistaramMessageUtils {
 			keys.add(td.ownText());
 		}
 		
-		System.out.println("keys : "+keys);
+		//System.out.println("keys : "+keys);
 		Elements bodyTrs = tariffDetailsTable.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
 		
 		for(Element tr: bodyTrs) {
@@ -85,18 +85,18 @@ public class VistaramMessageUtils {
 			tariffDetailsList.add(tariffDetailRecord);
 		}
 		
-		System.out.println(tariffDetailsList);
+		//System.out.println(tariffDetailsList);
 		
 		//Extracting Reservation Details:
 		
 	
 		
 		Elements tables = document.select("body > table");
-		System.out.println("tables size : " + tables.size());
+		//System.out.println("tables size : " + tables.size());
 		
 		for(Element table : tables){
-			System.out.println("table----------------------------------------->");
-			System.out.println(table.html());
+			//System.out.println("table----------------------------------------->");
+			//System.out.println(table.html());
 			
 			if(table.text().contains("Booking ID")) {
 				String voucherString = table.text();
@@ -108,7 +108,7 @@ public class VistaramMessageUtils {
 			Elements trs = table
 					.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
 			for (Element tr : trs) {
-				System.out.println("children in tr "+tr.childNodeSize()+" -- "+tr.children().size());
+				//System.out.println("children in tr "+tr.childNodeSize()+" -- "+tr.children().size());
 				if(tr.children().size() > 1) {
 					String key = tr.child(0).text().toLowerCase();
 					String value = tr.child(1).ownText();
@@ -116,7 +116,7 @@ public class VistaramMessageUtils {
 				}
 				
 			}
-			System.out.println("<-----------------------------------------table");
+			//System.out.println("<-----------------------------------------table");
 		}
 		
 		System.out.println("voucherDetailsMap: "+voucherDetailsMap);

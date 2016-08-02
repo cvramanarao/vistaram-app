@@ -59,14 +59,14 @@ public class DataSourceConfiguration {
         return ds;
     }
     
-    @Bean
+    /*@Bean
     public JpaTransactionManager transactionManager() throws ClassNotFoundException {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
 
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 
         return transactionManager;
-    }
+    }*/
     
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws ClassNotFoundException {
@@ -83,6 +83,7 @@ public class DataSourceConfiguration {
         Properties jpaProperties = new Properties();
         jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         jpaProperties.put("spring.jpa.database-platform", "org.hibernate.dialect.MySQLDialect");
+        jpaProperties.put("", "");
        
         //jpaProperties.put("spring.jpa.generate-dd","true");
         jpaProperties.put("spring.jpa.show-sql","true");
