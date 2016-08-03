@@ -240,6 +240,8 @@ insert into users values ('saishubam', 'Welcome1', 1);
 insert into authorities values('user','saishubam');
 insert into users values ('msricity', 'Welcome1', 1);
 insert into authorities values('user','msricity');
+insert into users values ('rajas', 'Welcome1', 1);
+insert into authorities values('user','rajas');
 
 insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
@@ -320,5 +322,11 @@ values('SaiSubham','XXXXXXXXXXXXXXXXXXXX','Shirdi','India','Hotel Sai Shubham','
 insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
 values('MSriCity','XXXXXXXXXXXXXXXXXXXX','Vijayawada','India','M SRICITY A/C','msricity');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+
+values('Hotel Rajas','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Hotel Holiday inn-rajas','rajas');
+
+
 
 commit;	

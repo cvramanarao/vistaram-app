@@ -18,18 +18,18 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
+import com.vistaram.batch.writer.VistaramDetailsWriter;
 import com.vistaram.listener.VistaramEmailMessageHandler;
 
 
 @Configuration
-@EnableAutoConfiguration
-@EnableTransactionManagement
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@EnableAspectJAutoProxy
-@ImportResource("file:///${user.home}/configuration/vistaram-email-integration.xml")
+//@ImportResource("file:///${user.home}/configuration/vistaram-email-integration.xml")
 @EnableAsync
 public class VistaramApplication  extends WebMvcConfigurerAdapter {
 	
@@ -38,6 +38,11 @@ public class VistaramApplication  extends WebMvcConfigurerAdapter {
         configurer.enable();
     }
 
+	@Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+	
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 	    registry.addViewController("/login").setViewName("login");
@@ -54,22 +59,27 @@ public class VistaramApplication  extends WebMvcConfigurerAdapter {
 		return propertySourcesPlaceholderConfigurer;
 	}
 	
-	@Autowired
+	/*@Autowired
 	@Qualifier("receiveChannel")
 	private DirectChannel directChannel;
 	
+	@Bean
+	public VistaramDetailsWriter vistaramDetailsWriter(){
+		return new VistaramDetailsWriter();
+	}
 	
-	@PostConstruct
-	public void init(){
-		System.out.println("VistaramApplication || init()-->");
-		directChannel.subscribe(messageHandler());
-		
-		System.out.println("<-- VistaramApplication || init()");
+	@Bean
+	public VistaramEmailMessageProcessor vistaramEmailMessageProcessor(){
+		return new VistaramEmailMessageProcessor();
 	}
 	
 	@Bean
 	public VistaramEmailMessageHandler messageHandler(){
-		return new VistaramEmailMessageHandler();
-	}
+		VistaramEmailMessageHandler messageHandler = new VistaramEmailMessageHandler();
+		directChannel.subscribe(messageHandler);
+		return messageHandler;
+	}*/
+	
+	
 
 }

@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableConfigurationProperties
 @EnableSpringConfigured
 //@EnableAutoConfiguration
-@EnableTransactionManagement
+//@EnableTransactionManagement
 public class DataSourceConfiguration {
 
 	@Value("${spring.datasource.driverClassName}")

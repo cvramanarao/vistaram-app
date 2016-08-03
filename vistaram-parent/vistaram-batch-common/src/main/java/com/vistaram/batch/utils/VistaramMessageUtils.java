@@ -20,12 +20,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.vistaram.data.domain.PaymentType;
-import com.vistaram.data.domain.VoucherDetails;
+import com.vistaram.data.domain.VoucherDetail;
 import com.vistaram.data.domain.VoucherDetailsBuilder;
 
 public class VistaramMessageUtils {
 	
-	public static VoucherDetails extractGoIbiboVoucherDetailsFromMessage(Message message) throws IOException, MessagingException {
+	public static VoucherDetail extractGoIbiboVoucherDetailsFromMessage(Message message) throws IOException, MessagingException {
 		Map<String, String> voucherDetailsMap = new HashMap<String, String>();
 		List<Map<String, String>> tariffDetailsList = new ArrayList<Map<String,String>>();
 		MimeMultipart mimePart = (MimeMultipart) message
@@ -44,7 +44,7 @@ public class VistaramMessageUtils {
 		}
 		
 		//System.out.println(voucherDetailsMap);
-		VoucherDetails voucherDetails = VoucherDetailsBuilder.build(voucherDetailsMap, tariffDetailsList);
+		VoucherDetail voucherDetails = VoucherDetailsBuilder.build(voucherDetailsMap, tariffDetailsList);
 		voucherDetails.setBookingAgent("goibibio.com");
 		voucherDetails.setPaymentType(PaymentType.ONLINE);
 		return voucherDetails;

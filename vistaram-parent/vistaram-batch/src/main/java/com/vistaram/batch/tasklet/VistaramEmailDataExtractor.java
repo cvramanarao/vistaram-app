@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
 import com.vistaram.batch.utils.VistaramMessageUtils;
 import com.vistaram.batch.writer.VistaramDetailsWriter;
-import com.vistaram.data.domain.VoucherDetails;
+import com.vistaram.data.domain.VoucherDetail;
 
 public class VistaramEmailDataExtractor implements Tasklet {
 
@@ -47,18 +47,18 @@ public class VistaramEmailDataExtractor implements Tasklet {
 		String username = "vistaramrooms@gmail.com";// change accordingly
 		String password = "vistaram66669";// change accordingly
 
-		Map<String, VoucherDetails> voucherDetailsMap = extractVoucherDetails(
+		Map<String, VoucherDetail> voucherDetailsMap = extractVoucherDetails(
 				host, port, mailStoreType, username, password);
-		List<VoucherDetails> voucherDetailsList = new ArrayList<VoucherDetails>();
+		List<VoucherDetail> voucherDetailsList = new ArrayList<VoucherDetail>();
 		voucherDetailsList.addAll(voucherDetailsMap.values());
 		writer.write(voucherDetailsList);
 
 		return RepeatStatus.FINISHED;
 	}
 
-	public Map<String, VoucherDetails> extractVoucherDetails(String host,
+	public Map<String, VoucherDetail> extractVoucherDetails(String host,
 			String port, String storeType, String user, String password) {
-		Map<String, VoucherDetails> voucherDetailsMap = new HashMap<String, VoucherDetails>();
+		Map<String, VoucherDetail> voucherDetailsMap = new HashMap<String, VoucherDetail>();
 		try {
 
 			// create properties field
@@ -171,7 +171,7 @@ public class VistaramEmailDataExtractor implements Tasklet {
 							+ message.getContent().toString());
 					try {
 						
-						VoucherDetails voucherDetails = VistaramMessageUtils
+						VoucherDetail voucherDetails = VistaramMessageUtils
 								.extractGoIbiboVoucherDetailsFromMessage(message);
 						voucherDetailsMap.put(voucher.trim(), voucherDetails);
 						writer.write(voucherDetails);

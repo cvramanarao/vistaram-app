@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.vistaram.data.domain.PaymentType;
 import com.vistaram.data.domain.TariffDetails;
-import com.vistaram.data.domain.VoucherDetails;
+import com.vistaram.data.domain.VoucherDetail;
 import com.vistaram.data.relational.domain.BookingDetail;
 import com.vistaram.data.relational.domain.GuestDetail;
 import com.vistaram.data.relational.domain.HotelDetail;
@@ -17,7 +17,7 @@ public class DtoToEntityMapper {
 	
 	
 	public static  BookingDetail mapVoucherDetailsToBookingDetails(
-			VoucherDetails voucherDetails) {
+			VoucherDetail voucherDetails) {
 		
 		
 		System.out.println("mapVoucherDetailsToBookingDetails()-->");
@@ -57,7 +57,7 @@ public class DtoToEntityMapper {
 	}
 	
 	
-	public static List<TariffDetail> mapVoucherDetailsToTariffDetails(VoucherDetails voucherDetails){
+	public static List<TariffDetail> mapVoucherDetailsToTariffDetails(VoucherDetail voucherDetails){
 		List<TariffDetail> tariffDetails = new ArrayList<TariffDetail>();
 		List<TariffDetails> tariffDetailsList = voucherDetails.getTariffDetails();
 		for(TariffDetails details : tariffDetailsList) {
@@ -74,7 +74,7 @@ public class DtoToEntityMapper {
 		
 		return tariffDetails;
 	}
-	public static GuestDetail mapVoucherDetailsToGuestDetails(VoucherDetails voucherDetails){
+	public static GuestDetail mapVoucherDetailsToGuestDetails(VoucherDetail voucherDetails){
 		GuestDetail guestDetail = new GuestDetail();
 		String guestName = voucherDetails.getGuestName();
 		int beginIndex =  guestName.lastIndexOf(" ");
@@ -88,7 +88,7 @@ public class DtoToEntityMapper {
 		
 		return guestDetail;
 	}
-	public static List<RoomDetail> mapVoucherDetailsToRoomDetails(VoucherDetails voucherDetails){
+	public static List<RoomDetail> mapVoucherDetailsToRoomDetails(VoucherDetail voucherDetails){
 		List<RoomDetail> roomDetails = new ArrayList<RoomDetail>();
 		for(int i=0;i<voucherDetails.getNoOfRooms();i++) {
 			RoomDetail roomDetail = new RoomDetail();

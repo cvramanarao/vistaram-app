@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.vistaram.data.domain.VoucherDetails;
+import com.vistaram.data.domain.VoucherDetail;
 import com.vistaram.data.mapper.DtoToEntityMapper;
 import com.vistaram.data.relational.dao.BookingDetailDao;
 import com.vistaram.data.relational.dao.GuestDetailDao;
@@ -26,7 +26,7 @@ public class VoucherDetailsService {
 	private HotelDetailDao hotelDetailDao;
 	
 	@Transactional
-	public void saveVoucherDetails(VoucherDetails voucherDetails){
+	public void saveVoucherDetails(VoucherDetail voucherDetails){
 		System.out.println("saveVoucherDetails()-->");
 		
 		BookingDetail bookingDetail = bookingDetailDao.getBookingDetailByVoucherId(voucherDetails.getVoucherNumber());

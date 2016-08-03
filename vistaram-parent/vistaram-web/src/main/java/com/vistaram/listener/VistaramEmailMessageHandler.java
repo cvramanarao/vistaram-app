@@ -16,15 +16,17 @@ import org.springframework.messaging.MessagingException;
 
 import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
 import com.vistaram.batch.writer.VistaramDetailsWriter;
-import com.vistaram.data.domain.VoucherDetails;
+import com.vistaram.data.domain.VoucherDetail;
+
+
 public class VistaramEmailMessageHandler implements MessageHandler {
 
 	@Autowired
-	private VistaramEmailMessageProcessor processor;
+	private VistaramEmailMessageProcessor vistaramEmailMessageProcessor;
 	
 	
-	@Autowired
-	private VistaramDetailsWriter writer;
+	@Autowired(required = false)
+	private VistaramDetailsWriter vistaramDetailsWriter;
 	
 	@Override
 	public void handleMessage(Message<?> message) throws MessagingException {
@@ -59,11 +61,11 @@ public class VistaramEmailMessageHandler implements MessageHandler {
 		try {
 			Object content = mimeMessage.getContent();
 			System.out.println("content: "+content);
-			VoucherDetails voucherDetails = processor.process(mimeMessage);		
+			VoucherDetail voucherDetails = vistaramEmailMessageProcessor.process(mimeMessage);		
 			if(null != voucherDetails) {
-				List<VoucherDetails> voucherDetailsList = new ArrayList<VoucherDetails>();
+				List<VoucherDetail> voucherDetailsList = new ArrayList<VoucherDetail>();
 				voucherDetailsList.add(voucherDetails);
-				writer.write(voucherDetailsList);
+				vistaramDetailsWriter.write(voucherDetailsList);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

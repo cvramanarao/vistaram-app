@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class VoucherDetailsBuilder {
 	
-	public static VoucherDetails buildVoucherDetails(Map<String, String> detailsMap){
-		VoucherDetails voucherDetails = new VoucherDetails();
+	public static VoucherDetail buildVoucherDetails(Map<String, String> detailsMap){
+		VoucherDetail voucherDetails = new VoucherDetail();
 		/*
 		 * 
 		 * {name of hotel & city=Vistaram Rtc Complex, Visakhapatnam, India, type of room=Royal King A/c, number of rooms=1, 
@@ -33,7 +33,7 @@ public class VoucherDetailsBuilder {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-			System.err.println("Error parsing booking date");
+			System.err.println("Error parsing booking date : "+bookingDateStr);
 		}
 		
 		if(null == bookingDate) {
@@ -124,6 +124,8 @@ public class VoucherDetailsBuilder {
 
 	private static String correctDateString(String dateStr) {
 		dateStr = dateStr.replace(".", "");
+		dateStr = dateStr.replace("noon", "12:00 pm");
+		dateStr = dateStr.replace("midnight", "12:00 am");
 		if(dateStr.startsWith("Sept")) {
 			dateStr = dateStr.replace("Sept", "Sep");
 		} else if(dateStr.startsWith("June")) {
@@ -176,9 +178,9 @@ public class VoucherDetailsBuilder {
 		return tariffDetails;
 	}
 	
-	public static VoucherDetails build(Map<String, String> voucherDetailsMap,
+	public static VoucherDetail build(Map<String, String> voucherDetailsMap,
 			List<Map<String, String>> tariffDetailsList) {
-		VoucherDetails voucherDetails = buildVoucherDetails(voucherDetailsMap);
+		VoucherDetail voucherDetails = buildVoucherDetails(voucherDetailsMap);
 		
 		List<TariffDetails> tariffDetailObjectsList = new ArrayList<TariffDetails>();
 		for(Map<String, String> tariffDetailsMap : tariffDetailsList) {

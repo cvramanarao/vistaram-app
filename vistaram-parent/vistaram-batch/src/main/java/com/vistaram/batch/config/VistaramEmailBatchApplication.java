@@ -35,12 +35,12 @@ import com.vistaram.batch.reader.VistaramEmailMessageReader;
 import com.vistaram.batch.tasklet.VistaramEmailDataExtractor;
 import com.vistaram.batch.writer.VistaramDetailsWriter;
 import com.vistaram.data.config.DataSourceConfiguration;
-import com.vistaram.data.domain.VoucherDetails;
+import com.vistaram.data.domain.VoucherDetail;
 
 @Configuration
 @ComponentScan
 @Component
-@EnableBatchProcessing
+//@EnableBatchProcessing
 @Import(DataSourceConfiguration.class)
 public class VistaramEmailBatchApplication{
 
@@ -73,12 +73,12 @@ public class VistaramEmailBatchApplication{
 	}
 	
 	@Bean
-	public ItemProcessor<Message, VoucherDetails> vistaramEmailMessageProcessor(){
+	public ItemProcessor<Message, VoucherDetail> vistaramEmailMessageProcessor(){
 		return new VistaramEmailMessageProcessor();
 	}
 	
 	@Bean
-	public ItemWriter<VoucherDetails> vistaramDetailsWriter(){
+	public ItemWriter<VoucherDetail> vistaramDetailsWriter(){
 		return new VistaramDetailsWriter();
 	}
 	
@@ -86,7 +86,7 @@ public class VistaramEmailBatchApplication{
 	@Bean
 	public Step vistaramEmailDataExtractorStep() throws Exception {
 		TaskletStep step = stepBuilderFactory.get("vistaramEmailDataExtractorStep").
-				<Message, VoucherDetails> chunk(10).reader(vistaramEmailMessageReader()).processor(vistaramEmailMessageProcessor()).writer(vistaramDetailsWriter()).build();
+				<Message, VoucherDetail> chunk(10).reader(vistaramEmailMessageReader()).processor(vistaramEmailMessageProcessor()).writer(vistaramDetailsWriter()).build();
 		return step;
 	}
 	

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VoucherDetails {
+public class VoucherDetail {
 	
 	
 	/*
@@ -187,7 +187,7 @@ public class VoucherDetails {
 	
 	@Override
 	public String toString() {
-		return "VoucherDetails [bookingAgent=" + bookingAgent
+		return "VoucherDetail [bookingAgent=" + bookingAgent
 				+ ", voucherNumber=" + voucherNumber + ", guestName="
 				+ guestName + ", hotelAndCity=" + hotelAndCity
 				+ ", bookingDate=" + bookingDate + ", checkInDate="
