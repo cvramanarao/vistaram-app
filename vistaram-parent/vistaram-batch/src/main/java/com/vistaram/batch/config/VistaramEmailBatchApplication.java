@@ -31,7 +31,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
+import com.vistaram.batch.processor.VistaramGmailMessageProcessor;
 import com.vistaram.batch.reader.VistaramEmailMessageReader;
+import com.vistaram.batch.reader.VistaramGmailMessageReader;
 import com.vistaram.batch.tasklet.VistaramEmailDataExtractor;
 import com.vistaram.batch.writer.VistaramDetailsWriter;
 import com.vistaram.data.config.DataSourceConfiguration;
@@ -50,21 +52,11 @@ public class VistaramEmailBatchApplication{
 	@Autowired
 	public StepBuilderFactory stepBuilderFactory;	
 	
+	@Autowired
+	public VistaramEmailMessageProcessor vistaramEmailMessageProcessor;
 	
-
-	/*@Bean
-	public Tasklet vistaramEmailDataExtractorTask() {
-		return new VistaramEmailDataExtractor();
-	}
-	
-	@Bean
-	protected Step vistaramDataExtractorStep() throws Exception {
-		return stepBuilderFactory.get("vistaramDataExtractorStep").tasklet(vistaramEmailDataExtractorTask()).build();
-	}
-	@Bean
-	public Job vistaramDataExtractorJob(Step vistaramDataExtractorStep) throws Exception {
-		return jobBuilderFactory.get("vistaramDataExtractorJob").incrementer(new RunIdIncrementer()).start(vistaramDataExtractorStep).build();
-	}*/
+	@Autowired
+	public VistaramDetailsWriter vistaramDetailsWriter;
 	
 	@Bean
 	public ItemReader<Message> vistaramEmailMessageReader(){
@@ -73,20 +65,9 @@ public class VistaramEmailBatchApplication{
 	}
 	
 	@Bean
-	public ItemProcessor<Message, VoucherDetail> vistaramEmailMessageProcessor(){
-		return new VistaramEmailMessageProcessor();
-	}
-	
-	@Bean
-	public ItemWriter<VoucherDetail> vistaramDetailsWriter(){
-		return new VistaramDetailsWriter();
-	}
-	
-	
-	@Bean
 	public Step vistaramEmailDataExtractorStep() throws Exception {
 		TaskletStep step = stepBuilderFactory.get("vistaramEmailDataExtractorStep").
-				<Message, VoucherDetail> chunk(10).reader(vistaramEmailMessageReader()).processor(vistaramEmailMessageProcessor()).writer(vistaramDetailsWriter()).build();
+				<Message, VoucherDetail> chunk(10).reader(vistaramEmailMessageReader()).processor(vistaramEmailMessageProcessor).writer(vistaramDetailsWriter).build();
 		return step;
 	}
 	
@@ -96,7 +77,29 @@ public class VistaramEmailBatchApplication{
 		return jobBuilderFactory.get("vistaramEmailDataExtractorJob").incrementer(new RunIdIncrementer()).start(vistaramEmailDataExtractorStep).build();
 	}
 	
-
+	@Bean
+	public ItemReader<com.google.api.services.gmail.model.Message> vistaramGmailMessageReader(){
+		
+		return new VistaramGmailMessageReader();
+	}
+	
+	@Bean
+	public ItemProcessor<com.google.api.services.gmail.model.Message, VoucherDetail> vistaramGmailMessageProcessor(){
+		return new VistaramGmailMessageProcessor();
+	}
+	
+	@Bean
+	public Step vistaramGmailDataExtractorStep() throws Exception {
+		TaskletStep step = stepBuilderFactory.get("vistaramGmailDataExtractorStep").
+				<com.google.api.services.gmail.model.Message, VoucherDetail> chunk(10).reader(vistaramGmailMessageReader()).processor(vistaramGmailMessageProcessor()).writer(vistaramDetailsWriter).build();
+		return step;
+	}
+	
+	
+	@Bean
+	public Job vistaramGmailDataExtractorJob(Step vistaramGmailDataExtractorStep) throws Exception {
+		return jobBuilderFactory.get("vistaramGmailDataExtractorJob").incrementer(new RunIdIncrementer()).start(vistaramGmailDataExtractorStep).build();
+	}
 	
 	
 	

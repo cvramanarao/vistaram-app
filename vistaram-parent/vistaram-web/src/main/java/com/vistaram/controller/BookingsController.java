@@ -1,8 +1,10 @@
 package com.vistaram.controller;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,9 +32,26 @@ public class BookingsController {
 		System.out.println("no. of bookings : "+bookingDetails.size());
 		for(BookingDetail bookingDetail : bookingDetails){
 			VoucherDetail voucherDetail = EntityToDtoMapper.mapBookingDetailToVoucherDetails(bookingDetail);
+			System.out.println("voucher detail : "+voucherDetail);
 			voucherDetails.add(voucherDetail);
 		}
 		System.out.println("<-- getBookings()");
+		return voucherDetails;
+	}
+	
+	@RequestMapping("/bookings/today")
+	public List<VoucherDetail> getTodaysBookings(){
+		System.out.println("getTodaysBookings()-->");
+		List<VoucherDetail> voucherDetails = new ArrayList<VoucherDetail>();
+		
+		List<BookingDetail> bookingDetails = bookingDetailsService.getBookingDetailsForCurrentBookingDate();
+		System.out.println("no. of bookings : "+bookingDetails.size());
+		for(BookingDetail bookingDetail : bookingDetails){
+			VoucherDetail voucherDetail = EntityToDtoMapper.mapBookingDetailToVoucherDetails(bookingDetail);
+			System.out.println("voucher detail : "+voucherDetail);
+			voucherDetails.add(voucherDetail);
+		}
+		System.out.println("<-- getTodaysBookings()");
 		return voucherDetails;
 	}
 

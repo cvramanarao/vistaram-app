@@ -28,9 +28,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(basePackages={"com.vistaram.data.relational.repositories"}, considerNestedRepositories=true)
 @EntityScan(basePackages={"com.vistaram.data.relational.domain"})
 @EnableConfigurationProperties
-@EnableSpringConfigured
-//@EnableAutoConfiguration
-//@EnableTransactionManagement
 public class DataSourceConfiguration {
 
 	@Value("${spring.datasource.driverClassName}")
@@ -98,10 +95,10 @@ public class DataSourceConfiguration {
         return entityManagerFactoryBean;
     }
     
-    @Bean
+   /* @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
       return new PersistenceExceptionTranslationPostProcessor();
     }
-    
+    */
     
 }

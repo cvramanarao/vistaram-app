@@ -16,7 +16,12 @@ public class BookingDetailsService {
 	private BookingDetailDao bookingDetailDao;
 	
 	public List<BookingDetail> getBookingDetailsByBookingDate(Date date) {
-		return bookingDetailDao.getBookingDetails();
+		return bookingDetailDao.getBookingDetails(date);
+	}
+	
+	public List<BookingDetail> getBookingDetailsForCurrentBookingDate() {
+		
+		return bookingDetailDao.getCurrentDateBookingDetails();
 	}
 
 }

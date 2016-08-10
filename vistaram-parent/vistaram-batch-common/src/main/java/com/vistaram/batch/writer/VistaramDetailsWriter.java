@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 import com.vistaram.data.domain.VoucherDetail;
 import com.vistaram.data.service.VoucherDetailsService;
 
+@Component
 public class VistaramDetailsWriter implements ItemWriter<VoucherDetail> {
 
 	@Autowired
 	private VoucherDetailsService voucherDetailsService;
 	
 	@Override
-	@Transactional
 	public void write(List<? extends VoucherDetail> items) throws Exception {
 		System.out.println("VistaramDetailsWriter || writewrite(List<? extends VoucherDetail> items)-->");
 		System.out.println("No. of Items : " +items.size());
@@ -29,7 +29,7 @@ public class VistaramDetailsWriter implements ItemWriter<VoucherDetail> {
 		
 	}
 	
-	@Transactional
+
 	public void write(VoucherDetail voucherDetails){
 		System.out.println("VistaramDetailsWriter || write(VoucherDetail voucherDetails)-->");
 		voucherDetailsService.saveVoucherDetails(voucherDetails);

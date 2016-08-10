@@ -20,7 +20,7 @@ public class DtoToEntityMapper {
 			VoucherDetail voucherDetails) {
 		
 		
-		System.out.println("mapVoucherDetailsToBookingDetails()-->");
+		//System.out.println("mapVoucherDetailsToBookingDetails()-->");
 		BookingDetail bookingDetail = new BookingDetail();
 		bookingDetail.setBookingAgent(voucherDetails.getBookingAgent());
 		bookingDetail.setVoucherId(voucherDetails.getVoucherNumber());
@@ -51,7 +51,8 @@ public class DtoToEntityMapper {
 		bookingDetail.setTotalTax(voucherDetails.getTotalTax());
 		bookingDetail.setTotalAmout(voucherDetails.getTotalAmountPayable());
 		bookingDetail.setPaymentType(PaymentType.ONLINE.toString());
-		System.out.println("<-- mapVoucherDetailsToBookingDetails()");
+		bookingDetail.setSource(voucherDetails.getSource());
+		//System.out.println("<-- mapVoucherDetailsToBookingDetails()");
 		return bookingDetail;
 		
 	}

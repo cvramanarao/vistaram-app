@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
@@ -24,12 +25,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
 import com.vistaram.batch.writer.VistaramDetailsWriter;
+import com.vistaram.data.config.DataSourceConfiguration;
 import com.vistaram.listener.VistaramEmailMessageHandler;
 
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-//@ImportResource("file:///${user.home}/configuration/vistaram-email-integration.xml")
+@ComponentScan
+@ImportResource("file:///${user.home}/configuration/vistaram-email-integration.xml")
 @EnableAsync
 public class VistaramApplication  extends WebMvcConfigurerAdapter {
 	
@@ -59,27 +62,16 @@ public class VistaramApplication  extends WebMvcConfigurerAdapter {
 		return propertySourcesPlaceholderConfigurer;
 	}
 	
-	/*@Autowired
+	@Autowired
 	@Qualifier("receiveChannel")
 	private DirectChannel directChannel;
 	
 	@Bean
-	public VistaramDetailsWriter vistaramDetailsWriter(){
-		return new VistaramDetailsWriter();
-	}
-	
-	@Bean
-	public VistaramEmailMessageProcessor vistaramEmailMessageProcessor(){
-		return new VistaramEmailMessageProcessor();
-	}
-	
-	@Bean
 	public VistaramEmailMessageHandler messageHandler(){
 		VistaramEmailMessageHandler messageHandler = new VistaramEmailMessageHandler();
+		// messageHandler.setVistaramDetailsWriter(vistaramDetailsWriter());
 		directChannel.subscribe(messageHandler);
 		return messageHandler;
-	}*/
-	
-	
+	}
 
 }

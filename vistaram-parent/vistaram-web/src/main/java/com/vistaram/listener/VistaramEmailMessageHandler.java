@@ -25,7 +25,7 @@ public class VistaramEmailMessageHandler implements MessageHandler {
 	private VistaramEmailMessageProcessor vistaramEmailMessageProcessor;
 	
 	
-	@Autowired(required = false)
+	@Autowired
 	private VistaramDetailsWriter vistaramDetailsWriter;
 	
 	@Override
@@ -81,5 +81,24 @@ public class VistaramEmailMessageHandler implements MessageHandler {
 		System.out.println("payload : "+payload);
 		System.out.println("<-- handleMessage()");
 	}
+
+	public VistaramEmailMessageProcessor getVistaramEmailMessageProcessor() {
+		return vistaramEmailMessageProcessor;
+	}
+
+	public void setVistaramEmailMessageProcessor(
+			VistaramEmailMessageProcessor vistaramEmailMessageProcessor) {
+		this.vistaramEmailMessageProcessor = vistaramEmailMessageProcessor;
+	}
+
+	public VistaramDetailsWriter getVistaramDetailsWriter() {
+		return vistaramDetailsWriter;
+	}
+
+	public void setVistaramDetailsWriter(VistaramDetailsWriter vistaramDetailsWriter) {
+		this.vistaramDetailsWriter = vistaramDetailsWriter;
+	}
+	
+	
 
 }

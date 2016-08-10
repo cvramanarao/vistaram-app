@@ -57,6 +57,8 @@ public class BookingDetail implements Serializable {
 
 	@Column(name="voucher_id")
 	private String voucherId;
+	
+	private String source;
 
 	//bi-directional many-to-one association to GuestDetail
 	@ManyToOne(cascade=CascadeType.ALL)
@@ -226,5 +228,16 @@ public class BookingDetail implements Serializable {
 
 		return tariffDetail;
 	}
+	
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+	
+	
+
 
 }

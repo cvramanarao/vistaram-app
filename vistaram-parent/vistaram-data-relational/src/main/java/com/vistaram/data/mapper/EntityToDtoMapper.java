@@ -1,7 +1,9 @@
 package com.vistaram.data.mapper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.vistaram.data.domain.PaymentType;
 import com.vistaram.data.domain.VoucherDetail;
@@ -16,9 +18,15 @@ public class EntityToDtoMapper {
 			BookingDetail bookingDetail) {
 		
 		VoucherDetail voucherDetails = new VoucherDetail();
-		System.out.println("mapBookingDetailToVoucherDetails()-->");
+		//System.out.println("mapBookingDetailToVoucherDetails()-->");
 		voucherDetails.setVoucherNumber(bookingDetail.getVoucherId());
-		voucherDetails.setBookingDate(bookingDetail.getBookingDate());
+		Calendar bookingCl = Calendar.getInstance();
+		bookingCl.setTime(bookingDetail.getBookingDate());
+		
+		Calendar cl = Calendar.getInstance();
+		cl.setTimeZone(TimeZone.getTimeZone("IST"));
+		cl.set(bookingCl.get(Calendar.YEAR), bookingCl.get(Calendar.MONTH), bookingCl.get(Calendar.DATE), bookingCl.get(Calendar.HOUR_OF_DAY), bookingCl.get(Calendar.MINUTE), bookingCl.get(Calendar.SECOND));
+		voucherDetails.setBookingDate(cl.getTime());
 		voucherDetails.setCheckInDate(bookingDetail.getCheckinDate());
 		voucherDetails.setCheckOutDate(bookingDetail.getCheckoutDate());
 		voucherDetails.setTotalAmountPayable(bookingDetail.getTotalAmout());
@@ -26,7 +34,9 @@ public class EntityToDtoMapper {
 		voucherDetails.setHotelAndCity(bookingDetail.getHotelDetail().getHotelName());
 		voucherDetails.setNoOfRooms(bookingDetail.getNoOfRooms());
 		voucherDetails.setNoOfNights(bookingDetail.getNoOfNights());
-		System.out.println("<-- mapBookingDetailToVoucherDetails()");
+		voucherDetails.setBookingAgent(bookingDetail.getBookingAgent());
+		voucherDetails.setSource(bookingDetail.getSource());
+		//System.out.println("<-- mapBookingDetailToVoucherDetails()");
 		return voucherDetails;
 		
 	}

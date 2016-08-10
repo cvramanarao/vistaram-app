@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.mail.BodyPart;
 import javax.mail.Message;
+import javax.mail.Message.RecipientType;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMultipart;
 
@@ -43,10 +45,13 @@ public class VistaramMessageUtils {
 			in.close();
 		}
 		
+		
+		
 		//System.out.println(voucherDetailsMap);
 		VoucherDetail voucherDetails = VoucherDetailsBuilder.build(voucherDetailsMap, tariffDetailsList);
 		voucherDetails.setBookingAgent("goibibio.com");
 		voucherDetails.setPaymentType(PaymentType.ONLINE);
+		voucherDetails.setSource(Arrays.toString(message.getRecipients(RecipientType.TO)));
 		return voucherDetails;
 	}
 

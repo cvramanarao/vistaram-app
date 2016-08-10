@@ -1,10 +1,13 @@
 package com.vistaram.data.domain;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class VoucherDetail {
 	
@@ -31,7 +34,15 @@ public class VoucherDetail {
 	private String voucherNumber;
 	private String guestName;
 	private String hotelAndCity;
+	//2015-11-17 01:34:00
 	private Date bookingDate;
+	private String bookingDateString;
+	
+	
+
+
+
+
 	private Date checkInDate;
 	private Date checkOutDate;
 	private String roomType;
@@ -49,6 +60,8 @@ public class VoucherDetail {
 	private double totalTax;
 	private double totalDiscount;
 	private double totalAmountPayable;
+	
+	private String source;
 	
 	private List<TariffDetails> tariffDetails;
 	
@@ -183,14 +196,29 @@ public class VoucherDetail {
 	}
 	
 
+	public String getBookingDateString() {
+		SimpleDateFormat format = new SimpleDateFormat();
+		format.applyPattern("yyyy-MM-dd HH:mm:ss");
+		bookingDateString = format.format(bookingDate);
+		return bookingDateString;
+	}
+	/*public void setBookingDateString(String bookingDateString) {
+		this.bookingDateString = bookingDateString;
+	}*/
 	
+	public String getSource() {
+		return source;
+	}
+	public void setSource(String source) {
+		this.source = source;
+	}
 	
 	@Override
 	public String toString() {
 		return "VoucherDetail [bookingAgent=" + bookingAgent
 				+ ", voucherNumber=" + voucherNumber + ", guestName="
 				+ guestName + ", hotelAndCity=" + hotelAndCity
-				+ ", bookingDate=" + bookingDate + ", checkInDate="
+				+ ", bookingDate=" + bookingDate+ ", bookingDateStr=" + bookingDateString + ", checkInDate="
 				+ checkInDate + ", checkOutDate=" + checkOutDate
 				+ ", roomType=" + roomType + ", noOfRooms=" + noOfRooms
 				+ ", noOfNights=" + noOfNights + ", ratePlan=" + ratePlan
@@ -202,5 +230,6 @@ public class VoucherDetail {
 				+ ", tariffDetails=" + tariffDetails + ", guestsPerRoom="
 				+ guestsPerRoom + "]";
 	}
+	
 	
 }

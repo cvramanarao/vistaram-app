@@ -3,6 +3,7 @@ package com.vistaram.data.relational.dao;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -36,15 +37,42 @@ public class BookingDetailDao {
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED)
-	public List<BookingDetail> getBookingDetailsByBookingDate(Date date){
-		Calendar cl = Calendar.getInstance();
-		cl.setTime(date);
-		Date end = cl.getTime();
-		cl.add(Calendar.DATE, -1);
+	public List<BookingDetail> getCurrentDateBookingDetails(){
+		Calendar cl = Calendar.getInstance(TimeZone.getTimeZone("IST"));
 		cl.set(Calendar.HOUR, 0);
 		cl.set(Calendar.MINUTE, 0);
 		cl.set(Calendar.SECOND, 0);
-		return bookingDetailRepo.findByBookingDate(cl.getTime(), end);
+		cl.set(Calendar.MILLISECOND, 0);
+		
+		return bookingDetailRepo.findByCurrentBookingDate(cl.getTime());
+	}
+	
+	@Transactional(propagation=Propagation.REQUIRED)
+	public List<BookingDetail> getBookingDetails(Date date){
+		
+		Calendar begin = Calendar.getInstance();
+		begin.setTimeZone(TimeZone.getTimeZone("IST"));
+		begin.setTime(date);
+		System.out.println(begin.getTimeZone());
+		//Date end = cl.getTime();
+		begin.set(Calendar.HOUR, 0);
+		begin.set(Calendar.MINUTE, 0);
+		begin.set(Calendar.SECOND, 0);
+		begin.set(Calendar.MILLISECOND, 0);
+		
+		System.out.println("begin: "+begin);
+		
+		Calendar end = Calendar.getInstance();
+		end.setTimeZone(TimeZone.getTimeZone("IST"));
+		end.setTime(date);
+		System.out.println(end.getTimeZone());
+		//Date end = cl.getTime();
+		end.set(Calendar.HOUR, 23);
+		end.set(Calendar.MINUTE, 59);
+		end.set(Calendar.SECOND, 59);
+		end.set(Calendar.MILLISECOND, 999);
+		System.out.println("end : "+end);
+		return bookingDetailRepo.findByBookingDateByRange(begin.getTime(), end.getTime());
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED)

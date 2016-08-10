@@ -11,7 +11,10 @@ import org.springframework.stereotype.Component;
 import com.vistaram.batch.utils.VistaramMessageUtils;
 import com.vistaram.data.domain.VoucherDetail;
 
+@Component
 public class VistaramEmailMessageProcessor implements ItemProcessor<Message, VoucherDetail> {
+	
+	
 
 	@Override
 	public VoucherDetail process(Message message) throws Exception {
@@ -24,12 +27,8 @@ public class VistaramEmailMessageProcessor implements ItemProcessor<Message, Vou
 		
 		System.out.println("All Recipients: "+Arrays.toString(message.getAllRecipients()));
 		
-		System.out.println("Text: "
-				+ message.getContent().toString());
-
 		
-		
-		if (message.getFrom()[0].toString().equalsIgnoreCase("hotelpartners@goibibo.com") &&  message.getSubject().contains("Confirm Hotel Booking") ) {
+		if (message.getFrom()[0].toString().contains("hotelpartners@goibibo.com") &&  message.getSubject().contains("Confirm Hotel Booking") ) {
 			voucherDetails = VistaramMessageUtils.extractGoIbiboVoucherDetailsFromMessage(message);
 		}
 		System.out.println("<-- VistaramEmailMessageProcessor || process()");		
