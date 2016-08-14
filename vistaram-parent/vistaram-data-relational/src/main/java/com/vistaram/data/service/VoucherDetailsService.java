@@ -25,7 +25,7 @@ public class VoucherDetailsService {
 	@Autowired
 	private HotelDetailDao hotelDetailDao;
 	
-	@Transactional
+	//@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void saveVoucherDetails(VoucherDetail voucherDetails){
 		System.out.println("saveVoucherDetails()-->");
 		

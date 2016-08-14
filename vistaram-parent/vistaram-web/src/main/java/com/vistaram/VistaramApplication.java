@@ -73,5 +73,10 @@ public class VistaramApplication  extends WebMvcConfigurerAdapter {
 		directChannel.subscribe(messageHandler);
 		return messageHandler;
 	}
+	
+	 @Bean
+	 public VistaramDetailsWriter vistaramDetailsWriter(){
+		 return new VistaramDetailsWriter();
+	 }
 
 }

@@ -1,12 +1,16 @@
 package com.vistaram.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,6 +56,24 @@ public class BookingsController {
 			voucherDetails.add(voucherDetail);
 		}
 		System.out.println("<-- getTodaysBookings()");
+		return voucherDetails;
+	}
+	
+	@RequestMapping("/checkins/today")
+	public List<VoucherDetail> getTodaysCheckins(Principal principal){
+		System.out.println("getTodaysCheckins()-->");
+		List<VoucherDetail> voucherDetails = new ArrayList<VoucherDetail>();
+		Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		System.out.println(authorities);
+		
+		List<BookingDetail> bookingDetails = bookingDetailsService.getBookingDetailsForCurrentCheckinDateForUser(principal.getName());
+		System.out.println("no. of bookings : "+bookingDetails.size());
+		for(BookingDetail bookingDetail : bookingDetails){
+			VoucherDetail voucherDetail = EntityToDtoMapper.mapBookingDetailToVoucherDetails(bookingDetail);
+			System.out.println("voucher detail : "+voucherDetail);
+			voucherDetails.add(voucherDetail);
+		}
+		System.out.println("<-- getTodaysCheckins()");
 		return voucherDetails;
 	}
 

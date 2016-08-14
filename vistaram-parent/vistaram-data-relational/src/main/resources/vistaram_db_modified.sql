@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS `hotel_details` (
   `country` VARCHAR(120) NULL,
   `hotel_identifier_name` VARCHAR(150) NOT NULL,
   `users_username` VARCHAR(50) NOT NULL,
+  `booking_agent` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`hotel_id`),
   CONSTRAINT `fk_hotel_details_users1`
     FOREIGN KEY (`users_username`)
@@ -69,10 +70,10 @@ CREATE TABLE IF NOT EXISTS `hotel_details` (
 ENGINE = InnoDB;
 
 SHOW WARNINGS;
-CREATE UNIQUE INDEX `hotel_identifier_name_UNIQUE` ON `hotel_details` (`hotel_identifier_name` ASC);
+CREATE UNIQUE INDEX `hotel_identifier_name_agent_UNIQUE` ON `hotel_details` (`hotel_identifier_name` ASC, `booking_agent`);
 
 SHOW WARNINGS;
-CREATE  INDEX `users_username_UNIQUE` ON `hotel_details` (`users_username` ASC);
+-- CREATE  INDEX `users_username_UNIQUE` ON `hotel_details` (`users_username` ASC);
 
 SHOW WARNINGS;
 
@@ -95,8 +96,9 @@ CREATE TABLE IF NOT EXISTS `booking_details` (
   `guest_details_guest_id` INT NOT NULL,
   `hotel_details_hotel_id` INT NOT NULL,
   `total_tax` DOUBLE NOT NULL,
-  `total_amout` DOUBLE NOT NULL,
+  `total_amount` DOUBLE NOT NULL,
   `STATUS` ENUM('CONFIRMED', 'CANCELLED', 'YET_TO_CONFIRM') NOT NULL,
+  `source` VARCHAR(120) NOT NULL,
   PRIMARY KEY (`booking_id`),
   CONSTRAINT `fk_booking_details_guest_details`
     FOREIGN KEY (`guest_details_guest_id`)

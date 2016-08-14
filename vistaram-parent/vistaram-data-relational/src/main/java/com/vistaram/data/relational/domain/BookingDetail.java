@@ -16,7 +16,11 @@ import java.util.List;
  */
 @Entity
 @Table(name="booking_details")
-@NamedQuery(name="BookingDetail.findAll", query="SELECT b FROM BookingDetail b")
+
+@NamedQueries({
+	@NamedQuery(name="BookingDetail.findAll", query="SELECT b FROM BookingDetail b"),
+	@NamedQuery(name="BookingDetail.findByVoucherId", query="SELECT b FROM BookingDetail b where b.voucherId=:voucherId")
+})
 public class BookingDetail implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -49,8 +53,8 @@ public class BookingDetail implements Serializable {
 	@Column(name="payment_type")
 	private String paymentType;
 
-	@Column(name="total_amout")
-	private double totalAmout;
+	@Column(name="total_amount")
+	private double totalAmount;
 
 	@Column(name="total_tax")
 	private double totalTax;
@@ -145,12 +149,12 @@ public class BookingDetail implements Serializable {
 		this.paymentType = paymentType;
 	}
 
-	public double getTotalAmout() {
-		return this.totalAmout;
+	public double getTotalAmount() {
+		return this.totalAmount;
 	}
 
-	public void setTotalAmout(double totalAmout) {
-		this.totalAmout = totalAmout;
+	public void setTotalAmount(double totalAmount) {
+		this.totalAmount = totalAmount;
 	}
 
 	public double getTotalTax() {

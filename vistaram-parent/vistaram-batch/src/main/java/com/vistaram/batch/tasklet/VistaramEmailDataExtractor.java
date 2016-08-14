@@ -29,6 +29,7 @@ import com.vistaram.batch.utils.VistaramMessageUtils;
 import com.vistaram.batch.writer.VistaramDetailsWriter;
 import com.vistaram.data.domain.VoucherDetail;
 
+@Deprecated
 public class VistaramEmailDataExtractor implements Tasklet {
 
 	@Autowired
@@ -185,15 +186,15 @@ public class VistaramEmailDataExtractor implements Tasklet {
 
 				}
 
-				/*
-				 * if(message.getFrom()[0].toString().equalsIgnoreCase(
-				 * "MakeMyTrip <noreply@makemytrip.com>") && message.getSubject
-				 * ().contains("Hotel Booking on MakeMyTrip.com")) { ++vouchers;
-				 * System.out.println("Text: " +
-				 * message.getContent().toString());
-				 * 
-				 * extractMakeMyTripVoucherDetails(message); }
-				 */
+				
+				  if(message.getFrom()[0].toString().equalsIgnoreCase("MakeMyTrip <noreply@makemytrip.com>")
+						  && message.getSubject().contains("Hotel Booking on MakeMyTrip.com")) { 
+					  System.out.println("Text: " + message.getContent().toString());
+					  VoucherDetail voucherDetails = VistaramMessageUtils.extractMakeMyTripVoucherDetailsFromMessage(message); 
+					  voucherDetailsMap.put(voucherDetails.getVoucherNumber(), voucherDetails);
+					  writer.write(voucherDetails);
+				  }
+				 
 				
 //				if(vouchers > 10)
 //					break;

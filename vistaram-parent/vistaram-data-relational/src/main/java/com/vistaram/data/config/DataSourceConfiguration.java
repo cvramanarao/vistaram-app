@@ -3,23 +3,22 @@ package com.vistaram.data.config;
 
 import java.util.Properties;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
+import javax.sql.DataSource;
+
 import org.hibernate.jpa.HibernatePersistenceProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
-import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.PlatformTransactionManager;
 
 
 
@@ -29,6 +28,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EntityScan(basePackages={"com.vistaram.data.relational.domain"})
 @EnableConfigurationProperties
 public class DataSourceConfiguration {
+	
+	
+	
+	//@Autowired
+	//private DataSource dataSource;
 
 	@Value("${spring.datasource.driverClassName}")
     private String databaseDriverClassName; 
@@ -43,7 +47,7 @@ public class DataSourceConfiguration {
     private String databasePassword;
 
     @Bean
-    @Primary
+   // @Primary
     public DataSource tomcatDataSource()  {
     	
         org.apache.tomcat.jdbc.pool.DataSource ds = new org.apache.tomcat.jdbc.pool.DataSource();
@@ -56,14 +60,14 @@ public class DataSourceConfiguration {
         return ds;
     }
     
-    /*@Bean
-    public JpaTransactionManager transactionManager() throws ClassNotFoundException {
+    @Bean
+    public PlatformTransactionManager transactionManager() throws ClassNotFoundException {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
 
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 
         return transactionManager;
-    }*/
+    }
     
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws ClassNotFoundException {
@@ -100,5 +104,6 @@ public class DataSourceConfiguration {
       return new PersistenceExceptionTranslationPostProcessor();
     }
     */
+ 
     
 }

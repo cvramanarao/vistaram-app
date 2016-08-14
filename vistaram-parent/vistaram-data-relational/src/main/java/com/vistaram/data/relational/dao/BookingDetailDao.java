@@ -15,7 +15,7 @@ import com.vistaram.data.relational.repositories.BookingDetailRepository;
 
 
 @Repository
-@Transactional
+//@Transactional
 public class BookingDetailDao {
 	
 	@Autowired
@@ -23,31 +23,31 @@ public class BookingDetailDao {
 	
 	
 	
-	@Transactional(propagation=Propagation.REQUIRED)
+	//@Transactional(propagation=Propagation.REQUIRED)
 	public void save(BookingDetail detail){
 		System.out.println("BookingDetailDao || save()-->");
 		
-		bookingDetailRepo.save(detail);
+		bookingDetailRepo.saveAndFlush(detail);
 		System.out.println("<-- BookingDetailDao || save()");
 	}
 	
-	@Transactional(propagation=Propagation.REQUIRED)
+	//@Transactional(propagation=Propagation.REQUIRED)
 	public List<BookingDetail> getBookingDetails(){
 		return bookingDetailRepo.findAll();
 	}
 	
-	@Transactional(propagation=Propagation.REQUIRED)
+	//@Transactional(propagation=Propagation.REQUIRED)
 	public List<BookingDetail> getCurrentDateBookingDetails(){
 		Calendar cl = Calendar.getInstance(TimeZone.getTimeZone("IST"));
-		cl.set(Calendar.HOUR, 0);
+		cl.set(Calendar.HOUR_OF_DAY, 0);
 		cl.set(Calendar.MINUTE, 0);
 		cl.set(Calendar.SECOND, 0);
 		cl.set(Calendar.MILLISECOND, 0);
-		
+		System.out.println("Current Date : "+cl.getTime());
 		return bookingDetailRepo.findByCurrentBookingDate(cl.getTime());
 	}
 	
-	@Transactional(propagation=Propagation.REQUIRED)
+	//@Transactional(propagation=Propagation.REQUIRED)
 	public List<BookingDetail> getBookingDetails(Date date){
 		
 		Calendar begin = Calendar.getInstance();
@@ -55,7 +55,7 @@ public class BookingDetailDao {
 		begin.setTime(date);
 		System.out.println(begin.getTimeZone());
 		//Date end = cl.getTime();
-		begin.set(Calendar.HOUR, 0);
+		begin.set(Calendar.HOUR_OF_DAY, 0);
 		begin.set(Calendar.MINUTE, 0);
 		begin.set(Calendar.SECOND, 0);
 		begin.set(Calendar.MILLISECOND, 0);
@@ -67,7 +67,7 @@ public class BookingDetailDao {
 		end.setTime(date);
 		System.out.println(end.getTimeZone());
 		//Date end = cl.getTime();
-		end.set(Calendar.HOUR, 23);
+		end.set(Calendar.HOUR_OF_DAY, 23);
 		end.set(Calendar.MINUTE, 59);
 		end.set(Calendar.SECOND, 59);
 		end.set(Calendar.MILLISECOND, 999);
@@ -75,8 +75,30 @@ public class BookingDetailDao {
 		return bookingDetailRepo.findByBookingDateByRange(begin.getTime(), end.getTime());
 	}
 	
-	@Transactional(propagation=Propagation.REQUIRED)
+	//@Transactional(propagation=Propagation.REQUIRED)
 	public BookingDetail getBookingDetailByVoucherId(String voucherId){
 		return bookingDetailRepo.findByVoucherId(voucherId);
+	}
+
+	public List<BookingDetail> getCurrentDateCheckInDetails() {
+		// TODO Auto-generated method stub
+		Calendar cl = Calendar.getInstance(TimeZone.getTimeZone("IST"));
+		cl.set(Calendar.HOUR_OF_DAY, 0);
+		cl.set(Calendar.MINUTE, 0);
+		cl.set(Calendar.SECOND, 0);
+		cl.set(Calendar.MILLISECOND, 0);
+		
+		return bookingDetailRepo.findByCurrentCheckInDate(cl.getTime());
+	}
+
+	public List<BookingDetail> getCurrentDateCheckInDetailsForUser(String name) {
+		// TODO Auto-generated method stub
+		Calendar cl = Calendar.getInstance(TimeZone.getTimeZone("IST"));
+		cl.set(Calendar.HOUR_OF_DAY, 0);
+		cl.set(Calendar.MINUTE, 0);
+		cl.set(Calendar.SECOND, 0);
+		cl.set(Calendar.MILLISECOND, 0);
+		
+		return bookingDetailRepo.findByCurrentCheckInDateForUser(cl.getTime(), name);
 	}
 }

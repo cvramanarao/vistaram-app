@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vistaram.data.relational.domain.GuestDetail;
 
-@Transactional(readOnly=false)
+//@Transactional(readOnly=false)
 public interface GuestDetailRepository extends JpaRepository<GuestDetail, Long>{
 
 }

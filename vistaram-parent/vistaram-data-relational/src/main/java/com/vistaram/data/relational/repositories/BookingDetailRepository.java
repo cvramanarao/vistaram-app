@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vistaram.data.relational.domain.BookingDetail;
 //com.vistaram.data.relational.repositories.BookingDetailRepository
 
-@Transactional(readOnly=false)
+//@Transactional(readOnly=false)
 public interface BookingDetailRepository extends JpaRepository<BookingDetail, Long> {
 	
 	@Query("select b from BookingDetail b where b.voucherId = :voucherId")
@@ -28,7 +28,16 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, Lo
 	@Query("select b from BookingDetail b where b.checkoutDate >= :startDate and b.checkoutDate <= :endDate ")
 	public List<BookingDetail> findByCheckoutDateByRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 	
-	@Query("select b from BookingDetail b where b.bookingDate >= :startDate order by bookingDate DESC")
+	@Query("select b from BookingDetail b where b.bookingDate >= :startDate")
 	public List<BookingDetail> findByCurrentBookingDate(@Param("startDate") Date startDate);
+
+	@Query("select b from BookingDetail b where b.checkinDate >= :startDate")
+	public List<BookingDetail> findByCurrentCheckInDate(@Param("startDate")Date startDate);
+
+	@Query("select b from BookingDetail b where b.hotelDetail.user.username = :user and b.checkinDate >= :startDate order by bookingDate DESC")
+	public List<BookingDetail> findByCurrentCheckInDateForUser(@Param("startDate") Date startDate, @Param("user") String hotelier);
+	
+	@Query("select b from BookingDetail b where b.hotelDetail.user.username = :user and b.checkoutDate >= :startDate order by bookingDate DESC")
+	public List<BookingDetail> findByCurrentCheckOutDateForUser(@Param("startDate") Date startDate, @Param("user") String hotelier);
 	
 }

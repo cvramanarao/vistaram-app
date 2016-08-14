@@ -27,9 +27,16 @@ public class VistaramEmailMessageProcessor implements ItemProcessor<Message, Vou
 		
 		System.out.println("All Recipients: "+Arrays.toString(message.getAllRecipients()));
 		
+		String from = message.getFrom()[0].toString();
+		String subject = message.getSubject();
 		
-		if (message.getFrom()[0].toString().contains("hotelpartners@goibibo.com") &&  message.getSubject().contains("Confirm Hotel Booking") ) {
+		if (from.contains("hotelpartners@goibibo.com") && subject.contains("Confirm Hotel Booking") ) {
 			voucherDetails = VistaramMessageUtils.extractGoIbiboVoucherDetailsFromMessage(message);
+		}
+		
+		if(from.equalsIgnoreCase("MakeMyTrip <noreply@makemytrip.com>")
+				  && subject.contains("Hotel Booking on MakeMyTrip.com")) { 
+			voucherDetails = VistaramMessageUtils.extractMakeMyTripVoucherDetailsFromMessage(message);
 		}
 		System.out.println("<-- VistaramEmailMessageProcessor || process()");		
 		return voucherDetails;

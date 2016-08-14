@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -18,11 +19,14 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.Base64;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.Gmail.Users.Messages.Get;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
+import com.google.api.services.gmail.model.MessagePart;
 import com.vistaram.batch.gmail.utils.FileDataStoreFactories;
 
 public class GmailUtils {
@@ -124,9 +128,9 @@ public class GmailUtils {
         }
       }
 
-      for (Message message : messages) {
+      /*for (Message message : messages) {
         System.out.println(message.toPrettyString());
-      }
+      }*/
 
       return messages;
     }
@@ -162,6 +166,37 @@ public class GmailUtils {
       }
 
       return messages;
+    }
+    
+    
+    public static String getContent(Gmail service, String userId, Message message) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+        	Message msg = service.users().messages().get(userId, message.getId()).execute();
+            getPlainTextFromMessageParts(msg.getPayload().getParts(), stringBuilder);
+            byte[] bodyBytes = Base64.decodeBase64(stringBuilder.toString());
+            String text = new String(bodyBytes, "UTF-8");
+            return text;
+        } catch (UnsupportedEncodingException e) {
+           System.err.println("UnsupportedEncoding: " + e.toString());
+            return message.getSnippet();
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return message.getSnippet();
+		}
+    }
+
+    private static void getPlainTextFromMessageParts(List<MessagePart> messageParts, StringBuilder stringBuilder) {
+        for (MessagePart messagePart : messageParts) {
+            if (messagePart.getMimeType().equals("text/plain")) {
+                stringBuilder.append(messagePart.getBody().getData());
+            }
+
+            if (messagePart.getParts() != null) {
+                getPlainTextFromMessageParts(messagePart.getParts(), stringBuilder);
+            }
+        }
     }
 
 

@@ -24,4 +24,15 @@ public class BookingDetailsService {
 		return bookingDetailDao.getCurrentDateBookingDetails();
 	}
 
+	public List<BookingDetail> getBookingDetailsForCurrentCheckinDate() {
+		// TODO Auto-generated method stub
+		return bookingDetailDao.getCurrentDateCheckInDetails();
+	}
+
+	public List<BookingDetail> getBookingDetailsForCurrentCheckinDateForUser(
+			String name) {
+		// TODO Auto-generated method stub
+		return bookingDetailDao.getCurrentDateCheckInDetailsForUser(name);
+	}
+
 }

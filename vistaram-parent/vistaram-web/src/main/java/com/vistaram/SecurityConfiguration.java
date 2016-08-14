@@ -12,9 +12,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,6 +33,7 @@ import com.vistaram.data.config.DataSourceConfiguration;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
 @Import(DataSourceConfiguration.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	
@@ -62,16 +65,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     	JdbcUserDetailsManager userDetailsService = new JdbcUserDetailsManager();
         userDetailsService.setDataSource(dataSource);
-       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+      // BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
  
-        auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
-        auth.jdbcAuthentication().dataSource(dataSource);
+        auth.userDetailsService(userDetailsService);
+        auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery(
+    			"select username,password, enabled from users where username=?")
+    		.authoritiesByUsernameQuery(
+    			"select username, authority from authorities where username=?");
+        
         
         System.out.println("userDetailsService.userExists(admin) : "+userDetailsService.userExists("admin"));
         if(!userDetailsService.userExists("admin")) {
             List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
             authorities.add(new SimpleGrantedAuthority("ADMIN"));
-            User userDetails = new User("admin", encoder.encode("Welcome123!"), authorities);
+            User userDetails = new User("admin", "Welcome123!", authorities);
  
             userDetailsService.createUser(userDetails);
         }

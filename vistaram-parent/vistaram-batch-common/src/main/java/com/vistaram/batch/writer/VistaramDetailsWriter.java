@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.vistaram.data.domain.VoucherDetail;
 import com.vistaram.data.service.VoucherDetailsService;
 
-@Component
+//@Component
 public class VistaramDetailsWriter implements ItemWriter<VoucherDetail> {
 
 	@Autowired
@@ -22,6 +22,7 @@ public class VistaramDetailsWriter implements ItemWriter<VoucherDetail> {
 		System.out.println("VistaramDetailsWriter || writewrite(List<? extends VoucherDetail> items)-->");
 		System.out.println("No. of Items : " +items.size());
 		for(VoucherDetail voucherDetails : items){
+			System.out.println("saving voucher details : "+voucherDetails.getVoucherNumber());
 			voucherDetailsService.saveVoucherDetails(voucherDetails);
 		}
 		

@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class VoucherDetailsBuilder {
 	
-	public static VoucherDetail buildVoucherDetails(Map<String, String> detailsMap){
+	private static VoucherDetail buildVoucherDetails(Map<String, String> detailsMap){
 		VoucherDetail voucherDetails = new VoucherDetail();
 		/*
 		 * 
@@ -137,7 +137,7 @@ public class VoucherDetailsBuilder {
 	}
 
 	
-	public static TariffDetails buildTariffDetails(Map<String, String> tariffDetailsMap) {
+	private static TariffDetails buildTariffDetails(Map<String, String> tariffDetailsMap) {
 		TariffDetails tariffDetails = new TariffDetails();
 		SimpleDateFormat sdf = new SimpleDateFormat();
 		
@@ -178,7 +178,7 @@ public class VoucherDetailsBuilder {
 		return tariffDetails;
 	}
 	
-	public static VoucherDetail build(Map<String, String> voucherDetailsMap,
+	public VoucherDetail build(Map<String, String> voucherDetailsMap,
 			List<Map<String, String>> tariffDetailsList) {
 		VoucherDetail voucherDetails = buildVoucherDetails(voucherDetailsMap);
 		

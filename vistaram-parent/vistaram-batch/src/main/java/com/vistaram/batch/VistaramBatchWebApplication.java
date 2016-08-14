@@ -49,7 +49,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableAutoConfiguration(exclude = { BatchAutoConfiguration.class, DataSourceAutoConfiguration.class,
 		WebMvcAutoConfiguration.class,HypermediaAutoConfiguration.class, MultipartAutoConfiguration.class })
-@EnableTransactionManagement
+//@EnableTransactionManagement
 public class VistaramBatchWebApplication extends SpringBootServletInitializer {
 
 	/**

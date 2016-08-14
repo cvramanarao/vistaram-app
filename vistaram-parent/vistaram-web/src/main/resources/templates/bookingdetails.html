@@ -7,24 +7,14 @@
 <title>Vistaram Hotels Management Suite</title>
 <meta charset="utf-8"></meta>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet"
-	href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-<link rel="stylesheet"
-	href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script
-	src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-	
-<script
-	src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<script
-	src="static/js/dataTables.bootstrap.js"></script>
-<script
-	src="static/js/dataTables.foundation.js"></script>
-<script
-	src="static/js/dataTables.jqueryui.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css"/>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.3/js/bootstrap.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-1.12.3.js"></script>
+<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+
 	
 <script type="text/javascript">
 
@@ -43,60 +33,129 @@
     		$.get("bookings/today",
 			    function(dataSet, status){
 			        //alert("Data: " + dataSet + "\nStatus: " + status);
+			        $("#bookings-table").empty();
 			        $('#bookings-table').DataTable({
-			        	//data : dataSet,
-			        	 destroy: true,
-			        	aaData : dataSet,
-			        	
-			        	/*
-			        	private String bookingAgent;
-	private String voucherNumber;
-	private String guestName;
-	private String hotelAndCity;
-	private Date bookingDate;
-	private Date checkInDate;
-	private Date checkOutDate;
-	private String roomType;
-	
-
-	private int noOfRooms;
-	private int noOfNights;
-	private String ratePlan;
-	private String guestRequest;
-	private String inclusions;
-	private String bookingType;
-	
-	private PaymentType paymentType;
-	
-	private double totalTax;
-	private double totalDiscount;
-	private double totalAmountPayable;
-			        	*/
-					     aoColumns: [
-					        { mDataProp: "voucherNumber" },
-					        { mDataProp: "guestName" },
-					        { mDataProp: "hotelAndCity" },
-					        { mDataProp: "bookingDateString" },
-					        { mDataProp: "checkInDate" },
-					        { mDataProp: "checkOutDate" },
-					        { mDataProp: "roomType" },
-					        { mDataProp: "noOfRooms" },
-					        { mDataProp: "noOfNights" },
-					        { mDataProp: "ratePlan" },
-					        { mDataProp: "bookingType" },
-					        { mDataProp: "paymentType" },
-					        { mDataProp: "totalTax" },
-					        { mDataProp: "totalDiscount" },
-					        { mDataProp: "totalAmountPayable" },
-					        { mDataProp: "bookingAgent" },
-					        { mDataProp: "source" }
+			        	data : dataSet,
+			        	destroy: true,
+			        	columnDefs:[
+			        	 	{ title: "Voucher",   targets: 0 },
+						    { title: "Guest Name",  targets: 1 },
+						    { title: "Hotel", targets: 2 },
+						    { title: "Booking Date", targets: 3 },
+						    { title: "Checkin Date", targets: 4 },
+						    { title: "Checkout Date", targets: 5 },
+						    { title: "roomType", targets: 6 },
+					        { title: "noOfRooms", targets: 7 },
+					        { title: "noOfNights", targets: 8 },
+						    { title: "Rate Plan", targets: 9},
+						    { title: "Booking Type", targets: 10 },
+						    { title: "Payment Type", targets: 11 },
+						    { title: "Total Tax",    targets: 12 },
+						    { title: "Total Discount",    targets: 13 },
+						    { title: "Total Amount",    targets: 14 },
+						    { title: "Booking Agent", targets: 15 },
+						    { title: "Source",    targets: 16 }
+			        	 ],
+			        	 columns: [
+			     
+					            { data : "voucherNumber" },
+						        { data: "guestName" },
+						        { data: "hotelAndCity" },
+						        { data: "bookingDateString" },
+						        { data: "checkInDate" },
+						        { data: "checkOutDate" },
+						        { data: "roomType" },
+						        { data: "noOfRooms" },
+						        { data: "noOfNights" },
+						        { data: "ratePlan" },
+						        { data: "bookingType" },
+						        { data: "paymentType" },
+						        { data: "totalTax" },
+						        { data: "totalDiscount" },
+						        { data: "totalAmountPayable" },
+						        { data: "bookingAgent" },
+						        { data: "source" }
+					        ]
+			        });
+			    }
+		    );
+		});
+		
+		$('#checkins_load').click(function(event){
+    		//alert('Bookings');
+    		$.get("checkins/today",
+			    function(dataSet, status){
+			        //alert("Data: " + dataSet + "\nStatus: " + status);
+			        $("#bookings-table").empty();
+			        $('#bookings-table').DataTable({
+			        	data : dataSet,
+			        	destroy: true,
+			        	columnDefs:[
+			        	 	{ title: "Voucher",   targets: 0 },
+						    { title: "Guest Name",  targets: 1 },
+						    { title: "Booking Date", targets: 2 },
+						    { title: "Checkin Date", targets: 3 },
+						    { title: "Checkout Date", targets: 4 },
+						    { title: "roomType", targets: 5 },
+					        { title: "noOfRooms", targets: 6 },
+					        { title: "noOfNights", targets: 7 },
+						    { title: "Payment Type", targets: 8 }
+			        	 ],
+			        	 columns: [
+			     
+					            { data : "voucherNumber" },
+						        { data: "guestName" },
+						        { data: "bookingDateString" },
+						        { data: "checkInDate" },
+						        { data: "checkOutDate" },
+						        { data: "roomType" },
+						        { data: "noOfRooms" },
+						        { data: "noOfNights" },
+						        { data: "paymentType" }
+					        ]
+			        });
+			    }
+		    );
+		});
+		
+		$('#checkouts_load').click(function(event){
+    		//alert('Bookings');
+    		$.get("checkouts/today",
+			    function(dataSet, status){
+			        //alert("Data: " + dataSet + "\nStatus: " + status);
+			         $("#bookings-table").empty();
+			        $('#bookings-table').DataTable({
+			        	data : dataSet,
+			        	destroy: true,
+			        	columnDefs:[
+			        	 	{ title: "Voucher",   targets: 0 },
+						    { title: "Guest Name",  targets: 1 },
+						    { title: "Booking Date", targets: 2 },
+						    { title: "Checkin Date", targets: 3 },
+						    { title: "Checkout Date", targets: 4 },
+						    { title: "roomType", targets: 5 },
+					        { title: "noOfRooms", targets: 6 },
+					        { title: "noOfNights", targets: 7 },
+						    { title: "Payment Type", targets: 8 }
+			        	 ],
+			        	 columns: [
+			     
+					            { data : "voucherNumber" },
+						        { data: "guestName" },
+						        { data: "bookingDateString" },
+						        { data: "checkInDate" },
+						        { data: "checkOutDate" },
+						        { data: "roomType" },
+						        { data: "noOfRooms" },
+						        { data: "noOfNights" },
+						        { data: "paymentType" }
 					        ]
 					
 			        });
 			    }
 		    );
-		   // alert('posted data');
 		});
+		
 	});
 
 </script>
@@ -116,13 +175,15 @@
 				<div class="col-sm-8">
 					<h2 class = "heading">Vistaram Hotels Management Suite</h2>
 				</div>
-				<div></div>
+				<div>
+					Hello,<span sec:authentication="name">Bob</span>|<a th:href="@{/logout}">logout</a>
+				</div>
 				<div></div>
 				<div class="col-sm-8 btn-group">
-				    <button id="bookings_load" type="button" class="btn btn-success">Bookings</button>
-				    <button type="button" class="btn btn-warning">Inventory</button>
-				    <button type="button" class="btn btn-danger">Checkins</button>
-				    <button type="button" class="btn btn-warning">Checkouts</button>
+				    <button id="bookings_load" type="button" class="btn btn-success" sec:authorize="hasAuthority('ADMIN')">Bookings</button>
+				    <button id="inventory_load" type="button" class="btn btn-warning">Inventory</button>
+				    <button id="checkins_load" type="button" class="btn btn-danger">Checkins</button>
+				    <button id="checkouts_load" type="button" class="btn btn-warning">Checkouts</button>
 				</div>
 			</div>
 			
@@ -134,31 +195,39 @@
 				<div class="table-responsive"> 
   					<table id="bookings-table" class="table table-striped table-bordered">
 
-						<thead>
+						<!-- thead>
 					      <tr>		        
 					       <th>Voucher Id</th>
 					        <th>Guest Name</th>
-					        <th>Hotel Name</th>
+					        <th  sec:authorize="hasRole('ADMIN')">Hotel Name</th>
 					        <th>Booking Date</th>
 					        <th>Checkin Date</th>
 					        <th>Checkout Date</th>
 					        <th>Room Type</th>
 					        <th>No. Of Rooms</th>
 					        <th>No. Of Nights</th>
-					        <th>Rate Plan</th>
-					        <th>Booking Type</th>
+					        <th  sec:authorize="hasRole('ADMIN')">Rate Plan</th>
+					        <th  sec:authorize="hasRole('ADMIN')">Booking Type</th>
 					        <th>Payment Type</th>
-					        <th>Total Tax</th>
-					        <th>Total Discount</th>
-					        <th>Total Amount</th>
-					        <th>Agent</th>
-					        <th>Source</th>
+					        <th sec:authorize="hasRole('ADMIN')">Total Tax</th>
+					        <th sec:authorize="hasRole('ADMIN')">Total Discount</th>
+					        <th sec:authorize="hasRole('ADMIN')">Total Amount</th>
+					        <th  sec:authorize="hasRole('ADMIN')">Agent</th>
+					        <th  sec:authorize="hasRole('ADMIN')">Source</th>
 					      </tr>
-					      </thead>
+					      </thead -->
 					</table>
 					
 				</div>
 			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="col-sm-8">
+					<p>&copy;Copyright 2016 Vistaram Software Solutions</p>
+				</div>
+			</div>
+			
 		</div>
 
 	</div>

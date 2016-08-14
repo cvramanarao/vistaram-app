@@ -29,7 +29,7 @@ public class EntityToDtoMapper {
 		voucherDetails.setBookingDate(cl.getTime());
 		voucherDetails.setCheckInDate(bookingDetail.getCheckinDate());
 		voucherDetails.setCheckOutDate(bookingDetail.getCheckoutDate());
-		voucherDetails.setTotalAmountPayable(bookingDetail.getTotalAmout());
+		voucherDetails.setTotalAmountPayable(bookingDetail.getTotalAmount());
 		voucherDetails.setGuestName(bookingDetail.getGuestDetail().getLastName()+", "+bookingDetail.getGuestDetail().getFirstName());
 		voucherDetails.setHotelAndCity(bookingDetail.getHotelDetail().getHotelName());
 		voucherDetails.setNoOfRooms(bookingDetail.getNoOfRooms());
