@@ -4,9 +4,9 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
--- drop database vistaram_db;
--- create database vistaram_db;
--- use vistaram_db;
+drop database vistaram_db1;
+create database vistaram_db1;
+use vistaram_db1;
 -- -----------------------------------------------------
 -- Schema mydb
 -- -----------------------------------------------------
@@ -205,7 +205,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- use vistaram_db;
 insert into users values ('vistaramrooms@gmail.com', 'Welcome1', 1);
-insert into authorities values('admin','vistaramrooms@gmail.com');
+insert into authorities values('ADMIN','vistaramrooms@gmail.com');
 insert into users values ('hotelmadhurainn@gmail.com', 'Welcome1', 1);
 insert into authorities values('user','hotelmadhurainn@gmail.com');
 insert into users values ('info.vskp@microcontinental.in', 'Welcome1', 1);
@@ -244,91 +244,151 @@ insert into users values ('msricity', 'Welcome1', 1);
 insert into authorities values('user','msricity');
 insert into users values ('rajas', 'Welcome1', 1);
 insert into authorities values('user','rajas');
+insert into users values ('primeplaza', 'Welcome1', 1);
+insert into authorities values('user','primeplaza');
+insert into users values ('srisaisuvarnainn', 'Welcome1', 1);
+insert into authorities values('user','srisaisuvarnainn');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Madhura INN', '49-24-50/1, Sankaramatam Main Road, back side nistla nivas', 'Visakhapatnam', 'India', 'Vistaram Near Railway Station','hotelmadhurainn@gmail.com');
+values('Madhura INN', '49-24-50/1, Sankaramatam Main Road, back side nistla nivas', 'Visakhapatnam', 'India', 'Vistaram Near Railway Station','hotelmadhurainn@gmail.com', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Micro Continental', 'Station Road', 'Visakhapatnam', 'India', 'Vistaram Ac Rooms Railway Station', 'info.vskp@microcontinental.in');
+values('Micro Continental', 'Station Road', 'Visakhapatnam', 'India', 'Vistaram Ac Rooms Railway Station', 'info.vskp@microcontinental.in', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Apple Hotel', 'opp Rtc complex,near kfc, dwaraka nagar', 'Visakhapatnam', 'India', 'Vistaram Rtc Complex', 'applethehotel@gmail.com');
+values('Apple Hotel', 'opp Rtc complex,near kfc, dwaraka nagar', 'Visakhapatnam', 'India', 'Vistaram Near Rtc Complex', 'applethehotel@gmail.com', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Vihar Boutique Hotel', 'Vinayagar Plaza, Airtel Building Sampath Vinayaka Temple Road', 'Visakhapatnam', 'India', 'Vistaram Near Rtc Complex', 'om.rt@viharhospitality.com');
+values('Vihar Boutique Hotel', 'Vinayagar Plaza, Airtel Building Sampath Vinayaka Temple Road', 'Visakhapatnam', 'India', 'Vistaram Rtc Complex', 'om.rt@viharhospitality.com', 'goibibo.com');
 
 -- insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
 
--- values('Krishna Tara Comforts','Visakha-Araku Main Road','Araku Valley','India','Vistaram A/C Rooms','arukuacrooms');
+-- values('Krishna Tara Comforts','Visakha-Araku Main Road','Araku Valley','India','Vistaram A/C Rooms','arukuacrooms', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Luck Residency','A-392/1,Road No.1,Near IGI Airport,NH-8 Highway,Mahipalpur Extn','Delhi','India','Vistaram Airspace Residency lucc','vistaramairspacelucc');
+values('Luck Residency','A-392/1,Road No.1,Near IGI Airport,NH-8 Highway,Mahipalpur Extn','Delhi','India','Vistaram Airspace Residency lucc','vistaramairspacelucc', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Hotel Lohias','A-53, Mahipalpur Extn. , National Highway -8 (Near AIRPORT)','Delhi','India','Vistaram Airspace Lohais','vistaramairspacelohais');
+values('Hotel Lohias','A-53, Mahipalpur Extn. , National Highway -8 (Near AIRPORT)','Delhi','India','Vistaram Airspace Lohais','vistaramairspacelohais', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Waves Hotel','A-272, Mahipalpur Extn A- Block, NH-8, Near IGI Airport','Delhi','India','Vistaram Airspace Waves','vistaramairspacewaves');
+values('Waves Hotel','A-272, Mahipalpur Extn A- Block, NH-8, Near IGI Airport','Delhi','India','Vistaram Airspace Waves','vistaramairspacewaves', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Prime Plaza','Plot No. 7-9,Jharsa, Near Medanta Hospital,Sec. 3','Gurgoan','India','Vistaram Azad Square','vistaramazadsquare');
+values('Prime Plaza','Plot No. 7-9,Jharsa, Near Medanta Hospital,Sec. 3','Gurgoan','India','Vistaram Azad Square','vistaramazadsquare', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Vihar Holiday Inn','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram Araku Valley Hotel','viharholidayinn');
+values('Vihar Holiday Inn','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram Araku Valley Hotel','viharholidayinn', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Vihar Holiday Inn','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram Araku Valley','viharholidayinn');
+values('Vihar Holiday Inn','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram Araku Valley','viharholidayinn', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Vihar Holiday Inn','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram A/C Rooms','viharholidayinn');
+values('Vihar Holiday Inn','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Vistaram A/C Rooms','viharholidayinn', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('SiriVarshini','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','Siri Varshini Inn','sirivarshini');
+values('SiriVarshini','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','Siri Varshini Inn','sirivarshini', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Leelagrand Inn','XXXXXXXXXXXXXXXXXXXX','Vijayawada','India','Hotel Leela Grand Inn','leelagrandinn');
+values('Leelagrand Inn','XXXXXXXXXXXXXXXXXXXX','Vijayawada','India','Hotel Leela Grand Inn','leelagrandinn', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Welfare Marina','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','HOTEL WELFARE MARINA','welfaremarina');
+values('Welfare Marina','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','HOTEL WELFARE MARINA','welfaremarina', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Hitech Grand','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','Hi-Tech grand Hotel','hitechgrand');
+values('Hitech Grand','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','Hi-Tech grand Hotel','hitechgrand', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Meena Paradise','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','HOTEL MEENA PARADISE','meenaparadise');
+values('Hitech Grand','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','Hi-Tech Grand Hotel','hitechgrand', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Aditya Inn','XXXXXXXXXXXXXXXXXXXX','Rajahmundry','India','SRI ADITYA INN','adityainn');
+values('Meena Paradise','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','HOTEL MEENA PARADISE','meenaparadise', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('SaiSubham','XXXXXXXXXXXXXXXXXXXX','Shirdi','India','Hotel Sai Shubham','saishubam');
+values('Aditya Inn','XXXXXXXXXXXXXXXXXXXX','Rajahmundry','India','SRI ADITYA INN','adityainn', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('MSriCity','XXXXXXXXXXXXXXXXXXXX','Vijayawada','India','M SRICITY A/C','msricity');
+values('SaiSubham','XXXXXXXXXXXXXXXXXXXX','Shirdi','India','Hotel Sai Shubham','saishubam', 'goibibo.com');
 
-insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username)
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
-values('Hotel Rajas','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Hotel Holiday inn-rajas','rajas');
+values('MSriCity','XXXXXXXXXXXXXXXXXXXX','Vijayawada','India','M SRICITY A/C','msricity', 'goibibo.com');
 
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
 
+values('Hotel Rajas','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Hotel Holiday inn-rajas','rajas', 'goibibo.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Hotel Rajas','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Hotel Holiday inn - rajas','rajas', 'goibibo.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Sri Sai Suvarna Inn','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','SRI SAI SUVARNA INN','srisaisuvarnainn', 'goibibo.com');
+
+-- make my trip
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Apple Hotel','Visakhapatnam','XXXXXXXXXXXXXXX','India','Vistaram Rtc Complex','applethehotel@gmail.com','makemytrip.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Madhura INN','Visakhapatnam','XXXXXXXXXXXXXXX','India','Vistaram Sankarmatam Road','hotelmadhurainn@gmail.com','makemytrip.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Welfare Marina','Visakhapatnam','XXXXXXXXXXXXXXX','India','Vistaram Railway station Road','welfaremarina','makemytrip.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Hotel Prime Plaza','Gurgaon','XXXXXXXXXXXXXXX','India','Vistaram Prime','primeplaza','makemytrip.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Luck Residency','New Delhi','XXXXXXXXXXXXXXX','India','Airport Residency Hotel Luck','vistaramairspacelucc','makemytrip.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Waves Hotel','New Delhi','XXXXXXXXXXXXXXX','India','Vistaram Waves Airspace Hotel','vistaramairspacewaves','makemytrip.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Vihar Holiday Inn','Araku Valley','XXXXXXXXXXXXXXX','India','Vistaram AC rooms Araku','viharholidayinn','makemytrip.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Vihar Boutique Hotel','Visakhapatnam','XXXXXXXXXXXXXXX','India','Vistaram Near Rtc Complex','om.rt@viharhospitality.com','makemytrip.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('SiriVarshini','XXXXXXXXXXXXXXXXXXXX','Visakhapatnam','India','Hotel Siri Varshini','sirivarshini', 'makemytrip.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Leelagrand Inn','XXXXXXXXXXXXXXXXXXXX','Vijayawada','India','Hotel Leela Grand Inn','leelagrandinn', 'makemytrip.com');
+
+insert into hotel_details(hotel_name, address, city, country, hotel_identifier_name, users_username, booking_agent)
+
+values('Hotel Rajas','XXXXXXXXXXXXXXXXXXXX','Araku Valley','India','Holiday inn Rajas','rajas', 'makemytrip.com');
 
 commit;	

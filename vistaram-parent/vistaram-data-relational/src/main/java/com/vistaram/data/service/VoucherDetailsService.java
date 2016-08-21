@@ -1,23 +1,22 @@
 package com.vistaram.data.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.vistaram.data.domain.VoucherDetail;
 import com.vistaram.data.mapper.DtoToEntityMapper;
 import com.vistaram.data.relational.dao.BookingDetailDao;
-import com.vistaram.data.relational.dao.GuestDetailDao;
 import com.vistaram.data.relational.dao.HotelDetailDao;
 import com.vistaram.data.relational.domain.BookingDetail;
-import com.vistaram.data.relational.domain.GuestDetail;
 import com.vistaram.data.relational.domain.HotelDetail;
-import com.vistaram.data.relational.repositories.BookingDetailRepository;
 
 
 @Service
 public class VoucherDetailsService {
+	
+	private static Logger logger = LoggerFactory.getLogger(VoucherDetailsService.class);
 	
 	@Autowired
 	private BookingDetailDao bookingDetailDao;
@@ -27,7 +26,7 @@ public class VoucherDetailsService {
 	
 	//@Transactional(propagation=Propagation.REQUIRES_NEW)
 	public void saveVoucherDetails(VoucherDetail voucherDetails){
-		System.out.println("saveVoucherDetails()-->");
+		logger.debug("saveVoucherDetails()-->");
 		
 		BookingDetail bookingDetail = bookingDetailDao.getBookingDetailByVoucherId(voucherDetails.getVoucherNumber());
 		
@@ -35,16 +34,17 @@ public class VoucherDetailsService {
 		
 			bookingDetail = DtoToEntityMapper.mapVoucherDetailsToBookingDetails(voucherDetails);
 			String hotelAndCity = voucherDetails.getHotelAndCity();
-			System.out.println("hotelAndCity : "+hotelAndCity.substring(0, hotelAndCity.indexOf(",")));
-			HotelDetail hotelDetail = hotelDetailDao.getHotelDetailByIdentificationName(hotelAndCity.substring(0, hotelAndCity.indexOf(",")));
-			System.out.println("Hotel : "+hotelDetail);
+			String bookingAgent = bookingDetail.getBookingAgent();
+			logger.debug("hotelAndCity : "+hotelAndCity.substring(0, hotelAndCity.indexOf(","))+" -- "+bookingAgent);
+			HotelDetail hotelDetail = hotelDetailDao.getHotelDetail(hotelAndCity.substring(0, hotelAndCity.indexOf(",")), bookingAgent);
+			logger.debug("Hotel : "+hotelDetail);
 			bookingDetail.setHotelDetail(hotelDetail);
 			bookingDetailDao.save(bookingDetail);
 		} else {
 			
 		}
 		
-		System.out.println("<-- saveVoucherDetails()");
+		logger.debug("<-- saveVoucherDetails()");
 	}
 
 }

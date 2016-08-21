@@ -4,56 +4,40 @@ package com.vistaram.batch.config;
 import java.util.Properties;
 
 import javax.mail.Message;
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import javax.transaction.TransactionManager;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.JobScope;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepScope;
-import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
-import org.springframework.batch.core.launch.support.SimpleJobLauncher;
-import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
-import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.core.step.tasklet.TaskletStep;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaItemWriter;
-import org.springframework.batch.repeat.CompletionPolicy;
 import org.springframework.batch.repeat.RepeatContext;
-import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.batch.repeat.exception.ExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.integration.channel.DirectChannel;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
+import com.vistaram.batch.listener.VistaramEmailMessageHandler;
+import com.vistaram.batch.processor.VistaramEmailMessageBookingDetailProcessor;
 import com.vistaram.batch.processor.VistaramGmailMessageBookingDetailProcessor;
 import com.vistaram.batch.processor.VistaramGmailMessageProcessor;
 import com.vistaram.batch.reader.VistaramEmailMessageReader;
 import com.vistaram.batch.reader.VistaramGmailMessageReader;
-import com.vistaram.batch.tasklet.VistaramEmailDataExtractor;
-import com.vistaram.batch.writer.VistaramDetailsWriter;
-import com.vistaram.data.config.DataSourceConfiguration;
 import com.vistaram.data.domain.VoucherDetail;
 import com.vistaram.data.relational.domain.BookingDetail;
 
@@ -63,6 +47,7 @@ import com.vistaram.data.relational.domain.BookingDetail;
 //@EnableTransactionManagement
 //@Import(DataSourceConfiguration.class)
 //@EnableJpaRepositories(basePackages="com.vistaram.data.relational.repositories")
+@ImportResource("file:///${user.home}/configuration/vistaram-email-integration.xml")
 public class VistaramEmailBatchApplication{
 
 	@Autowired
@@ -75,56 +60,9 @@ public class VistaramEmailBatchApplication{
 	private DataSource dataSource;
 	
 	@Bean
-	@Qualifier("jpaTrx")
+	//@Qualifier("jpaTrx")
 	public PlatformTransactionManager jpaTransactionManager() {
 	       return new JpaTransactionManager(emf().getObject());
-	}
-	
-	/*@Autowired
-	public VistaramEmailMessageProcessor vistaramEmailMessageProcessor;
-	
-	@Autowired
-	public VistaramDetailsWriter vistaramDetailsWriter;
-	
-	@Bean
-	public ItemReader<Message> vistaramEmailMessageReader(){
-		
-		return new VistaramEmailMessageReader();
-	}
-	
-	
-
-	
-	
-	@Bean
-	public Step vistaramEmailDataExtractorStep() throws Exception {
-		TaskletStep step = stepBuilderFactory.get("vistaramEmailDataExtractorStep").
-				<Message, VoucherDetail> chunk(10).reader(vistaramEmailMessageReader()).processor(vistaramEmailMessageProcessor).writer(vistaramDetailsWriter).build();
-		return step;
-	}
-	
-	
-	@Bean
-	public Job vistaramEmailDataExtractorJob(Step vistaramEmailDataExtractorStep) throws Exception {
-		return jobBuilderFactory.get("vistaramEmailDataExtractorJob").incrementer(new RunIdIncrementer()).start(vistaramEmailDataExtractorStep).build();
-	}
-	
-	*/
-	
-	@Bean
-	public ItemReader<com.google.api.services.gmail.model.Message> vistaramGmailMessageReader(){
-		
-		return new VistaramGmailMessageReader();
-	}
-	
-	@Bean
-	public ItemProcessor<com.google.api.services.gmail.model.Message, VoucherDetail> vistaramGmailMessageProcessor(){
-		return new VistaramGmailMessageProcessor();
-	}
-	
-	@Bean
-	public ItemProcessor<com.google.api.services.gmail.model.Message, BookingDetail> vistaramGmailMessageBookingDetailProcessor(){
-		return new VistaramGmailMessageBookingDetailProcessor();
 	}
 	
 	@Bean
@@ -149,6 +87,34 @@ public class VistaramEmailBatchApplication{
         emf.setJpaProperties(jpaProperties);
         return emf;
 	}
+	
+	@Bean
+	public ItemReader<Message> vistaramEmailMessageReader(){
+		
+		return new VistaramEmailMessageReader();
+	}
+	
+	@Bean
+	public ItemReader<com.google.api.services.gmail.model.Message> vistaramGmailMessageReader(){
+		
+		return new VistaramGmailMessageReader();
+	}
+	
+	@Bean
+	public ItemProcessor<com.google.api.services.gmail.model.Message, VoucherDetail> vistaramGmailMessageProcessor(){
+		return new VistaramGmailMessageProcessor();
+	}
+	
+	@Bean
+	public ItemProcessor<com.google.api.services.gmail.model.Message, BookingDetail> vistaramGmailMessageBookingDetailProcessor(){
+		return new VistaramGmailMessageBookingDetailProcessor();
+	}
+	
+	@Bean
+	public ItemProcessor<Message, BookingDetail> vistaramEmailMessageBookingDetailProcessor(){
+		return new VistaramEmailMessageBookingDetailProcessor();
+	}
+	
 	
 	@Bean
 	public ItemWriter<BookingDetail> bookingDetailWriter() {
@@ -186,12 +152,48 @@ public class VistaramEmailBatchApplication{
 		return jobBuilderFactory.get("vistaramGmailDataExtractorJob").incrementer(new RunIdIncrementer()).start(vistaramGmailDataExtractorStep).build();
 	}
 	
+
+	@Bean
+	public Step vistaramEmailDataExtractorStep() throws Exception {
+		TaskletStep step = stepBuilderFactory.get("vistaramEmailDataExtractorStep").transactionManager(jpaTransactionManager()).
+				<Message, BookingDetail> chunk(10).reader(vistaramEmailMessageReader()).
+				processor(vistaramEmailMessageBookingDetailProcessor()).writer(bookingDetailWriter()).
+				exceptionHandler(new ExceptionHandler() {
+					
+					@Override
+					public void handleException(RepeatContext ctx, Throwable t)
+							throws Throwable {
+						t.printStackTrace(System.out);
+					}
+				}).build();
+		return step;
+	}
+	
+	
+	@Bean
+	public Job vistaramEmailDataExtractorJob(Step vistaramEmailDataExtractorStep) throws Exception {
+		return jobBuilderFactory.get("vistaramEmailDataExtractorJob").incrementer(new RunIdIncrementer()).start(vistaramEmailDataExtractorStep).build();
+	}
+	
+	@Autowired
+	@Qualifier("receiveChannel")
+	private DirectChannel directChannel;
+	
+	@Bean
+	public VistaramEmailMessageHandler messageHandler(){
+		VistaramEmailMessageHandler messageHandler = new VistaramEmailMessageHandler();
+		// messageHandler.setVistaramDetailsWriter(vistaramDetailsWriter());
+		directChannel.subscribe(messageHandler);
+		return messageHandler;
+	}
+	    
+	
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer placeHolderConfigurer() {
 		PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer 
 				= new PropertySourcesPlaceholderConfigurer();
 		
-		propertySourcesPlaceholderConfigurer.setLocations(new ClassPathResource("application.properties"),new ClassPathResource("batch-mysql.properties"), new FileSystemResource(System.getProperty("user.home")+"/configuration/application.properties"));
+		propertySourcesPlaceholderConfigurer.setLocations(new ClassPathResource("application.properties"),new ClassPathResource("batch-mysql.properties"));
 		propertySourcesPlaceholderConfigurer.setIgnoreUnresolvablePlaceholders(true);
 		propertySourcesPlaceholderConfigurer.setIgnoreResourceNotFound(true);
 		return propertySourcesPlaceholderConfigurer;

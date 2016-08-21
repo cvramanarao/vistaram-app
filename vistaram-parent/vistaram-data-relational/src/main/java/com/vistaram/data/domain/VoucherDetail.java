@@ -33,6 +33,12 @@ public class VoucherDetail {
 	private String bookingAgent;
 	private String voucherNumber;
 	private String guestName;
+	private String guestContactNumber;
+	
+
+	private String guestEmail;
+	
+
 	private String hotelAndCity;
 	//2015-11-17 01:34:00
 	private Date bookingDate;
@@ -47,7 +53,7 @@ public class VoucherDetail {
 	private Date checkOutDate;
 	private String roomType;
 	
-
+	private String roomName;
 	private int noOfRooms;
 	private int noOfNights;
 	private String ratePlan;
@@ -211,6 +217,19 @@ public class VoucherDetail {
 	}
 	public void setSource(String source) {
 		this.source = source;
+	}
+	
+	public String getGuestContactNumber() {
+		return guestContactNumber;
+	}
+	public void setGuestContactNumber(String guestContactNumber) {
+		this.guestContactNumber = guestContactNumber;
+	}
+	public String getGuestEmail() {
+		return guestEmail;
+	}
+	public void setGuestEmail(String guestEmail) {
+		this.guestEmail = guestEmail;
 	}
 	
 	@Override

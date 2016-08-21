@@ -47,7 +47,8 @@ public class DataSourceConfiguration {
     private String databasePassword;
 
     @Bean
-   // @Primary
+    @Primary
+    @Qualifier("tomcatDataSource")
     public DataSource tomcatDataSource()  {
     	
         org.apache.tomcat.jdbc.pool.DataSource ds = new org.apache.tomcat.jdbc.pool.DataSource();

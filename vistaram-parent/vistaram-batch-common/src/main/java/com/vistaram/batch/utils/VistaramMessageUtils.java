@@ -6,9 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -20,6 +22,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vistaram.data.domain.MakeMyTripVoucherDetailsBuilder;
 import com.vistaram.data.domain.PaymentType;
@@ -28,18 +32,20 @@ import com.vistaram.data.domain.VoucherDetailsBuilder;
 
 public class VistaramMessageUtils {
 	
+	private static Logger logger = LoggerFactory.getLogger(VistaramMessageUtils.class);
+	
 	public static VoucherDetail extractGoIbiboVoucherDetailsFromMessage(Message message) throws IOException, MessagingException {
 		Map<String, String> voucherDetailsMap = new HashMap<String, String>();
 		List<Map<String, String>> tariffDetailsList = new ArrayList<Map<String,String>>();
 		MimeMultipart mimePart = (MimeMultipart) message
 				.getContent();
-		System.out.println("total parts in this message : "
+		logger.debug("total parts in this message : "
 				+ mimePart.getCount());
 		for (int j = 0; j < mimePart.getCount(); j++) {
 
-			//System.out.println("body part for : " + j);
+			//logger.debug("body part for : " + j);
 			BodyPart bodyPart = mimePart.getBodyPart(j);
-			//System.out.println(bodyPart);
+			//logger.debug(bodyPart);
 			InputStream in = bodyPart.getInputStream();
 			extractDetailsFromInputStream(voucherDetailsMap, tariffDetailsList,
 					in);
@@ -48,12 +54,12 @@ public class VistaramMessageUtils {
 		
 		
 		
-		//System.out.println(voucherDetailsMap);
+		logger.debug(String.valueOf(voucherDetailsMap));
 		
 		VoucherDetailsBuilder builder = new VoucherDetailsBuilder();
 		
 		VoucherDetail voucherDetails = builder.build(voucherDetailsMap, tariffDetailsList);
-		voucherDetails.setBookingAgent("goibibio.com");
+		voucherDetails.setBookingAgent("goibibo.com");
 		voucherDetails.setPaymentType(PaymentType.ONLINE);
 		voucherDetails.setSource(Arrays.toString(message.getRecipients(RecipientType.TO)));
 		return voucherDetails;
@@ -66,7 +72,7 @@ public class VistaramMessageUtils {
 		extractVoucherDetailsFromGoIbiboHtml(voucherDetailsMap, tariffDetailsList, html);
 		VoucherDetailsBuilder builder = new VoucherDetailsBuilder();
 		VoucherDetail voucherDetails = builder.build(voucherDetailsMap, tariffDetailsList);
-		voucherDetails.setBookingAgent("goibibio.com");
+		voucherDetails.setBookingAgent("goibibo.com");
 		voucherDetails.setPaymentType(PaymentType.ONLINE);
 		voucherDetails.setSource(to);
 		return voucherDetails;
@@ -92,7 +98,7 @@ public class VistaramMessageUtils {
 			Map<String, String> voucherDetailsMap,
 			List<Map<String, String>> tariffDetailsList, String html) {
 		
-		//System.out.println("html : "+html);
+		//logger.debug("html : "+html);
 		
 		Document document = Jsoup.parse(html);
 		
@@ -104,7 +110,7 @@ public class VistaramMessageUtils {
 			keys.add(td.ownText());
 		}
 		
-		//System.out.println("keys : "+keys);
+		//logger.debug("keys : "+keys);
 		Elements bodyTrs = tariffDetailsTable.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
 		
 		for(Element tr: bodyTrs) {
@@ -117,22 +123,22 @@ public class VistaramMessageUtils {
 			tariffDetailsList.add(tariffDetailRecord);
 		}
 		
-		//System.out.println(tariffDetailsList);
+		//logger.debug(tariffDetailsList);
 		
 		//Extracting Reservation Details:
 		
 	
 		
 		Elements tables = document.select("body > table");
-		//System.out.println("tables size : " + tables.size());
+		//logger.debug("tables size : " + tables.size());
 		
 		for(Element table : tables){
-			//System.out.println("table----------------------------------------->");
-			//System.out.println(table.html());
+			//logger.debug("table----------------------------------------->");
+			//logger.debug(table.html());
 			
 			if(table.text().contains("Booking ID")) {
 				String voucherString = table.text();
-				System.out.println("voucherString : "
+				logger.debug("voucherString : "
 						+ voucherString);
 				voucherDetailsMap.put("voucher number", voucherString.substring(voucherString.indexOf(":")+1));
 			}
@@ -140,7 +146,7 @@ public class VistaramMessageUtils {
 			Elements trs = table
 					.select("table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
 			for (Element tr : trs) {
-				//System.out.println("children in tr "+tr.childNodeSize()+" -- "+tr.children().size());
+				//logger.debug("children in tr "+tr.childNodeSize()+" -- "+tr.children().size());
 				if(tr.children().size() > 1) {
 					String key = tr.child(0).text().toLowerCase();
 					String value = tr.child(1).ownText();
@@ -148,15 +154,22 @@ public class VistaramMessageUtils {
 				}
 				
 			}
-			//System.out.println("<-----------------------------------------table");
+			//logger.debug("<-----------------------------------------table");
 		}
 		
-		System.out.println("voucherDetailsMap: "+voucherDetailsMap);
+		logger.debug("voucherDetailsMap: "+voucherDetailsMap);
 	}
 	
 	public static VoucherDetail extractMakeMyTripVoucherDetailsFromHtml(String from, String to, String html){
-		System.out.println("VistaramMessageUtils || extractMakeMyTripVoucherDetailsFromHtml");
-		Map<String, String> voucherDetailsMap = new HashMap<String, String>();
+		logger.debug("VistaramMessageUtils || extractMakeMyTripVoucherDetailsFromHtml");
+		Map<String, String> voucherDetailsMap = new TreeMap<String, String>(new Comparator<String>() {
+
+			@Override
+			public int compare(String o1, String o2) {
+				// TODO Auto-generated method stub
+				return o1.compareToIgnoreCase(o2);
+			}
+		});
 		List<Map<String, String>> tariffDetailsList = new ArrayList<Map<String,String>>();
 		extractVoucherDetailsFromMakeMyTripHtml(voucherDetailsMap, tariffDetailsList, html);
 		VoucherDetailsBuilder builder = new MakeMyTripVoucherDetailsBuilder();
@@ -166,7 +179,7 @@ public class VistaramMessageUtils {
 		voucherDetails.setBookingAgent("makemytrip.com");
 		voucherDetails.setPaymentType(PaymentType.ONLINE);
 		voucherDetails.setSource(to);
-		System.out.println("<-- VistaramMessageUtils || extractMakeMyTripVoucherDetailsFromHtml");
+		logger.debug("<-- VistaramMessageUtils || extractMakeMyTripVoucherDetailsFromHtml");
 		return voucherDetails;
 	}
 	
@@ -174,113 +187,171 @@ public class VistaramMessageUtils {
 			Map<String, String> voucherDetailsMap,
 			List<Map<String, String>> tariffDetailsList, String html) {
 		
-		System.out.println("html : "+html);
+		logger.debug("html : "+html);
 		
 		Document document = Jsoup.parse(html);
 		
-		Elements trs = document.select("body>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
-		System.out.println("trs size : " + trs.size());
+		Elements trs = document.select("body>table>tbody>tr>td>table>tbody>tr");
+		if(trs.size() == 1) {
+			trs = document.select("body>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
+		}
 		
+		//Elements trs = document.select("body>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
+		logger.debug("trs size : " + trs.size());
 		
 		Element voucherNumberTr = trs.get(0);
-		System.out.println(voucherNumberTr);
+		//logger.debug("voucherNumberTr: "+voucherNumberTr);
+		
+		Elements voucherNumberTds = voucherNumberTr.select("tr>td");
+		Elements textSpans = voucherNumberTds.get(0).select("td>span");
+		
+		//Elements textSpans = voucherNumberTr.select("tr>td>span");
+		/*if(textSpans.size() < 0) {
+			textSpans = voucherNumberTr.select("tr>td>table>tbody>tr>td>span");
+		}*/
+		
 		//Extract voucher number
-		Elements textSpans = voucherNumberTr.select("tr>td>table>tbody>tr>td>span");
+		//Elements 
+		
+		PaymentType paymentType = PaymentType.ONLINE;
+		logger.debug("total Text Spans "+textSpans.size());
 		for(int i=0;i<textSpans.size();i++){
 			String text = textSpans.get(i).text();
 			text = text.trim();
+			//logger.debug("span text : "+text);
 			if(text.contains("Booking ID")){
 				String voucherNumber = text.substring(text.indexOf("-")+1).trim();
-				System.out.println("Voucher : "+voucherNumber);
+				logger.debug("Voucher : "+voucherNumber);
 				voucherDetailsMap.put("VoucherNumber", voucherNumber);
 			}
 			
-			if(text.startsWith("Booking Date")){
+			if(text.startsWith("Booking Date") || text.startsWith("Voucher Date")){
 			    String bookingDateStr = text.substring(text.indexOf("-")+1).trim();
-				System.out.println("Booking Date :"+bookingDateStr);
+				logger.debug("Booking Date :"+bookingDateStr);
 				voucherDetailsMap.put("BookingDate", bookingDateStr);
 			}
 
 		}
 		
-		Element hotelDetailsTr = trs.first();
-				
+		
+		
+		
+		if (null == voucherDetailsMap.get("VoucherNumber")){
+			 voucherNumberTr = trs.get(3);
+			 //logger.debug("Second VoucherNumber Tr" + voucherNumberTr);
+			 Elements children = voucherNumberTr.select("tr>td>p>strong");
+			 if(children.size() > 0){
+				String bookingId = children.get(1).ownText();
+				bookingId = bookingId.trim();
+				String voucherNumber = bookingId.substring("Booking ID".length()).trim();
+				logger.debug("Voucher : "+voucherNumber);
+				voucherDetailsMap.put("VoucherNumber", voucherNumber);
+			 }
+		}
+		
+		logger.debug("Voucher Number : "+voucherDetailsMap.get("VoucherNumber"));
+		
+		
+		
+		Element hotelDetailsTr = null;
+		int index = -1;	
 		for (int i=1;i<trs.size();i++){
 			if(trs.get(i).text().equalsIgnoreCase("Hotel Details")) {
+				//logger.debug("index of i for hotelDetails " +i);
+				index = i;
 				hotelDetailsTr = trs.get(i);
+				break;
 			}
 		}
 		
-		System.out.println("hotelDetailsTr : "+hotelDetailsTr);
-		int index = hotelDetailsTr.siblingIndex()+2;
+		int hotelDetailIndex = index;
+		//logger.debug("hotelDetailsTr : "+hotelDetailsTr);
+		//logger.debug(index+" vs "+hotelDetailsTr.siblingIndex());
+		index += 2;
 		Element hotelTr = trs.get(index);
-		System.out.println(hotelTr);
-		String hotelAndCity = hotelTr.select("td>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td").get(0).text();
-		System.out.println("hotelAndCity: "+hotelAndCity);
+		//logger.debug("hotelTr: "+hotelTr);
+		String hotelAndCity = null;
+		Element hotelAndCityEl = hotelTr.select("td>table>tbody>tr>td>table>tbody>tr>td").get(0);
+		//logger.debug(hotelAndCityEl);
+		if(hotelAndCityEl.child(0).tag().getName().equalsIgnoreCase("span")){
+			hotelAndCity = hotelAndCityEl.text();
+		}else {
+			hotelAndCity = hotelAndCityEl.select("table>tbody>tr>td").get(0).text();
+		}
+		//hotelAndCity = hotelTr.select("td>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr>td").get(0).text();
+		logger.debug("hotelAndCity: "+hotelAndCity);
 		voucherDetailsMap.put("HotelAndCity", hotelAndCity);
 		index +=2;
-		String guestName = trs.get(index).child(0).text();
-		System.out.println("guestName " +guestName.substring(guestName.indexOf(":")+1));
-		voucherDetailsMap.put("GuestName", guestName.substring(guestName.indexOf(":")+1));
-		index+=1;
-		String guestEmail = trs.get(index).child(0).text();
-		System.out.println("guestEmail " +guestEmail);
-		voucherDetailsMap.put("GuestEmail", guestEmail.substring(guestEmail.indexOf(":")+1));
-		index+=1;
-		String guestContact = trs.get(index).child(0).text();
-		System.out.println("guestContact " +guestContact);
-		voucherDetailsMap.put("GuestContact", guestContact.substring(guestContact.indexOf(":")+1));
-		index+=1;
-		String roomType = trs.get(index).child(0).text();
-		System.out.println("roomType " +roomType);
-		voucherDetailsMap.put("RoomType", roomType.substring(roomType.indexOf(":")+1));
-		index+=1;
-		String mealPlan = trs.get(index).child(0).text();
-		System.out.println("mealPlan " +mealPlan);
-		voucherDetailsMap.put("mealPlan", mealPlan.substring(mealPlan.indexOf(":")+1));
-		index+=2;
-		Element reservationDetailsTr = trs.get(index);
-		System.out.println("reservationDetailsTr : "+reservationDetailsTr);
-		Elements reservationDetailsTrs = reservationDetailsTr.select("td>table>tbody>tr");
-		Elements reservationDetailsKeys = reservationDetailsTrs.get(0).children();
-		List<String> keys = new ArrayList<String>();
-		for(int i=0;i<reservationDetailsKeys.size();i++){
-			keys.add(reservationDetailsKeys.get(i).text());
+		
+		for(int i = 0;i<trs.size();i++){
+			
+			Element row = trs.get(i);
+			
+			
+			Element cell = row.child(0);
+			if(cell.children().size() > 0){
+				//logger.debug(i+") "+row);
+				if(!cell.child(0).tagName().equalsIgnoreCase("table")){
+					
+					for(int j=0;j<row.children().size();j++) {
+					
+						String data = row.child(j).text();
+						//logger.debug(data);
+						String[] tokens = data.split(":");
+						String key = tokens[0].trim();
+						String value = data.substring(tokens[0].trim().length()).trim();
+						if(key.length() < 30  && value.length() < 50) {
+							voucherDetailsMap.put(key, value.isEmpty()?"":value.substring(1).trim());
+						}
+					
+					}
+				
+				} else {
+					Elements detailTrs = cell.child(0).select("table>tbody>tr");
+					if(detailTrs.get(0).child(0).text().equalsIgnoreCase("Room")){
+						
+						List<String> keys = new ArrayList<String>();
+						Elements reservationDetailsKeys = detailTrs.get(0).children();
+						for(int j=0;j<reservationDetailsKeys.size();j++){
+							String key = reservationDetailsKeys.get(j).text();
+							keys.add(key);
+						}
+						
+						
+						Elements reservationDetailsVals = detailTrs.get(1).children();
+						List<String> vals = new ArrayList<String>();
+						for(int j=0;j<reservationDetailsVals.size();j++){
+							vals.add(reservationDetailsVals.get(j).text());
+						}
+						
+						int j=0;
+						for(String key:keys){
+							voucherDetailsMap.put(key, vals.get(j++));
+						}
+						
+						
+						for(int k=0;k<detailTrs.size();k++){
+							if(k < 2)
+								continue;
+							String key = detailTrs.get(k).child(0).text();
+							if(detailTrs.get(k).children().size() > 1) {
+								String value = detailTrs.get(k).child(1).text();
+								voucherDetailsMap.put(key, value);
+							}
+						}
+					}
+				}
+			}
 		}
-		Elements reservationDetailsVals = reservationDetailsTrs.get(1).children();
-		List<String> vals = new ArrayList<String>();
-		for(int i=0;i<reservationDetailsVals.size();i++){
-			vals.add(reservationDetailsVals.get(i).text());
-		}
 		
-		int i=0;
-		for(String key:keys){
-			voucherDetailsMap.put(key, vals.get(i++));
-		}
-		
-		String subTotal = reservationDetailsTrs.get(2).child(1).text();
-		System.out.println("subTotal: "+subTotal);
-		voucherDetailsMap.put("SubTotal", subTotal);
-		
-		String taxes = reservationDetailsTrs.get(3).child(1).text();
-		System.out.println("taxes: "+taxes);
-		voucherDetailsMap.put("Taxes", taxes);
-		
-		String tds = reservationDetailsTrs.get(4).child(1).text();
-		System.out.println("tds: "+tds);
-		voucherDetailsMap.put("Tds", tds);
-		
-		String grandTotal = reservationDetailsTrs.get(5).child(1).text();
-		System.out.println("grandTotal: "+grandTotal);
-		voucherDetailsMap.put("GrandTotal", grandTotal);
-		System.out.println(voucherDetailsMap);
+		logger.debug(String.valueOf(voucherDetailsMap));
 	}
 	public static VoucherDetail extractMakeMyTripVoucherDetailsFromMessage(Message message) throws IOException, MessagingException {
 		Map<String, String> voucherDetailsMap = new HashMap<String, String>();
 		MimeMultipart mimePart = (MimeMultipart) message
 				.getContent();
 		BodyPart emaiLBodyPart = mimePart.getBodyPart(0);
-		System.out.println(emaiLBodyPart);
+		logger.debug(String.valueOf(emaiLBodyPart));
 		InputStream in = emaiLBodyPart.getInputStream();
 		BufferedReader br = new BufferedReader(
 				new InputStreamReader(in));
@@ -290,33 +361,10 @@ public class VistaramMessageUtils {
 			sb.append(line);
 		}
 		String html = sb.toString();
-		System.out.println("Make My Trip : "+html);
-		Document document = Jsoup.parse(sb.toString());
-		Elements trs = document.select("body>table>tbody>tr>td>table>tbody>tr>td>table>tbody>tr");
-		System.out.println("trs size : " + trs.size());
-		
-		Element voucherNumberTr = trs.get(0);
-		System.out.println(voucherNumberTr);
-		Elements textSpans = voucherNumberTr.select("tr>td>table>tbody>tr>td>span");
-		
-		for(int i=0;i<textSpans.size();i++){
-			String text = textSpans.get(i).text();
-			text = text.trim();
-			if(text.contains("Booking ID")){
-				String voucherNumber = text.substring(text.indexOf("-")).trim();
-				System.out.println("Voucher : "+voucherNumber);
-			}
-			
-			if(text.startsWith("Booking Date")){
-			    String bookingDateStr = text.substring(text.indexOf("-")).trim();
-				System.out.println("Booking Date :"+bookingDateStr);
-				
-			}
-
-		}	
-		
+		logger.debug("Make My Trip : "+html);
 		List<Map<String, String>> tariffDetailsList = new ArrayList<Map<String,String>>();
-		//System.out.println(voucherDetailsMap);
+		extractVoucherDetailsFromMakeMyTripHtml(voucherDetailsMap, tariffDetailsList, html);
+		//logger.debug(voucherDetailsMap);
 		VoucherDetailsBuilder builder = new MakeMyTripVoucherDetailsBuilder();
 		VoucherDetail voucherDetails = builder.build(voucherDetailsMap, tariffDetailsList );
 		voucherDetails.setBookingAgent("makemytrip.com");

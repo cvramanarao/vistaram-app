@@ -10,4 +10,7 @@ public interface HotelDetailRepository extends JpaRepository<HotelDetail, Intege
 
 	@Query("select h from HotelDetail h where h.hotelIdentifierName = :hotelIdentifierName")
 	public HotelDetail findHotelDetailByIdentificationName(@Param("hotelIdentifierName") String identifierName);
+
+	@Query("select h from HotelDetail h where h.hotelIdentifierName = :hotelIdentifierName and h.bookingAgent = :bookingAgent")
+	public HotelDetail findHotelDetail(@Param("hotelIdentifierName") String identifierName, @Param("bookingAgent") String bookingAgent);
 }

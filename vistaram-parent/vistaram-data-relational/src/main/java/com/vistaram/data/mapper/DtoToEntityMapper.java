@@ -20,7 +20,7 @@ public class DtoToEntityMapper {
 			VoucherDetail voucherDetails) {
 		
 		
-		//System.out.println("mapVoucherDetailsToBookingDetails()-->");
+		System.out.println("mapVoucherDetailsToBookingDetails()-->");
 		BookingDetail bookingDetail = new BookingDetail();
 		bookingDetail.setBookingAgent(voucherDetails.getBookingAgent());
 		bookingDetail.setVoucherId(voucherDetails.getVoucherNumber());
@@ -52,7 +52,7 @@ public class DtoToEntityMapper {
 		bookingDetail.setTotalAmount(voucherDetails.getTotalAmountPayable());
 		bookingDetail.setPaymentType(PaymentType.ONLINE.toString());
 		bookingDetail.setSource(voucherDetails.getSource());
-		//System.out.println("<-- mapVoucherDetailsToBookingDetails()");
+		System.out.println("<-- mapVoucherDetailsToBookingDetails()");
 		return bookingDetail;
 		
 	}
@@ -93,7 +93,7 @@ public class DtoToEntityMapper {
 		List<RoomDetail> roomDetails = new ArrayList<RoomDetail>();
 		for(int i=0;i<voucherDetails.getNoOfRooms();i++) {
 			RoomDetail roomDetail = new RoomDetail();
-			System.out.println(voucherDetails.getGuestsPerRoom());
+			System.out.println("Guests Per Room "+voucherDetails.getGuestsPerRoom());
 			for(Map.Entry<String, Map<String, Integer>> entry : voucherDetails.getGuestsPerRoom().entrySet()){
 				System.out.println(entry.getKey()+" -- "+entry.getValue());
 				roomDetail.setRoomName(entry.getKey());

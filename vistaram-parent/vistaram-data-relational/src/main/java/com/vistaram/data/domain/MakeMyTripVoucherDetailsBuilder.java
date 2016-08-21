@@ -36,8 +36,10 @@ public class MakeMyTripVoucherDetailsBuilder extends VoucherDetailsBuilder {
 		VoucherDetail voucherDetail = new VoucherDetail();
 		
 		voucherDetail.setVoucherNumber(voucherDetailMap.get("VoucherNumber"));
-		voucherDetail.setGuestName(voucherDetailMap.get("GuestName"));
+		voucherDetail.setGuestName(voucherDetailMap.get("Primary Guest"));
 		//TODO: set Guest Contacts
+		voucherDetail.setGuestContactNumber(voucherDetailMap.get("Contact Number"));
+		voucherDetail.setGuestEmail(voucherDetailMap.get("E-mail"));
 		
 		String bookingDateStr = voucherDetailMap.get("BookingDate");
 		//bookingDateStr = correctDateString(bookingDateStr);
@@ -54,39 +56,76 @@ public class MakeMyTripVoucherDetailsBuilder extends VoucherDetailsBuilder {
 			System.err.println("Error parsing booking date : "+bookingDateStr);
 		}
 		
+		System.out.println(bookingDate);
 		voucherDetail.setBookingDate(bookingDate);
 		
 		String checkInDateStr = voucherDetailMap.get("Check In");
-		
-		checkInDateStr = checkInDateStr.substring(0, checkInDateStr.indexOf("(")).trim();
 		
 		//checkInDateStr = correctDateString(checkInDateStr);
 		System.out.println("checkInDateStr: "+checkInDateStr);
 		Date checkInDate = null;
 		try {
-			sdf.applyLocalizedPattern("E, MMM dd, yyyy");
+			sdf.applyLocalizedPattern("E, MMM dd, yyyy '(' hh:mm a ')'");
 		    checkInDate = sdf.parse(checkInDateStr);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			
 		}
-		
+		System.out.println("checkin date : "+checkInDate);
+		if(null == checkInDate){
+			try {
+				sdf.applyLocalizedPattern("E, MMM dd, yyyy '('hh:mm a ')'");
+			    checkInDate = sdf.parse(checkInDateStr);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+		}
+		if(null == checkInDate){
+			try {
+				sdf.applyLocalizedPattern("E, MMM dd, yyyy '(' hh:mm a')'");
+			    checkInDate = sdf.parse(checkInDateStr);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+		}
+		if(null == checkInDate){
+			try {
+				sdf.applyLocalizedPattern("E, MMM dd, yyyy '('hh:mm a')'");
+			    checkInDate = sdf.parse(checkInDateStr);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+		}
+		if(null == checkInDate){
+			try {
+				sdf.applyLocalizedPattern("E, MMM dd, yyyy hh:mm a");
+			    checkInDate = sdf.parse(checkInDateStr.trim());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			}
+		}
+		System.out.println("checkin date : "+checkInDate);
 		voucherDetail.setCheckInDate(checkInDate);
 		
 		
 		String checkOutDateStr = voucherDetailMap.get("Check Out");
 		//checkOutDateStr = correctDateString(checkOutDateStr);
 		//System.out.println("checkOutDateStr: "+checkOutDateStr);
-		checkOutDateStr = checkOutDateStr.substring(0, checkOutDateStr.indexOf("(")).trim();
+		//checkOutDateStr = checkOutDateStr.substring(0, checkOutDateStr.indexOf("(")).trim();
 		
 		Date checkOutDate = null;
 		try {
 			checkOutDate = sdf.parse(checkOutDateStr);
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
-		
+		System.out.println("checkout date : "+checkOutDate);
 		voucherDetail.setCheckOutDate(checkOutDate);
 		String hotelAndCity = voucherDetailMap.get("HotelAndCity");
 		String[] args = hotelAndCity .split(",");
@@ -95,26 +134,29 @@ public class MakeMyTripVoucherDetailsBuilder extends VoucherDetailsBuilder {
 		}
 		
 		voucherDetail.setHotelAndCity(hotelAndCity);
-		voucherDetail.setRoomType(voucherDetailMap.get("RoomType"));
+		
+		voucherDetail.setRoomType(voucherDetailMap.get("Room"));
 		
 		voucherDetail.setNoOfRooms(1);
-		Integer noOfNights = Integer.valueOf(voucherDetailMap.get("#Nights"));
+		Integer noOfNights = Integer.valueOf(null!= voucherDetailMap.get("#Nights")?voucherDetailMap.get("#Nights"):voucherDetailMap.get("No. of Night(s)"));
 		voucherDetail.setNoOfNights(noOfNights);
 		voucherDetail.setRatePlan(voucherDetailMap.get("RatePlan"));
 		voucherDetail.setGuestRequest(voucherDetailMap.get("guest request"));
 		
-		String guestsString = voucherDetailMap.get("Travelers");
+		String guestsString = null != voucherDetailMap.get("Travelers")?voucherDetailMap.get("Travelers"):voucherDetailMap.get("Guest");
 		Map<String, Integer> guests = new HashMap<String, Integer>();
 		//Travelers=2 Adults, 1 Children (3 years)
 		String[] guestTokens = guestsString.split(", ");
 		System.out.println(Arrays.asList(guestTokens));
 		System.out.println(guestTokens[0].trim().charAt(0));
 		
-		guests.put("Adult", Integer.valueOf(guestTokens[0].trim().charAt(0)));
+		guests.put("Adult", Integer.valueOf(String.valueOf(guestTokens[0].trim().charAt(0))));
 		if (guestTokens.length > 1) {
 			System.out.println(guestTokens[1].trim().charAt(0));
-			guests.put("Child", Integer.valueOf(guestTokens[1].trim().charAt(0)));
+			guests.put("Child", Integer.valueOf(String.valueOf(guestTokens[1].trim().charAt(0))));
 		}
+		
+		System.out.println("Guests : "+guests);
 		voucherDetail.getGuestsPerRoom().put(voucherDetailMap.get("Room"), guests);
 		
 	    /*for(int i=1;i<=voucherDetail.getNoOfRooms();i++) {
@@ -140,7 +182,7 @@ public class MakeMyTripVoucherDetailsBuilder extends VoucherDetailsBuilder {
 	    voucherDetail.setTotalTax(null==totalTaxStr || totalTaxStr.isEmpty()?0:Double.valueOf(totalTaxStr));
 	    String totalDiscountStr = voucherDetailMap.get("Tds");
 	    voucherDetail.setTotalDiscount(null==totalDiscountStr || totalDiscountStr.isEmpty()?0:Double.valueOf(totalDiscountStr));
-	    String totalAmountPayableStr = voucherDetailMap.get("GrandTotal");
+	    String totalAmountPayableStr = voucherDetailMap.get("Grand Total");
 	    voucherDetail.setTotalAmountPayable(null==totalAmountPayableStr || totalAmountPayableStr.isEmpty()?0:Double.valueOf(totalAmountPayableStr));
 	    //String extraGuest = voucherDetailMap.get("extra guest");
 	    //voucherDetail.setExtraGuest(Integer.valueOf(extraGuest));

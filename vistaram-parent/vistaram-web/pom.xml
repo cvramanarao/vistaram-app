@@ -37,17 +37,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>com.vistaram</groupId>
-			<artifactId>vistaram-data-relational</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.vistaram</groupId>
-			<artifactId>vistaram-batch-common</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
@@ -57,7 +46,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -82,10 +70,25 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.vistaram</groupId>
+			<artifactId>vistaram-data-relational</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vistaram</groupId>
+			<artifactId>vistaram-batch-common</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
 		</dependency>
-
+		
+		<dependency>
+		    <groupId>com.itextpdf</groupId>
+		    <artifactId>itextpdf</artifactId>
+		    <version>5.5.9</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -103,4 +106,36 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<repositories>
+		<!-- repository>
+			<id>spring-milestones</id>
+			<name>Spring Maven Milestone Repository</name>
+			<url>http://s3.amazonaws.com/maven.springframework.org/milestone</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository -->
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Maven Milestone Repository</name>
+			<url>https://repo.spring.io/libs-milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Maven Snapshot Repository</name>
+			<url>https://repo.spring.io/libs-snapshot-local</url>
+		</repository>
+		<repository>
+			<id>objectstyle</id>
+			<name>ObjectStyle.org Repository</name>
+			<url>https://objectstyle.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 </project>

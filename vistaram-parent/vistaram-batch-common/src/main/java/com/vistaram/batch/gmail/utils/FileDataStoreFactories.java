@@ -7,6 +7,8 @@ public class FileDataStoreFactories {
 	
 	 private static final java.io.File DATA_STORE_DIR_VISTARAMROOMS = new java.io.File(
 		        System.getProperty("user.home"), ".credentials/vistaramrooms-credentials.json");
+	 private static final java.io.File DATA_STORE_DIR_VISTARAMROOMS_WEB = new java.io.File(
+		        System.getProperty("user.home"), ".credentials/vistaramrooms-web-credentials.json");
 	 private static final java.io.File DATA_STORE_DIR_SHIRIVARSHINI = new java.io.File(
 		        System.getProperty("user.home"), ".credentials/shirivarshini-credentials.json");
 	 private static final java.io.File DATA_STORE_DIR_HOLIDAYINN = new java.io.File(
@@ -20,6 +22,7 @@ public class FileDataStoreFactories {
 	 
 	 
 	  private static FileDataStoreFactory DATA_STORE_FACTORY_VISTARAMROOMS;
+	  private static FileDataStoreFactory DATA_STORE_FACTORY_VISTARAMROOMS_WEB;
 	  private static FileDataStoreFactory DATA_STORE_FACTORY_SHIRIVARSHINI;
 	  private static FileDataStoreFactory DATA_STORE_FACTORY_HOLIDAYINN;
 	  private static FileDataStoreFactory DATA_STORE_FACTORY_LEELAGRAND;
@@ -29,6 +32,7 @@ public class FileDataStoreFactories {
 	  static {
 	        try {
 	            DATA_STORE_FACTORY_VISTARAMROOMS = new FileDataStoreFactory(DATA_STORE_DIR_VISTARAMROOMS);
+	            DATA_STORE_FACTORY_VISTARAMROOMS_WEB = new FileDataStoreFactory(DATA_STORE_DIR_VISTARAMROOMS_WEB);
 	            DATA_STORE_FACTORY_SHIRIVARSHINI = new FileDataStoreFactory(DATA_STORE_DIR_SHIRIVARSHINI);
 	            DATA_STORE_FACTORY_HOLIDAYINN = new FileDataStoreFactory(DATA_STORE_DIR_HOLIDAYINN);
 	            DATA_STORE_FACTORY_LEELAGRAND = new FileDataStoreFactory(DATA_STORE_DIR_LEELAGRAND );
@@ -53,6 +57,8 @@ public class FileDataStoreFactories {
 			  return DATA_STORE_FACTORY_LEELAGRAND;
 		  } else  if(userFileDirectoryParam.equalsIgnoreCase("shirdisai")) {
 			  return DATA_STORE_FACTORY_SHIRDISAI;
+		  } if(userFileDirectoryParam.equalsIgnoreCase("vistaramrooms-web")) {
+			  return DATA_STORE_FACTORY_VISTARAMROOMS_WEB;
 		  }
 		  return null;
 		  

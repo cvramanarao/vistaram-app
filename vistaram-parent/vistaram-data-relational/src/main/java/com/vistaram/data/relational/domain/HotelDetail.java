@@ -1,16 +1,10 @@
 package com.vistaram.data.relational.domain;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
 import java.util.List;
 
 
-/**
- * The persistent class for the hotel_details database table.
- * 
- */
 /**
  * The persistent class for the hotel_details database table.
  * 
@@ -19,6 +13,8 @@ import java.util.List;
 @Table(name="hotel_details")
 @NamedQuery(name="HotelDetail.findAll", query="SELECT h FROM HotelDetail h")
 public class HotelDetail implements Serializable {
+	
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -26,6 +22,9 @@ public class HotelDetail implements Serializable {
 	private int hotelId;
 
 	private String address;
+
+	@Column(name="booking_agent")
+	private String bookingAgent;
 
 	private String city;
 
@@ -65,6 +64,14 @@ public class HotelDetail implements Serializable {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getBookingAgent() {
+		return this.bookingAgent;
+	}
+
+	public void setBookingAgent(String bookingAgent) {
+		this.bookingAgent = bookingAgent;
 	}
 
 	public String getCity() {
@@ -135,6 +142,13 @@ public class HotelDetail implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	@Override
+	public String toString() {
+		return "HotelDetail [hotelId=" + hotelId + ", bookingAgent="
+				+ bookingAgent + ", hotelIdentifierName=" + hotelIdentifierName
+				+ ", hotelName=" + hotelName + "]";
 	}
 
 }

@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -22,7 +25,6 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.Base64;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.gmail.Gmail;
-import com.google.api.services.gmail.Gmail.Users.Messages.Get;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
@@ -30,6 +32,9 @@ import com.google.api.services.gmail.model.MessagePart;
 import com.vistaram.batch.gmail.utils.FileDataStoreFactories;
 
 public class GmailUtils {
+	
+	private static Logger logger = LoggerFactory.getLogger(GmailUtils.class);
+	
     /** Application name. */
     private static final String APPLICATION_NAME =
         "Gmail API Java Quickstart";
@@ -73,8 +78,10 @@ public class GmailUtils {
      */
     public static Credential authorize(String clientSecretFileName) throws IOException {
         // Load client secrets.
-        InputStream in =
-            new FileInputStream(System.getProperty("user.home")+ "/.credentials/"+clientSecretFileName+"-client_secret.json");
+        String path = System.getProperty("user.home")+ "/.credentials/"+clientSecretFileName+"-client_secret.json";
+        logger.debug(path);
+		InputStream in =
+            new FileInputStream(path);
         GoogleClientSecrets clientSecrets =
             GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
@@ -121,6 +128,7 @@ public class GmailUtils {
         messages.addAll(response.getMessages());
         if (response.getNextPageToken() != null) {
           String pageToken = response.getNextPageToken();
+          logger.debug("retreiving pageToken: "+pageToken);
           response = service.users().messages().list(userId).setQ(query)
               .setPageToken(pageToken).execute();
         } else {
@@ -129,7 +137,7 @@ public class GmailUtils {
       }
 
       /*for (Message message : messages) {
-        System.out.println(message.toPrettyString());
+        logger.debug(message.toPrettyString());
       }*/
 
       return messages;
@@ -162,7 +170,7 @@ public class GmailUtils {
       }
 
       for (Message message : messages) {
-        System.out.println(message.toPrettyString());
+        logger.debug(message.toPrettyString());
       }
 
       return messages;
@@ -209,7 +217,7 @@ public class GmailUtils {
         String user = "me";
         String query = "label:inbox-goibibo from:hotelpartners@goibibo.com after:2016/06/01";
         List<Message> messages = listMessagesMatchingQuery(service, user, query);
-        System.out.println("Total messages : "+messages.size());
+        logger.debug("Total messages : "+messages.size());
        
     }
 

@@ -1,4 +1,4 @@
-package com.vistaram.listener;
+package com.vistaram.batch.listener;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,25 +8,32 @@ import java.util.Map;
 
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.MessagingException;
 
+import com.vistaram.batch.processor.VistaramEmailMessageBookingDetailProcessor;
 import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
+import com.vistaram.batch.reader.VistaramEmailMessageReader;
 import com.vistaram.batch.writer.VistaramDetailsWriter;
 import com.vistaram.data.domain.VoucherDetail;
+import com.vistaram.data.relational.domain.BookingDetail;
 
 
 public class VistaramEmailMessageHandler implements MessageHandler {
 
 	@Autowired
-	private VistaramEmailMessageProcessor vistaramEmailMessageProcessor;
-	
+	private VistaramEmailMessageBookingDetailProcessor vistaramEmailMessageBookingDetailProcessor;
 	
 	@Autowired
-	private VistaramDetailsWriter vistaramDetailsWriter;
+	private ItemWriter<BookingDetail> bookingDetailWriter;
+	
+	private static Logger logger = LoggerFactory.getLogger(VistaramEmailMessageReader.class);
 	
 	@Override
 	public void handleMessage(Message<?> message) throws MessagingException {
@@ -61,11 +68,11 @@ public class VistaramEmailMessageHandler implements MessageHandler {
 		try {
 			Object content = mimeMessage.getContent();
 			System.out.println("content: "+content);
-			VoucherDetail voucherDetails = vistaramEmailMessageProcessor.process(mimeMessage);		
-			if(null != voucherDetails) {
-				List<VoucherDetail> voucherDetailsList = new ArrayList<VoucherDetail>();
-				voucherDetailsList.add(voucherDetails);
-				vistaramDetailsWriter.write(voucherDetailsList);
+			BookingDetail bookingDetail = vistaramEmailMessageBookingDetailProcessor.process(mimeMessage);		
+			if(null != bookingDetail) {
+				List<BookingDetail> bookingDetails = new ArrayList<BookingDetail>();
+				bookingDetails.add(bookingDetail);
+				bookingDetailWriter.write(bookingDetails);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -81,24 +88,4 @@ public class VistaramEmailMessageHandler implements MessageHandler {
 		System.out.println("payload : "+payload);
 		System.out.println("<-- handleMessage()");
 	}
-
-	public VistaramEmailMessageProcessor getVistaramEmailMessageProcessor() {
-		return vistaramEmailMessageProcessor;
-	}
-
-	public void setVistaramEmailMessageProcessor(
-			VistaramEmailMessageProcessor vistaramEmailMessageProcessor) {
-		this.vistaramEmailMessageProcessor = vistaramEmailMessageProcessor;
-	}
-
-	public VistaramDetailsWriter getVistaramDetailsWriter() {
-		return vistaramDetailsWriter;
-	}
-
-	public void setVistaramDetailsWriter(VistaramDetailsWriter vistaramDetailsWriter) {
-		this.vistaramDetailsWriter = vistaramDetailsWriter;
-	}
-	
-	
-
 }

@@ -5,27 +5,30 @@ import java.util.Arrays;
 import javax.mail.Message;
 import javax.mail.Message.RecipientType;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import com.vistaram.batch.utils.VistaramMessageUtils;
 import com.vistaram.data.domain.VoucherDetail;
 
-@Component
+
 public class VistaramEmailMessageProcessor implements ItemProcessor<Message, VoucherDetail> {
 	
-	
+	private static Logger logger = LoggerFactory.getLogger(VistaramEmailMessageProcessor.class);
 
 	@Override
 	public VoucherDetail process(Message message) throws Exception {
-		System.out.println("VistaramEmailMessageProcessor || process()-->");
+		logger.debug("VistaramEmailMessageProcessor || process()-->");
 		VoucherDetail voucherDetails = null;
-		System.out.println("To: "+Arrays.toString(message.getRecipients(RecipientType.TO)));
-		System.out.println("Subject: " + message.getSubject());
+		logger.debug("To: "+Arrays.toString(message.getRecipients(RecipientType.TO)));
+		logger.debug("Subject: " + message.getSubject());
 		
-		System.out.println("From: " + message.getFrom()[0]);
+		logger.debug("From: " + message.getFrom()[0]);
 		
-		System.out.println("All Recipients: "+Arrays.toString(message.getAllRecipients()));
+		logger.debug("All Recipients: "+Arrays.toString(message.getAllRecipients()));
+		logger.debug("Received Date : "+message.getReceivedDate());
 		
 		String from = message.getFrom()[0].toString();
 		String subject = message.getSubject();
@@ -38,7 +41,7 @@ public class VistaramEmailMessageProcessor implements ItemProcessor<Message, Vou
 				  && subject.contains("Hotel Booking on MakeMyTrip.com")) { 
 			voucherDetails = VistaramMessageUtils.extractMakeMyTripVoucherDetailsFromMessage(message);
 		}
-		System.out.println("<-- VistaramEmailMessageProcessor || process()");		
+		logger.debug("<-- VistaramEmailMessageProcessor || process()");		
 		return voucherDetails;
 	}
 

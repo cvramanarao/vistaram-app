@@ -12,6 +12,7 @@ import com.vistaram.data.relational.domain.BookingDetail;
 
 @Service
 public class BookingDetailsService {
+	
 	@Autowired
 	private BookingDetailDao bookingDetailDao;
 	
@@ -33,6 +34,10 @@ public class BookingDetailsService {
 			String name) {
 		// TODO Auto-generated method stub
 		return bookingDetailDao.getCurrentDateCheckInDetailsForUser(name);
+	}
+
+	public BookingDetail getBookingDetailsByVoucherNumber(String voucherNumber) {
+		return bookingDetailDao.getBookingDetailByVoucherId(voucherNumber);
 	}
 
 }

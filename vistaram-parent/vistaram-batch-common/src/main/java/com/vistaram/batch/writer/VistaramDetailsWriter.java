@@ -2,12 +2,12 @@ package com.vistaram.batch.writer;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
+import com.vistaram.batch.utils.VistaramMessageUtils;
 import com.vistaram.data.domain.VoucherDetail;
 import com.vistaram.data.service.VoucherDetailsService;
 
@@ -17,24 +17,26 @@ public class VistaramDetailsWriter implements ItemWriter<VoucherDetail> {
 	@Autowired
 	private VoucherDetailsService voucherDetailsService;
 	
+	private static Logger logger = LoggerFactory.getLogger(VistaramDetailsWriter.class);
+	
 	@Override
 	public void write(List<? extends VoucherDetail> items) throws Exception {
-		System.out.println("VistaramDetailsWriter || writewrite(List<? extends VoucherDetail> items)-->");
-		System.out.println("No. of Items : " +items.size());
+		logger.debug("VistaramDetailsWriter || writewrite(List<? extends VoucherDetail> items)-->");
+		logger.debug("No. of Items : " +items.size());
 		for(VoucherDetail voucherDetails : items){
-			System.out.println("saving voucher details : "+voucherDetails.getVoucherNumber());
+			logger.debug("saving voucher details : "+voucherDetails.getVoucherNumber());
 			voucherDetailsService.saveVoucherDetails(voucherDetails);
 		}
 		
-		System.out.println("<-- VistaramDetailsWriter || write(List<? extends VoucherDetail> items)");
+		logger.debug("<-- VistaramDetailsWriter || write(List<? extends VoucherDetail> items)");
 		
 	}
 	
 
 	public void write(VoucherDetail voucherDetails){
-		System.out.println("VistaramDetailsWriter || write(VoucherDetail voucherDetails)-->");
+		logger.debug("VistaramDetailsWriter || write(VoucherDetail voucherDetails)-->");
 		voucherDetailsService.saveVoucherDetails(voucherDetails);
-		System.out.println("<-- VistaramDetailsWriter || write(VoucherDetail voucherDetails)");
+		logger.debug("<-- VistaramDetailsWriter || write(VoucherDetail voucherDetails)");
 	}
 
 }

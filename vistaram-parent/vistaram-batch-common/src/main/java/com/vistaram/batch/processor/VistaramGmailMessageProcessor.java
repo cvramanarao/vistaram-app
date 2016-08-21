@@ -22,6 +22,7 @@ import com.vistaram.data.domain.VoucherDetail;
 
 public class VistaramGmailMessageProcessor implements ItemProcessor<Message, VoucherDetail> {
 	
+	
 	private JobExecution jobExecution;
 	
 	@BeforeStep
@@ -31,8 +32,8 @@ public class VistaramGmailMessageProcessor implements ItemProcessor<Message, Vou
 
 	@AfterStep
 	public void afterStep(StepExecution stepExecution) {
-stepExecution.getJobExecution().getExecutionContext().remove("service");
-stepExecution.getJobExecution().getExecutionContext().remove("user");
+		stepExecution.getJobExecution().getExecutionContext().remove("service");
+		stepExecution.getJobExecution().getExecutionContext().remove("user");
 	}
 
 	@Override

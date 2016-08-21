@@ -20,4 +20,9 @@ public class HotelDetailDao {
 		return hotelDetailRepo.findHotelDetailByIdentificationName(identifierName);
 	}
 
+	@Transactional(propagation=Propagation.REQUIRED)
+	public HotelDetail getHotelDetail(String identifierName, String bookingAgent) {
+		return hotelDetailRepo.findHotelDetail(identifierName, bookingAgent);
+	}
+
 }

@@ -51,12 +51,14 @@ public class VistaramGmailMessageBookingDetailProcessor implements
 					String hotelAndCity = voucherDetail.getHotelAndCity();
 					String hotel = hotelAndCity.substring(0, hotelAndCity.indexOf(",")).trim();
 					System.out.println("hotel : "+hotel);
-					HotelDetail hotelDetail = findHotel(hotel);
+					HotelDetail hotelDetail = findHotel(hotel, bookingDetail.getBookingAgent());
 					System.out.println("Hotel : "+hotelDetail);
 					bookingDetail.setHotelDetail(hotelDetail);
 				}
 			}
 			
+		} catch(Exception ex){
+			ex.printStackTrace(System.out);
 		} finally  {
 			// TODO Auto-generated catch block
 			System.out.println("<-- VistaramGmailMessageBookingDetailProcessor || process()");
@@ -117,10 +119,14 @@ public class VistaramGmailMessageBookingDetailProcessor implements
 
 		if (from.contains("hotelpartners@goibibo.com")
 				&& subject.contains("Confirm Hotel Booking")) {
-			
-			
-			String data = new String(Base64.decodeBase64(payload2.getParts()
+			String data = null;
+			if(payload2.getParts().size() > 1) {
+				data = new String(Base64.decodeBase64(payload2.getParts()
 					.get(1).getBody().getData()));
+			} else {
+				data = new String(Base64.decodeBase64(payload2.getParts()
+						.get(0).getBody().getData()));
+			}
 			voucherDetails = VistaramMessageUtils
 					.extractGoIbiboVoucherDetailsFromHtml(null, from, data);
 		}
@@ -139,9 +145,11 @@ public class VistaramGmailMessageBookingDetailProcessor implements
 		return voucherDetails;
 	}
 	
-	private HotelDetail findHotel(String hotelIdentifier){
+	private HotelDetail findHotel(String hotelIdentifier, String bookingAgent){
+		//System.out.println(hotelIdentifier+" <--> "+bookingAgent);
 		for(HotelDetail hotel : hotels){
-			if(hotel.getHotelIdentifierName().equalsIgnoreCase(hotelIdentifier)){
+			System.out.println(hotel);
+			if(hotel.getHotelIdentifierName().equalsIgnoreCase(hotelIdentifier) && hotel.getBookingAgent().equalsIgnoreCase(bookingAgent)){
 				return hotel;
 			}
 		}

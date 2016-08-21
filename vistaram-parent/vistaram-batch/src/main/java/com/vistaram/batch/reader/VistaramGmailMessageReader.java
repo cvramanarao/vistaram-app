@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.springframework.batch.core.ExitStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.AfterStep;
@@ -22,11 +23,11 @@ public class VistaramGmailMessageReader extends AbstractPaginatedDataItemReader<
 
 	private JobExecution jobExecution;
 
-	
+	private static Logger logger = LoggerFactory.getLogger(VistaramGmailMessageReader.class);
 	
 	public VistaramGmailMessageReader() {
 		setExecutionContextName("VistaramGmailDataContext");
-		setPageSize(100);
+		//setPageSize(100);
 	
 	}
 	
@@ -38,6 +39,7 @@ public class VistaramGmailMessageReader extends AbstractPaginatedDataItemReader<
 
 	@BeforeStep
 	public void beforeStep(StepExecution stepExecution) {
+		logger.debug("VistaramGmailMessageReader || beforeStep()-->");
 		jobExecution = stepExecution.getJobExecution();
 		String clientSecretFileName =  String.valueOf(jobExecution.getJobParameters().getString("client_secret"));
 		 
@@ -55,10 +57,10 @@ public class VistaramGmailMessageReader extends AbstractPaginatedDataItemReader<
 			//messages = GmailUtils.listMessagesMatchingQuery(service, user, query);
 			 ListMessagesResponse response = service.users().messages().list(user).setQ(query).execute();
 			 jobExecution.getExecutionContext().put("response", response);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			logger.error("Exception Occured in before Step : ", e);
 		}
+		logger.debug("<-- VistaramGmailMessageReader || beforeStep()");
 	}
 
 	@AfterStep
@@ -68,73 +70,24 @@ public class VistaramGmailMessageReader extends AbstractPaginatedDataItemReader<
 
 	@Override
 	protected Iterator<Message> doPageRead() {
-		System.out.println("doPageRead()-->");
-		System.out.println("Reading page : "+page);
-		
-		setMaxItemCount(jobExecution.getJobParameters().getLong("max_items", 10).intValue());
+		logger.debug("doPageRead()-->");
+		logger.debug("Reading page : "+page);
+		String maxCount = jobExecution.getJobParameters().getString("max_items", "10").trim();
+		logger.debug("maxCount : "+maxCount);
+		setMaxItemCount(Integer.valueOf(maxCount));
 		List<Message> messages = new ArrayList<Message>();
-//		String clientSecretFileName =  String.valueOf(jobExecution.getJobParameters().getString("client_secret"));
-//		 
-//		//String clientSecretFileName = "/vistaramclient_secret.json";
-//		try {
-//			Gmail service = GmailUtils.getGmailService(clientSecretFileName);
-//			
-//			jobExecution.getExecutionContext().put("service", service);
-//
-//			// Print the labels in the user's account.
-//			//String user = "me";
-//			String user = String.valueOf(jobExecution.getJobParameters().getString("user"));
-//			//String query = "label:inbox-goibibo from:hotelpartners@goibibo.com after:2016/06/01";
-//			String query = String.valueOf(jobExecution.getJobParameters().getString("query"));
-//			//messages = GmailUtils.listMessagesMatchingQuery(service, user, query);
-//			 ListMessagesResponse response = service.users().messages().list(user).setQ(query).execute();
-//			 setMaxItemCount(response.getResultSizeEstimate());
-//			 if(null != response.getMessages()) {
-//				 messages.addAll(response.getMessages());
-//			 }
-//			 
-//			 
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		ListMessagesResponse response = (ListMessagesResponse) jobExecution.getExecutionContext().get("response");
-		//setMaxItemCount(response.getResultSizeEstimate().intValue());
-		
-		//System.out.println("getMaxItemCount: "+response.getResultSizeEstimate().intValue());
-	
 		try {
+			ListMessagesResponse response = (ListMessagesResponse) jobExecution.getExecutionContext().get("response");
 			String user = String.valueOf(jobExecution.getJobParameters().getString("user"));
 			String query = String.valueOf(jobExecution.getJobParameters().getString("query"));
 			Gmail service = (Gmail) jobExecution.getExecutionContext().get("service");
-			
-			
-			
-			if(null != response.getMessages()) {
-				 messages.addAll(response.getMessages());
-				 if (response.getNextPageToken() != null) {
-			          String pageToken = response.getNextPageToken();
-			          response = service.users().messages().list(user).setQ(query)
-			              .setPageToken(pageToken).execute();
-			          setMaxItemCount(response.getResultSizeEstimate().intValue());
-			          jobExecution.getExecutionContext().put("response", response);
-			         
-			        } 
-			 } else {
-				 jobExecution.setExitStatus(ExitStatus.COMPLETED);
-			 }
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			messages = GmailUtils.listMessagesMatchingQuery(service, user, query);
+		} catch (Exception e) {
+			logger.error("Exception Occured : ", e);
 		}
-		 
-		 
-		 
+		logger.debug("Total messages : " + messages.size());
 		
-		System.out.println("Total messages : " + messages.size());
-		
-		System.out.println("<-- doPageRead() ");
+		logger.debug("<-- doPageRead() ");
 		return messages.iterator();
 	}
 
