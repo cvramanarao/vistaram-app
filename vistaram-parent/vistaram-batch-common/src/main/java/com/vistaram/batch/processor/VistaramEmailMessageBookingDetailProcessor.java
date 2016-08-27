@@ -26,7 +26,7 @@ public class VistaramEmailMessageBookingDetailProcessor implements ItemProcessor
 	@Autowired
 	private EntityManager entityManager;
 	
-	private List<HotelDetail> hotels = null;
+	private static List<HotelDetail> hotels = null;
 	
 	
 	private VistaramEmailMessageProcessor processor = new VistaramEmailMessageProcessor();
@@ -75,6 +75,11 @@ public class VistaramEmailMessageBookingDetailProcessor implements ItemProcessor
 	
 	private HotelDetail findHotel(String hotelIdentifier, String bookingAgent){
 		logger.debug(hotelIdentifier+" <--> "+bookingAgent);
+		if(null == hotels){
+			Query query = entityManager.createQuery("select h from HotelDetail h");
+			hotels = query.getResultList();
+			logger.debug("hotels: "+hotels);
+		}
 		for(HotelDetail hotel : hotels){
 			//logger.debug(hotel);
 			if(hotel.getHotelIdentifierName().equalsIgnoreCase(hotelIdentifier) && hotel.getBookingAgent().equalsIgnoreCase(bookingAgent)){

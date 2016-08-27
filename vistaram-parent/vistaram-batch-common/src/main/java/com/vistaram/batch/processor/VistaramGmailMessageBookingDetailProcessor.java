@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.annotation.AfterStep;
@@ -32,11 +34,12 @@ public class VistaramGmailMessageBookingDetailProcessor implements
 	
 	private List<HotelDetail> hotels = null;
 	
-	
+	private static Logger logger = LoggerFactory
+			.getLogger(VistaramGmailMessageBookingDetailProcessor.class);
 
 	@Override
 	public BookingDetail process(Message message) throws Exception {
-		System.out.println("VistaramGmailMessageBookingDetailProcessor || process() -->");
+		logger.debug("VistaramGmailMessageBookingDetailProcessor || process() -->");
 		BookingDetail bookingDetail = null;
 		try {
 			VoucherDetail voucherDetail = extractVoucherDetail(message);
@@ -45,14 +48,14 @@ public class VistaramGmailMessageBookingDetailProcessor implements
 				Query query = entityManager.createNamedQuery("BookingDetail.findByVoucherId");
 				query.setParameter("voucherId", voucherDetail.getVoucherNumber());
 				List results =  query.getResultList();
-				System.out.println("booking detail for voucher number "+voucherDetail.getVoucherNumber()+" is "+results);
+				logger.debug("booking detail for voucher number "+voucherDetail.getVoucherNumber()+" is "+results);
 				if(results.isEmpty()) { 
 					bookingDetail = DtoToEntityMapper.mapVoucherDetailsToBookingDetails(voucherDetail);
 					String hotelAndCity = voucherDetail.getHotelAndCity();
 					String hotel = hotelAndCity.substring(0, hotelAndCity.indexOf(",")).trim();
-					System.out.println("hotel : "+hotel);
+					logger.debug("hotel : "+hotel);
 					HotelDetail hotelDetail = findHotel(hotel, bookingDetail.getBookingAgent());
-					System.out.println("Hotel : "+hotelDetail);
+					logger.debug("Hotel : "+hotelDetail);
 					bookingDetail.setHotelDetail(hotelDetail);
 				}
 			}
@@ -61,7 +64,7 @@ public class VistaramGmailMessageBookingDetailProcessor implements
 			ex.printStackTrace(System.out);
 		} finally  {
 			// TODO Auto-generated catch block
-			System.out.println("<-- VistaramGmailMessageBookingDetailProcessor || process()");
+			logger.debug("<-- VistaramGmailMessageBookingDetailProcessor || process()");
 		}
 		
 		return bookingDetail;
@@ -74,7 +77,7 @@ public class VistaramGmailMessageBookingDetailProcessor implements
 		jobExecution = stepExecution.getJobExecution();
 		Query query = entityManager.createQuery("select h from HotelDetail h");
 		hotels = query.getResultList();
-		System.out.println("hotels : "+hotels);
+		logger.debug("hotels : "+hotels);
 	}
 
 	@AfterStep
@@ -88,9 +91,9 @@ public class VistaramGmailMessageBookingDetailProcessor implements
 		VoucherDetail voucherDetails = null;
 		MessagePart payload = message.getPayload();
 
-		// System.out.println("Payload : "+ payload);
-		// System.out.println("Raw : "+ message.getRaw());
-		// System.out.println(message.toPrettyString());
+		// logger.debug("Payload : "+ payload);
+		// logger.debug("Raw : "+ message.getRaw());
+		// logger.debug(message.toPrettyString());
 		Gmail service = (Gmail) jobExecution.getExecutionContext().get(
 				"service");
 		String user = String.valueOf(jobExecution.getJobParameters().getString(
@@ -115,7 +118,7 @@ public class VistaramGmailMessageBookingDetailProcessor implements
 				subject = header.getValue();
 			}
 		}
-		System.out.println("from : " + from + " subject: " + subject);
+		logger.debug("from : " + from + " subject: " + subject);
 
 		if (from.contains("hotelpartners@goibibo.com")
 				&& subject.contains("Confirm Hotel Booking")) {
@@ -146,15 +149,26 @@ public class VistaramGmailMessageBookingDetailProcessor implements
 	}
 	
 	private HotelDetail findHotel(String hotelIdentifier, String bookingAgent){
-		//System.out.println(hotelIdentifier+" <--> "+bookingAgent);
+		//logger.debug(hotelIdentifier+" <--> "+bookingAgent);
+		if (null == hotels) {
+			Query query = entityManager
+					.createQuery("select h from HotelDetail h");
+			hotels = query.getResultList();
+			logger.debug("hotels : " + hotels);
+		}
 		for(HotelDetail hotel : hotels){
-			System.out.println(hotel);
+			logger.debug(String.valueOf(hotel));
 			if(hotel.getHotelIdentifierName().equalsIgnoreCase(hotelIdentifier) && hotel.getBookingAgent().equalsIgnoreCase(bookingAgent)){
 				return hotel;
 			}
 		}
 		
 		return null;
+	}
+	
+	
+	public void setJobExecution(JobExecution jobExecution){
+		this.jobExecution = jobExecution;
 	}
 
 }

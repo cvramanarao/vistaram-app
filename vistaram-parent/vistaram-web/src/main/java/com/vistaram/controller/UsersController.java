@@ -8,7 +8,12 @@ public class UsersController {
 	
 	@RequestMapping("/")
 	public String home(){
-		return "bookingdetails";
+		return "home";
+	}
+	
+	@RequestMapping("/home")
+	public String homeAgain(){
+		return "home";
 	}
 
 }

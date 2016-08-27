@@ -96,6 +96,30 @@ public class BookingsController {
 		return voucherDetails;
 	}
 	
+	@RequestMapping("/checkouts/today")
+	public List<VoucherDetail> getTodaysCheckouts(Principal principal){
+		logger.debug("getTodaysCheckouts()-->");
+		List<VoucherDetail> voucherDetails = new ArrayList<VoucherDetail>();
+		List<BookingDetail> bookingDetails = new ArrayList<BookingDetail>();
+		Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		logger.debug(String.valueOf(authorities));
+		SimpleGrantedAuthority adminAuthority = new SimpleGrantedAuthority("ADMIN");
+		if(authorities.contains(adminAuthority)){
+			bookingDetails = bookingDetailsService.getBookingDetailsForCurrentCheckoutDate();
+		} else {
+			bookingDetails = bookingDetailsService.getBookingDetailsForCurrentCheckoutDateForUser(principal.getName());
+		}
+		logger.debug("no. of bookings : "+bookingDetails.size());
+		for(BookingDetail bookingDetail : bookingDetails){
+			VoucherDetail voucherDetail = EntityToDtoMapper.mapBookingDetailToVoucherDetails(bookingDetail);
+			logger.debug("voucher detail : "+voucherDetail);
+			voucherDetails.add(voucherDetail);
+		}
+		logger.debug("<-- getTodaysCheckouts()");
+		return voucherDetails;
+	}
+	
+	
 	@RequestMapping(value = "/download/{voucherNumber}")
 	public void generateVoucher(HttpServletResponse response, @PathVariable(value="voucherNumber") String voucherNumber){
 		logger.debug("generateVoucher() -->");

@@ -38,6 +38,7 @@ import com.vistaram.batch.processor.VistaramGmailMessageBookingDetailProcessor;
 import com.vistaram.batch.processor.VistaramGmailMessageProcessor;
 import com.vistaram.batch.reader.VistaramEmailMessageReader;
 import com.vistaram.batch.reader.VistaramGmailMessageReader;
+import com.vistaram.batch.tasklet.VistaramGmailDataExtractorTask;
 import com.vistaram.data.domain.VoucherDetail;
 import com.vistaram.data.relational.domain.BookingDetail;
 
@@ -47,7 +48,7 @@ import com.vistaram.data.relational.domain.BookingDetail;
 //@EnableTransactionManagement
 //@Import(DataSourceConfiguration.class)
 //@EnableJpaRepositories(basePackages="com.vistaram.data.relational.repositories")
-@ImportResource("file:///${user.home}/configuration/vistaram-email-integration.xml")
+//@ImportResource("file:///${user.home}/configuration/vistaram-email-integration.xml")
 public class VistaramEmailBatchApplication{
 
 	@Autowired
@@ -175,7 +176,42 @@ public class VistaramEmailBatchApplication{
 		return jobBuilderFactory.get("vistaramEmailDataExtractorJob").incrementer(new RunIdIncrementer()).start(vistaramEmailDataExtractorStep).build();
 	}
 	
-	@Autowired
+	
+	
+	
+	@Bean
+	public VistaramGmailDataExtractorTask vistaramGmailDataExtractorTask() {
+		return new VistaramGmailDataExtractorTask();
+	}
+
+	/**
+	 * This method creates and returns a step which consists of audit clean up
+	 * tasklet to run.
+	 * 
+	 * @return
+	 */
+	@Bean
+	public Step vistaramGmailDataExtractorTaskStep() {
+		return stepBuilderFactory.get("vistaramGmailDataExtractorTaskStep").transactionManager(jpaTransactionManager())
+				.tasklet(vistaramGmailDataExtractorTask()).build();
+	}
+
+	/**
+	 * This method accepts the audit clean up step and creates the audit clean
+	 * up job to run.
+	 * 
+	 * @param auditCleanUpStep
+	 * @return
+	 * @throws Exception
+	 */
+	@Bean
+	public Job vistaramGmailDataExtractorTaskJob(Step vistaramGmailDataExtractorTaskStep) throws Exception {
+		return jobBuilderFactory.get("vistaramGmailDataExtractorTaskJob")
+				.incrementer(new RunIdIncrementer()).start(vistaramGmailDataExtractorTaskStep)
+				.build();
+	}
+	
+	/*@Autowired
 	@Qualifier("receiveChannel")
 	private DirectChannel directChannel;
 	
@@ -185,7 +221,7 @@ public class VistaramEmailBatchApplication{
 		// messageHandler.setVistaramDetailsWriter(vistaramDetailsWriter());
 		directChannel.subscribe(messageHandler);
 		return messageHandler;
-	}
+	}*/
 	    
 	
 	@Bean

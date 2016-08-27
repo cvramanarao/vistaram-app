@@ -1,30 +1,30 @@
-package com.vistaram.batch.listener;
+package com.vistaram.listener;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
+import org.springframework.stereotype.Component;
 
-import com.vistaram.batch.processor.VistaramEmailMessageBookingDetailProcessor;
-import com.vistaram.data.relational.domain.BookingDetail;
+import com.vistaram.batch.processor.VistaramEmailMessageProcessor;
+import com.vistaram.batch.writer.VistaramDetailsWriter;
+import com.vistaram.data.domain.VoucherDetail;
 
 
+@Component
 public class VistaramEmailMessageHandler implements MessageHandler {
 
 	@Autowired
-	private VistaramEmailMessageBookingDetailProcessor vistaramEmailMessageBookingDetailProcessor;
+	private VistaramEmailMessageProcessor vistaramEmailMessageProcessor;
 	
 	@Autowired
-	private ItemWriter<BookingDetail> bookingDetailWriter;
+	private VistaramDetailsWriter vistaramDetailsWriter;
 	
 	private static Logger logger = LoggerFactory.getLogger(VistaramEmailMessageHandler.class);
 	
@@ -46,11 +46,9 @@ public class VistaramEmailMessageHandler implements MessageHandler {
 		
 			Object content = mimeMessage.getContent();
 			logger.debug("content: "+content);
-			BookingDetail bookingDetail = vistaramEmailMessageBookingDetailProcessor.process(mimeMessage);		
-			if(null != bookingDetail) {
-				List<BookingDetail> bookingDetails = new ArrayList<BookingDetail>();
-				bookingDetails.add(bookingDetail);
-				bookingDetailWriter.write(bookingDetails);
+			VoucherDetail voucherDetail = vistaramEmailMessageProcessor.process(mimeMessage);		
+			if(null != voucherDetail) {
+				vistaramDetailsWriter.write(voucherDetail);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -22,22 +22,25 @@ public interface BookingDetailRepository extends JpaRepository<BookingDetail, Lo
 	@Query("select b from BookingDetail b where b.bookingDate >= :startDate and b.bookingDate <= :endDate order by bookingDate desc")
 	public List<BookingDetail> findByBookingDateByRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 	
-	@Query("select b from BookingDetail b where b.checkinDate >= :startDate and b.checkinDate <= :endDate ")
+	@Query("select b from BookingDetail b where b.checkinDate >= :startDate and b.checkinDate <= :endDate")
 	public List<BookingDetail> findByCheckinDateByRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 	
-	@Query("select b from BookingDetail b where b.checkoutDate >= :startDate and b.checkoutDate <= :endDate ")
+	@Query("select b from BookingDetail b where b.checkoutDate >= :startDate and b.checkoutDate <= :endDate")
 	public List<BookingDetail> findByCheckoutDateByRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
 	
 	@Query("select b from BookingDetail b where b.bookingDate >= :startDate")
 	public List<BookingDetail> findByCurrentBookingDate(@Param("startDate") Date startDate);
 
-	@Query("select b from BookingDetail b where b.checkinDate >= :startDate")
+	@Query("select b from BookingDetail b where b.checkoutDate >= :startDate and b.checkinDate <= :startDate")
 	public List<BookingDetail> findByCurrentCheckInDate(@Param("startDate")Date startDate);
 
-	@Query("select b from BookingDetail b where b.hotelDetail.user.username = :user and b.checkinDate >= :startDate order by bookingDate DESC")
+	@Query("select b from BookingDetail b where b.checkoutDate >= :startDate and b.checkinDate <= :startDate and b.hotelDetail.user.username = :user")
 	public List<BookingDetail> findByCurrentCheckInDateForUser(@Param("startDate") Date startDate, @Param("user") String hotelier);
 	
-	@Query("select b from BookingDetail b where b.hotelDetail.user.username = :user and b.checkoutDate >= :startDate order by bookingDate DESC")
+	@Query("select b from BookingDetail b where b.hotelDetail.user.username = :user and b.checkoutDate >= :startDate and b.checkoutDate <= :endDate")
 	public List<BookingDetail> findByCurrentCheckOutDateForUser(@Param("startDate") Date startDate, @Param("user") String hotelier);
+
+	@Query("select b from BookingDetail b where b.checkoutDate >= :startDate")
+	public List<BookingDetail> findByCurrentCheckOutDate(@Param("startDate")Date startDate);
 	
 }

@@ -101,4 +101,38 @@ public class BookingDetailDao {
 		
 		return bookingDetailRepo.findByCurrentCheckInDateForUser(cl.getTime(), name);
 	}
+
+	public List<BookingDetail> getCurrentDateCheckOutDetails() {
+		Calendar cl = Calendar.getInstance(TimeZone.getTimeZone("IST"));
+		cl.set(Calendar.HOUR_OF_DAY, 0);
+		cl.set(Calendar.MINUTE, 0);
+		cl.set(Calendar.SECOND, 0);
+		cl.set(Calendar.MILLISECOND, 0);
+		
+		Calendar cl1 = Calendar.getInstance(TimeZone.getTimeZone("IST"));
+		cl1.set(Calendar.HOUR_OF_DAY, 23);
+		cl1.set(Calendar.MINUTE, 59);
+		cl1.set(Calendar.SECOND, 59);
+		cl1.set(Calendar.MILLISECOND, 999);
+		
+		return bookingDetailRepo.findByCheckoutDateByRange(cl.getTime(), cl1.getTime());
+	}
+
+	public List<BookingDetail> getCurrentDateCheckOutDetailsForUser(String name) {
+		Calendar cl = Calendar.getInstance(TimeZone.getTimeZone("IST"));
+		cl.set(Calendar.HOUR_OF_DAY, 0);
+		cl.set(Calendar.MINUTE, 0);
+		cl.set(Calendar.SECOND, 0);
+		cl.set(Calendar.MILLISECOND, 0);
+		
+		Calendar cl1 = Calendar.getInstance(TimeZone.getTimeZone("IST"));
+		cl1.set(Calendar.HOUR_OF_DAY, 23);
+		cl1.set(Calendar.MINUTE, 59);
+		cl1.set(Calendar.SECOND, 59);
+		cl1.set(Calendar.MILLISECOND, 999);
+		
+		return bookingDetailRepo.findByCheckoutDateByRange(cl.getTime(), cl1.getTime());
+		
+		//return bookingDetailRepo.findByCurrentCheckOutDateForUser(cl.getTime(),cl1.getTime(), name);
+	}
 }

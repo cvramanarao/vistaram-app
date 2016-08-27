@@ -40,4 +40,14 @@ public class BookingDetailsService {
 		return bookingDetailDao.getBookingDetailByVoucherId(voucherNumber);
 	}
 
+	public List<BookingDetail> getBookingDetailsForCurrentCheckoutDate() {
+		// TODO Auto-generated method stub
+		return bookingDetailDao.getCurrentDateCheckOutDetails();
+	}
+
+	public List<BookingDetail> getBookingDetailsForCurrentCheckoutDateForUser(
+			String name) {
+		return bookingDetailDao.getCurrentDateCheckOutDetailsForUser(name);
+	}
+
 }

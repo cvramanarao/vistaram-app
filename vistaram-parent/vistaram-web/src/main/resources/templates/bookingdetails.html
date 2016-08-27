@@ -27,6 +27,11 @@
 			    function(dataSet, status){
 			        //alert("Data: " + dataSet + "\nStatus: " + status);
 			        $("#bookings-table").empty();
+			        $("#checkins-table").empty();
+			        $("#checkouts-table").empty();
+			        $("[id^=bookings-table]").attr("hidden", false);
+			        $("[id^=checkins-table]").attr("hidden", true);
+			        $("[id^=checkouts-table]").attr("hidden", true);
 			        $('#bookings-table').DataTable({
 			        	data : dataSet,
 			        	destroy: true,
@@ -81,7 +86,12 @@
 			    function(dataSet, status){
 			        //alert("Data: " + dataSet + "\nStatus: " + status);
 			        $("#bookings-table").empty();
-			       var table = $('#bookings-table').DataTable({
+			        $("#checkins-table").empty();
+			        $("#checkouts-table").empty();
+			        $("[id^=bookings-table]").attr("hidden", true);
+			        $("[id^=checkins-table]").attr("hidden", false);
+			        $("[id^=checkouts-table]").attr("hidden", true);
+			       var table = $('#checkins-table').DataTable({
 			        	data : dataSet,
 			        	destroy: true,
 			        	deferRender: true,
@@ -149,8 +159,14 @@
     		$.get("checkouts/today",
 			    function(dataSet, status){
 			        //alert("Data: " + dataSet + "\nStatus: " + status);
-			         $("#bookings-table").empty();
-			        $('#bookings-table').DataTable({
+			        $("#bookings-table").empty();
+			        $("#checkins-table").empty();
+			        $("#checkouts-table").empty();
+			        $("[id^=bookings-table]").attr("hidden", true);
+			        $("[id^=checkins-table]").attr("hidden", true);
+			        $("[id^=checkouts-table]").attr("hidden", false);
+			        
+			        $('#checkouts-table').DataTable({
 			        	data : dataSet,
 			        	destroy: true,
 			        	deferRender: true,
@@ -192,21 +208,22 @@
 			
 			.heading {
 				color:green;
+				text-align: center;
 			}
 		
 	</style>
 </head>
 <body>
 	<div class="container-fluid">
+		<div class="page-header">
+		    <h4 class = "heading">Vistaram Hotels Management Suite</h4>
+		    <div style="float: right;">
+					Hello,<span sec:authentication="name">Bob</span>|<a th:href="@{/logout}">logout</a>
+			</div>
+		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<div class="col-md-12">
-					<h2 class = "heading">Vistaram Hotels Management Suite</h2>
-				</div>
-				<div>
-					Hello,<span sec:authentication="name">Bob</span>|<a th:href="@{/logout}">logout</a>
-				</div>
-				<div></div>
+				
 				<div class="col-md-12 btn-group">
 				    <button id="bookings_load" type="button" class="btn btn-success" sec:authorize="hasAuthority('ADMIN')">Bookings</button>
 				    <button id="inventory_load" type="button" class="btn btn-warning">Inventory</button>
@@ -221,7 +238,13 @@
 			<div class="col-md-12">
 				<div id="dialog" style="display: none"></div>
 				<div class="table-responsive"> 
-  					<table id="bookings-table" class="table table-striped table-bordered">
+  					<table id="bookings-table" class="table table-striped table-bordered" hidden="true">
+					</table>
+					
+					<table id="checkins-table" class="table table-striped table-bordered" hidden="true">
+					</table>
+					
+					<table id="checkouts-table" class="table table-striped table-bordered" hidden="true">
 					</table>
 				</div>
 			</div>
