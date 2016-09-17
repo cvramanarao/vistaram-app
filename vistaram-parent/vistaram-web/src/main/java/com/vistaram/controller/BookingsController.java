@@ -131,7 +131,8 @@ public class BookingsController {
 		String guestName = bookingDetail.getGuestDetail().getFirstName()+" "+bookingDetail.getGuestDetail().getLastName();
 		
 		String payment = null;
-		if(bookingDetail.getPaymentType().equals(PaymentType.ONLINE)){
+		System.out.println("payment Type : "+bookingDetail.getPaymentType());
+		if(bookingDetail.getPaymentType().equalsIgnoreCase(PaymentType.ONLINE.toString())){
 			payment=bookingDetail.getTotalAmount()+" Paid";
 		} else {
 			payment="Pay @Hotel "+bookingDetail.getTotalAmount();

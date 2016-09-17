@@ -46,6 +46,19 @@ public class DataSourceConfiguration {
     @Value("${spring.datasource.password}")
     private String databasePassword;
 
+    /*
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+    <property name="initialSize" value="10" />
+    <property name="maxActive" value="25" />
+    <property name="maxIdle" value="20" />
+    <property name="minIdle" value="10" />
+     ...
+    <property name="testOnBorrow" value="true" />
+    <property name="validationQuery" value="SELECT 1" />
+    	</bean>
+    	
+    */
+    
     @Bean
     @Primary
     @Qualifier("tomcatDataSource")
@@ -57,6 +70,12 @@ public class DataSourceConfiguration {
         ds.setUrl(datasourceUrl);
         ds.setUsername(databaseUsername);
         ds.setPassword(databasePassword);
+        ds.setInitialSize(10);
+        ds.setMaxActive(25);
+        ds.setMaxIdle(20);
+        ds.setMinIdle(10);
+        ds.setTestOnBorrow(true);
+        ds.setValidationQuery("SELECT 1");
         
         return ds;
     }
